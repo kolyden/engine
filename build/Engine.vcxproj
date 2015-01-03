@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\uut\container\uutArray.h" />
+    <ClInclude Include="..\uut\container\uutDictionary.h" />
+    <ClInclude Include="..\uut\container\uutHashString.h" />
+    <ClInclude Include="..\uut\container\uutList.h" />
+    <ClInclude Include="..\uut\container\uutString.h" />
+    <ClInclude Include="..\uut\core\uutApplication.h" />
+    <ClInclude Include="..\uut\core\uutContext.h" />
+    <ClInclude Include="..\uut\core\uutDebug.h" />
+    <ClInclude Include="..\uut\core\uutDefine.h" />
+    <ClInclude Include="..\uut\core\uutModule.h" />
+    <ClInclude Include="..\uut\core\uutObject.h" />
+    <ClInclude Include="..\uut\core\uutPtr.h" />
+    <ClInclude Include="..\uut\core\uutRefCounted.h" />
+    <ClInclude Include="..\uut\io\uutDeserializer.h" />
+    <ClInclude Include="..\uut\io\uutFile.h" />
+    <ClInclude Include="..\uut\io\uutFilesystem.h" />
+    <ClInclude Include="..\uut\io\uutInput.h" />
+    <ClInclude Include="..\uut\io\uutInputEvent.h" />
+    <ClInclude Include="..\uut\io\uutKeycode.h" />
+    <ClInclude Include="..\uut\io\uutPath.h" />
+    <ClInclude Include="..\uut\io\uutSerializer.h" />
+    <ClInclude Include="..\uut\math\uutMath.h" />
+    <ClInclude Include="..\uut\math\uutRect.h" />
+    <ClInclude Include="..\uut\math\uutVector2.h" />
+    <ClInclude Include="..\uut\math\uutVector3.h" />
+    <ClInclude Include="..\uut\platform\uutPlatform.h" />
+    <ClInclude Include="..\uut\platform\uutTime.h" />
+    <ClInclude Include="..\uut\resource\uutResource.h" />
+    <ClInclude Include="..\uut\resource\uutResourceCache.h" />
+    <ClInclude Include="..\uut\resource\uutResourceLoader.h" />
+    <ClInclude Include="..\uut\video\uutColor.h" />
+    <ClInclude Include="..\uut\video\uutGraphics.h" />
+    <ClInclude Include="..\uut\video\uutImage.h" />
+    <ClInclude Include="..\uut\video\uutImageLoader.h" />
+    <ClInclude Include="..\uut\video\uutTexture.h" />
+    <ClInclude Include="..\uut\video\uutTriangle.h" />
+    <ClInclude Include="..\uut\video\uutVertex.h" />
+    <ClInclude Include="..\uut\video\uutVideo.h" />
+    <ClInclude Include="..\uut\video\uutVideoBuffer.h" />
+    <ClInclude Include="..\uut\video\uutVideoDefs.h" />
+    <ClInclude Include="..\uut\video\uutVideoObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\uut\container\uutHashString.cpp" />
+    <ClCompile Include="..\uut\container\uutString.cpp" />
+    <ClCompile Include="..\uut\core\uutApplication.cpp" />
+    <ClCompile Include="..\uut\core\uutContext.cpp" />
+    <ClCompile Include="..\uut\core\uutDebug.cpp" />
+    <ClCompile Include="..\uut\core\uutModule.cpp" />
+    <ClCompile Include="..\uut\core\uutObject.cpp" />
+    <ClCompile Include="..\uut\core\uutRefCounted.cpp" />
+    <ClCompile Include="..\uut\io\uutDeserializer.cpp" />
+    <ClCompile Include="..\uut\io\uutFile.cpp" />
+    <ClCompile Include="..\uut\io\uutFilesystem.cpp" />
+    <ClCompile Include="..\uut\io\uutInput.cpp" />
+    <ClCompile Include="..\uut\io\uutPath.cpp" />
+    <ClCompile Include="..\uut\io\uutSerializer.cpp" />
+    <ClCompile Include="..\uut\math\uutRect.cpp" />
+    <ClCompile Include="..\uut\math\uutVector2.cpp" />
+    <ClCompile Include="..\uut\math\uutVector3.cpp" />
+    <ClCompile Include="..\uut\platform\uutPlatform.cpp" />
+    <ClCompile Include="..\uut\platform\uutTime.cpp" />
+    <ClCompile Include="..\uut\resource\uutResource.cpp" />
+    <ClCompile Include="..\uut\resource\uutResourceCache.cpp" />
+    <ClCompile Include="..\uut\resource\uutResourceLoader.cpp" />
+    <ClCompile Include="..\uut\video\uutColor.cpp" />
+    <ClCompile Include="..\uut\video\uutGraphics.cpp" />
+    <ClCompile Include="..\uut\video\uutImage.cpp" />
+    <ClCompile Include="..\uut\video\uutImageLoader.cpp" />
+    <ClCompile Include="..\uut\video\uutTexture.cpp" />
+    <ClCompile Include="..\uut\video\uutTriangle.cpp" />
+    <ClCompile Include="..\uut\video\uutVertex.cpp" />
+    <ClCompile Include="..\uut\video\uutVideo.cpp" />
+    <ClCompile Include="..\uut\video\uutVideoBuffer.cpp" />
+    <ClCompile Include="..\uut\video\uutVideoObject.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libs\SDL2\VisualC\SDL\SDL_VS2013.vcxproj">
+      <Project>{81ce8daf-ebb2-4761-8e45-b71abcca8c68}</Project>
+    </ProjectReference>
+    <ProjectReference Include="GLEW.vcxproj">
+      <Project>{a7a1f2c4-9f51-4cde-b896-b4d3f2450d75}</Project>
+    </ProjectReference>
+    <ProjectReference Include="SDL_IMAGE.vcxproj">
+      <Project>{ab1eb029-6c7a-4ab0-8263-0114625560c7}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EF945C5D-F0EF-4E4E-BB57-2F5F7979DFB6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../uut/;../libs/</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../uut/;../libs/</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
