@@ -3,6 +3,7 @@
 #include "math/uutRect.h"
 #include "uutVertex2.h"
 #include "uutVideoDefs.h"
+#include "uutColor.h"
 
 namespace uut
 {

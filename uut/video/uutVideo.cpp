@@ -7,6 +7,7 @@
 #include "uutVideoBuffer.h"
 #include "loaders/uutImageLoader.h"
 #include "loaders/uutTextureLoader.h"
+#include "loaders/uutModelLoaderOBJ.h"
 #include "SDL_IMAGE/SDL_image.h"
 
 namespace uut
@@ -448,6 +449,7 @@ namespace uut
 		auto cache = _context->GetModule<ResourceCache>();
 		cache->AddLoader(new ImageLoader(_context));
 		cache->AddLoader(new TextureLoader(_context));
+		cache->AddLoader(new ModelLoaderOBJ(_context));
 
 		if (!IMG_Init(IMG_INIT_PNG))
 			Debug::LogError("SDL Image init failed");

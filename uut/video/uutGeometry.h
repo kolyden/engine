@@ -13,6 +13,12 @@ namespace uut
 	public:
 		Geometry(Context* context);
 
+		void SetVideoBuffer(VideoBuffer* buffer);
+		VideoBuffer* GetVideoBuffer() const;
+
+		void SetIndexBuffer(VideoBuffer* buffer);
+		VideoBuffer* GetIndexBuffer() const;
+
 	protected:
 		SharedPtr<VideoBuffer> _vbuffer;
 		SharedPtr<VideoBuffer> _ibuffer;

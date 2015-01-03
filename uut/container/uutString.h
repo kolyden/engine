@@ -1,5 +1,6 @@
 #pragma once
 #include "core/uutDefine.h"
+#include "container/uutList.h"
 #include <cctype>
 #include <string>
 
@@ -32,6 +33,10 @@ namespace uut
 		int Find(const String& str, int start = 0) const	{ return (int)_data.find(str.GetData(), start); }
 		int FindR(char c) const								{ return (int)_data.rfind(c); }
 		int FindR(const String& str) const					{ return (int)_data.rfind(str.GetData()); }
+
+		void operator += (char c) { _data += c; }
+
+		List<String> Split(char c, bool keepEmpty = false);
 
 		static const String EMPTY;
 

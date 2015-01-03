@@ -35,4 +35,23 @@ namespace uut
 		return String(_data.substr(start, count ? count : (int)_data.size() - start));
 	}
 
+	List<String> String::Split(char c, bool keepEmpty /*= false*/)
+	{
+		List<String> arr;
+		int cur = 0, prev = 0;
+		while ((cur = Find(c, prev)) >= 0)
+		{
+			const int count = prev - cur - 1;
+			if (count == 0)
+			{
+				if (keepEmpty)
+					arr.Add(String::EMPTY);
+			}
+			else arr.Add(Copy(cur + 1, prev - cur));
+			prev = cur;
+		}
+
+		return arr;
+	}
+
 }

@@ -8,4 +8,24 @@ namespace uut
 	{
 	}
 
+	void Geometry::SetVideoBuffer(VideoBuffer* buffer)
+	{
+		_vbuffer = buffer;
+	}
+
+	VideoBuffer* Geometry::GetVideoBuffer() const
+	{
+		return _vbuffer;
+	}
+
+	void Geometry::SetIndexBuffer(VideoBuffer* buffer)
+	{
+		_ibuffer = buffer;
+	}
+
+	VideoBuffer* Geometry::GetIndexBuffer() const
+	{
+		return _ibuffer;
+	}
+
 }

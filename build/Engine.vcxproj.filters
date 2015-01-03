@@ -159,6 +159,12 @@
     <ClInclude Include="..\uut\video\uutVertex2.h">
       <Filter>video</Filter>
     </ClInclude>
+    <ClInclude Include="..\uut\video\loaders\uutModelLoaderOBJ.h">
+      <Filter>video\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\uutVertex3.h">
+      <Filter>video</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\uut\container\uutHashString.cpp">
@@ -264,6 +270,12 @@
       <Filter>video\loaders</Filter>
     </ClCompile>
     <ClCompile Include="..\uut\video\uutVertex2.cpp">
+      <Filter>video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\loaders\uutModelLoaderOBJ.cpp">
+      <Filter>video\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutVertex3.cpp">
       <Filter>video</Filter>
     </ClCompile>
   </ItemGroup>

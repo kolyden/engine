@@ -42,6 +42,7 @@
     <ClInclude Include="..\uut\resource\uutResourceCache.h" />
     <ClInclude Include="..\uut\resource\uutResourceLoader.h" />
     <ClInclude Include="..\uut\video\loaders\uutImageLoader.h" />
+    <ClInclude Include="..\uut\video\loaders\uutModelLoaderOBJ.h" />
     <ClInclude Include="..\uut\video\loaders\uutTextureLoader.h" />
     <ClInclude Include="..\uut\video\uutColor.h" />
     <ClInclude Include="..\uut\video\uutGeometry.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="..\uut\video\uutTexture.h" />
     <ClInclude Include="..\uut\video\uutTriangle.h" />
     <ClInclude Include="..\uut\video\uutVertex2.h" />
+    <ClInclude Include="..\uut\video\uutVertex3.h" />
     <ClInclude Include="..\uut\video\uutVideo.h" />
     <ClInclude Include="..\uut\video\uutVideoBuffer.h" />
     <ClInclude Include="..\uut\video\uutVideoDefs.h" />
@@ -80,6 +82,7 @@
     <ClCompile Include="..\uut\resource\uutResourceCache.cpp" />
     <ClCompile Include="..\uut\resource\uutResourceLoader.cpp" />
     <ClCompile Include="..\uut\video\loaders\uutImageLoader.cpp" />
+    <ClCompile Include="..\uut\video\loaders\uutModelLoaderOBJ.cpp" />
     <ClCompile Include="..\uut\video\loaders\uutTextureLoader.cpp" />
     <ClCompile Include="..\uut\video\uutColor.cpp" />
     <ClCompile Include="..\uut\video\uutGeometry.cpp" />
@@ -89,6 +92,7 @@
     <ClCompile Include="..\uut\video\uutTexture.cpp" />
     <ClCompile Include="..\uut\video\uutTriangle.cpp" />
     <ClCompile Include="..\uut\video\uutVertex2.cpp" />
+    <ClCompile Include="..\uut\video\uutVertex3.cpp" />
     <ClCompile Include="..\uut\video\uutVideo.cpp" />
     <ClCompile Include="..\uut\video\uutVideoBuffer.cpp" />
     <ClCompile Include="..\uut\video\uutVideoObject.cpp" />
