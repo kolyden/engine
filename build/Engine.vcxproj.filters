@@ -135,9 +135,6 @@
     <ClInclude Include="..\uut\video\uutTriangle.h">
       <Filter>video</Filter>
     </ClInclude>
-    <ClInclude Include="..\uut\video\uutVertex.h">
-      <Filter>video</Filter>
-    </ClInclude>
     <ClInclude Include="..\uut\math\uutVector3.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -158,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="..\uut\video\loaders\uutTextureLoader.h">
       <Filter>video\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\uutVertex2.h">
+      <Filter>video</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,9 +248,6 @@
     <ClCompile Include="..\uut\video\uutTriangle.cpp">
       <Filter>video</Filter>
     </ClCompile>
-    <ClCompile Include="..\uut\video\uutVertex.cpp">
-      <Filter>video</Filter>
-    </ClCompile>
     <ClCompile Include="..\uut\math\uutVector3.cpp">
       <Filter>math</Filter>
     </ClCompile>
@@ -265,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="..\uut\video\loaders\uutTextureLoader.cpp">
       <Filter>video\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutVertex2.cpp">
+      <Filter>video</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

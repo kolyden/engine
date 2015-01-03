@@ -50,7 +50,7 @@
     <ClInclude Include="..\uut\video\uutModel.h" />
     <ClInclude Include="..\uut\video\uutTexture.h" />
     <ClInclude Include="..\uut\video\uutTriangle.h" />
-    <ClInclude Include="..\uut\video\uutVertex.h" />
+    <ClInclude Include="..\uut\video\uutVertex2.h" />
     <ClInclude Include="..\uut\video\uutVideo.h" />
     <ClInclude Include="..\uut\video\uutVideoBuffer.h" />
     <ClInclude Include="..\uut\video\uutVideoDefs.h" />
@@ -88,7 +88,7 @@
     <ClCompile Include="..\uut\video\uutModel.cpp" />
     <ClCompile Include="..\uut\video\uutTexture.cpp" />
     <ClCompile Include="..\uut\video\uutTriangle.cpp" />
-    <ClCompile Include="..\uut\video\uutVertex.cpp" />
+    <ClCompile Include="..\uut\video\uutVertex2.cpp" />
     <ClCompile Include="..\uut\video\uutVideo.cpp" />
     <ClCompile Include="..\uut\video\uutVideoBuffer.cpp" />
     <ClCompile Include="..\uut\video\uutVideoObject.cpp" />

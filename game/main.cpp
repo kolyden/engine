@@ -6,25 +6,12 @@
 #include "video/uutGraphics.h"
 #include "platform/uutTime.h"
 #include "io/uutInput.h"
+#include "video/uutVertex2.h"
 
 RUNAPP(uut::MyApp);
 
 namespace uut
 {
-	struct SVertex
-	{
-		float x, y;
-		float u, v;
-		uint32_t color;
-	};
-
-	static const SDeclareType gVertDecl[] =
-	{
-		{ 0, USAGE_POSITION, 2, VALUE_FLOAT, 0 },
-		{ 0, USAGE_TEXCOORDS, 2, VALUE_FLOAT, offsetof(SVertex, u) },
-		{ 0, USAGE_COLOR, 4, VALUE_UBYTE, offsetof(SVertex, color) }
-	};
-
 	MyApp::MyApp()
 		: _color(0, 0, 0)
 		, _pos(100, 100)
@@ -46,7 +33,7 @@ namespace uut
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
 
 		_vbuf = SharedPtr<VideoBuffer>(new VideoBuffer(_context));
-		_vbuf->Create(BUFFER_VERTEX, sizeof(SVertex)* 4, BUFFERFLAG_DYNAMIC);
+		_vbuf->Create(BUFFER_VERTEX, Vertex2::SIZE* 4, BUFFERFLAG_DYNAMIC);
 
 		UpdateBuffer(_pos, Vector2(200.0f));
 	}
@@ -81,7 +68,7 @@ namespace uut
 		_graphics->DrawLine(Vector2(0, 0), _pos);
 		_graphics->Flush();
 
-		if (_vbuf && _video->BindBuffer(_vbuf, sizeof(SVertex), gVertDecl, 3))
+		if (_vbuf && _video->BindBuffer(_vbuf, Vertex2::SIZE, Vertex2::DECLARE, Vertex2::DECLARE_COUNT))
 		{
 			_video->SetColor(COLOR_DRAW, Color::WHITE);
 			_video->SetRenderState(RENDERSATE_BLEND, true);
@@ -98,7 +85,7 @@ namespace uut
 
 			_video->UnbindTexture(_tex0);
 			_video->SetRenderState(RENDERSATE_BLEND, false);
-			_video->UnbindBuffer(_vbuf, gVertDecl, 3);
+			_video->UnbindBuffer(_vbuf, Vertex2::DECLARE, Vertex2::DECLARE_COUNT);
 		}
 	}
 
@@ -117,12 +104,12 @@ namespace uut
 			const float tx1 = 0.0f, ty1 = 0.0f;
 			const float tx2 = 1.0f, ty2 = 1.0f;
 
-			const SVertex pVert[] =
+			const Vertex2 pVert[] =
 			{
-				{ x1, y1, tx1, ty1, 0xFFFFFFFF },
-				{ x2, y1, tx2, ty1, 0xFFFFFFFF },
-				{ x1, y2, tx1, ty2, 0xFFFFFFFF },
-				{ x2, y2, tx2, ty2, 0xFFFFFFFF }
+				Vertex2(Vector2(x1, y1), Vector2(tx1, ty1), 0xFFFFFFFF),
+				Vertex2(Vector2(x2, y1), Vector2(tx2, ty1), 0xFFFFFFFF),
+				Vertex2(Vector2(x1, y2), Vector2(tx1, ty2), 0xFFFFFFFF),
+				Vertex2(Vector2(x2, y2), Vector2(tx2, ty2), 0xFFFFFFFF),
 			};
 
 			_vbuf->UpdateData(0, _vbuf->GetSize(), pVert);

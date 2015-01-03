@@ -1,6 +1,6 @@
 #pragma once
 #include "core/uutObject.h"
-#include "video/uutVertex.h"
+#include "video/uutVertex2.h"
 #include "container/uutList.h"
 
 namespace uut

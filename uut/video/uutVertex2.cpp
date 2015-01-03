@@ -1,4 +1,4 @@
-#include "uutVertex.h"
+#include "uutVertex2.h"
 
 namespace uut
 {
@@ -15,4 +15,8 @@ namespace uut
 	{
 	}
 
+	Vertex2::Vertex2(const Vector2& _pos, const Vector2& _tex, const uint32_t _color)
+		: x(_pos._x), y(_pos._y), u(_tex._x), v(_tex._y), color(_color)
+	{
+	}
 }

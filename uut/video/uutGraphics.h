@@ -1,7 +1,7 @@
 #pragma once
 #include "core/uutModule.h"
 #include "math/uutRect.h"
-#include "uutVertex.h"
+#include "uutVertex2.h"
 #include "uutVideoDefs.h"
 
 namespace uut
