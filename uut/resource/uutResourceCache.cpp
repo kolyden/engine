@@ -1,6 +1,8 @@
 #include "uutResourceCache.h"
 #include "uutResource.h"
 #include "uutResourceLoader.h"
+#include "core/uutDebug.h"
+#include "io/uutFile.h"
 
 namespace uut
 {
@@ -9,42 +11,19 @@ namespace uut
 	{
 	}
 
-	void ResourceCache::AddResource(Resource* resource)
+	void ResourceCache::AddResource(Resource* resource, const Path& path)
 	{
 		if (resource == nullptr)
 			return;
 
-		SharedPtr<ResourceType> type = GetType(resource->GetType());
-		type->resources.Add(SharedPtr<Resource>(resource));
+		resource->_resourcePath = path;
+		SharedPtr<ResourceGroup> type = GetGroup(resource->GetType());
+		type->resources.Add(path, SharedPtr<Resource>(resource));
 	}
 
-	Resource* ResourceCache::GetResource(const HashString& type, const String& name)
+	Resource* ResourceCache::GetResource(const HashString& type, const Path& name)
 	{
-		if (name.Empty())
-			return 0;
-
-		const SharedPtr<Resource>& existing = FindResource(type, name);
-		//if (existing)
-			return existing;
-
-// 		SharedPtr<Resource> resource;
-// 		resource = DynamicCast<Resource>(_context->CreateObject(type));
-// 		if (!resource)
-// 			return 0;
-// 
-// 		SharedPtr<File> file = SharedPtr<File>(new File(_context));
-// 		if (!file->Open(name))
-// 			return 0;
-// 
-// 		resource->SetName(name);
-// 		if (!resource->Load(*(file.Get())))
-// 		{
-// 			return 0;
-// 		}
-// 
-// 		_groups[type]._resources.push_back(resource);
-// 		return resource;
-
+		return FindResource(type, name);
 	}
 
 	void ResourceCache::AddLoader(ResourceLoader* loader)
@@ -66,32 +45,60 @@ namespace uut
 
 	Resource* ResourceCache::Load(const HashString& type, const Path& path)
 	{
-		return 0;
+		auto existing = FindResource(type, path);
+		if (existing)
+			return existing;
+
+		auto loader = GetLoader(type);
+		if (!loader)
+		{
+			Debug::LogError("Can't find loader");
+			return 0;
+		}
+
+		if (!loader->CanLoad(path))
+		{
+			Debug::LogError("Can't load resource");
+			return 0;
+		}
+
+		auto file = SharedPtr<File>(new File(_context));
+		if (!file->Open(path))
+		{
+			Debug::LogError("Can't open file");
+			return 0;
+		}
+
+		auto res = loader->Load(*file);
+		if (res == 0)
+			return 0;
+
+		AddResource(res, path);
+
+		return res;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	SharedPtr<ResourceCache::ResourceType> ResourceCache::GetType(const HashString& type)
+	SharedPtr<ResourceCache::ResourceGroup> ResourceCache::GetGroup(const HashString& type)
 	{
-		SharedPtr<ResourceType> group;
+		SharedPtr<ResourceGroup> group;
 		if (!_types.TryGetValue(type, &group))
 		{
-			group = new ResourceType();
+			group = new ResourceGroup();
 			_types.Add(type, group);
 		}
 
 		return group;
 	}
 
-	SharedPtr<Resource> ResourceCache::FindResource(const HashString& type, const String& name) const
+	SharedPtr<Resource> ResourceCache::FindResource(const HashString& type, const Path& name) const
 	{
-		SharedPtr<ResourceType> group;
+		SharedPtr<ResourceGroup> group;
 		if (_types.TryGetValue(type, &group))
 		{
-			for (int i = 0; i < group->resources.Count(); i++)
-			{
-				if (group->resources[i]->GetName().Equals(name, true))
-					return group->resources[i];
-			}
+			SharedPtr<Resource> res;
+			if (group->resources.TryGetValue(name, &res))
+				return res;
 		}
 
 		return SharedPtr<Resource>::EMPTY;

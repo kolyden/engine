@@ -11,10 +11,12 @@ namespace uut
 		Resource(Context* context);
 
 		const String& GetName() const { return _name; }
-		const Path& GetResourcePath() const { return _path; }
+		const Path& GetResourcePath() const { return _resourcePath; }
 
-	protected:
+	private:
 		String _name;
-		Path _path;
+		Path _resourcePath;
+
+		friend class ResourceCache;
 	};
 }

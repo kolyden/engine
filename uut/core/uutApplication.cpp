@@ -32,6 +32,7 @@ namespace uut
 		_context->Init();
 
 		OnInit();
+		OnStart();
 
 		SDL_Event e;
 		while (!_quit)

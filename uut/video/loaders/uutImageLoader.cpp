@@ -1,5 +1,5 @@
 #include "uutImageLoader.h"
-#include "uutImage.h"
+#include "video/uutImage.h"
 #include "io/uutDeserializer.h"
 #include "SDL_IMAGE/SDL_image.h"
 
@@ -20,14 +20,14 @@ namespace uut
 		return true;
 	}
 
-	Resource* ImageLoader::Load(Deserializer& source)
+	SharedPtr<Resource> ImageLoader::Load(Deserializer& source)
 	{
 		auto rwops = CreatReadRWops(source);
 		auto surface = IMG_Load_RW(rwops, 1);
 		if (surface == 0)
-			return 0;
+			return SharedPtr<Resource>::EMPTY;
 
-		return new Image(_context, surface);
+		return SharedPtr<Resource>(new Image(_context, surface));
 	}
 
 }

@@ -43,7 +43,7 @@ namespace uut
 
 	void MyApp::OnStart()
 	{
-		_tex0 = _cache->Load<Texture>("zazaka.bmp");
+		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
 
 		_vbuf = SharedPtr<VideoBuffer>(new VideoBuffer(_context));
 		_vbuf->Create(BUFFER_VERTEX, sizeof(SVertex)* 4, BUFFERFLAG_DYNAMIC);

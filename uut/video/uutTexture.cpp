@@ -68,91 +68,99 @@ namespace uut
         _data = 0;
     }
 
-    bool Texture::Load(SharedPtr<Image> image)
+    bool Texture::Create(SharedPtr<Image> image)
     {
-        if (!image || !image->_data)
+        if (!image)
             return false;
 
-        SDL_Surface* surface = image->_data;
+		return CreateFromSurface(image->_data);
+    }
+
+	//////////////////////////////////////////////////////////////////////////
+	bool Texture::CreateFromSurface(SDL_Surface* surface)
+	{
+		if (surface == 0)
+			return false;
+
 		SDL_Surface* newSurface = 0;
-        bool freeSurface = false;
+		bool freeSurface = false;
 
-        GLenum format;
+		GLenum format;
 
-        switch (surface->format->format)
-        {
-        case SDL_PIXELFORMAT_RGBA8888:
-            format = GL_RGBA;
-            break;
+		switch (surface->format->format)
+		{
+		case SDL_PIXELFORMAT_RGBA8888:
+			format = GL_RGBA;
+			break;
 
-        case SDL_PIXELFORMAT_RGB888:
-        case SDL_PIXELFORMAT_RGB24:
-            format = GL_RGB;
-            break;
+		case SDL_PIXELFORMAT_RGB888:
+		case SDL_PIXELFORMAT_RGB24:
+			format = GL_RGB;
+			break;
 
-        default:
-            switch (surface->format->BitsPerPixel)
-            {
-            case 32:
-                newSurface = SDL_ConvertSurfaceFormat(surface,
-                    SDL_PIXELFORMAT_RGBA8888, 0);
-                format = GL_RGBA;
-                break;
+		default:
+			switch (surface->format->BitsPerPixel)
+			{
+			case 32:
+				newSurface = SDL_ConvertSurfaceFormat(surface,
+					SDL_PIXELFORMAT_RGBA8888, 0);
+				format = GL_RGBA;
+				break;
 
-            case 24:
-                newSurface = SDL_ConvertSurfaceFormat(surface,
-                    SDL_PIXELFORMAT_RGB888, 0);
-                format = GL_RGB;
-                break;
-            }
-            if (!surface && !newSurface)
-                return false;
+			case 24:
+				newSurface = SDL_ConvertSurfaceFormat(surface,
+					SDL_PIXELFORMAT_RGB888, 0);
+				format = GL_RGB;
+				break;
+			}
+			if (!surface && !newSurface)
+				return false;
 
 			surface = newSurface;
-            freeSurface = true;
-            break;
-        }
+			freeSurface = true;
+			break;
+		}
 
-        if ((SDL_LockSurface(surface) != 0 )|| !surface->pixels)
-        {
-            if (freeSurface)
-                SDL_FreeSurface(surface);
-            return false;
-        }
-        void* bits = surface->pixels;
+		if ((SDL_LockSurface(surface) != 0) || !surface->pixels)
+		{
+			if (freeSurface)
+				SDL_FreeSurface(surface);
+			return false;
+		}
+		void* bits = surface->pixels;
 
-        glGenTextures(1, &_data);
-        if (!CheckGLError("Error creating texture into OpenGL."))
-            return false;
+		glGenTextures(1, &_data);
+		if (!CheckGLError("Error creating texture into OpenGL."))
+			return false;
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _data);
-        if (!CheckGLError("Error creating texture into OpenGL."))
-            return false;
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _data);
+		if (!CheckGLError("Error creating texture into OpenGL."))
+			return false;
 
-        // Set-up texture properties.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		// Set-up texture properties.
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        // Loads image data into OpenGL.
-        glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0,
-            format, GL_UNSIGNED_BYTE, bits);
+		// Loads image data into OpenGL.
+		glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0,
+			format, GL_UNSIGNED_BYTE, bits);
 
-        SDL_UnlockSurface(surface);
-        if (freeSurface)
-            SDL_FreeSurface(surface);
+		SDL_UnlockSurface(surface);
+		if (freeSurface)
+			SDL_FreeSurface(surface);
 
-        if (!CheckGLError("Error creating texture into OpenGL."))
-            return false;
+		if (!CheckGLError("Error creating texture into OpenGL."))
+			return false;
 
-        glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
-        _size = image->GetSize();
-        _usage = TEXTURE_STATIC;
+		_size = Vector2i(surface->w, surface->h);
+		_usage = TEXTURE_STATIC;
 
-        return true;
-    }
+		return true;
+	}
 
 }

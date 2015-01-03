@@ -31,6 +31,11 @@
     <ClInclude Include="..\libs\SDL_IMAGE\miniz.h" />
     <ClInclude Include="..\libs\SDL_IMAGE\SDL_image.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="LIBPNG.vcxproj">
+      <Project>{ef855fe2-897a-4a35-a45d-e1ce3bc726e5}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AB1EB029-6C7A-4AB0-8263-0114625560C7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -74,8 +79,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../libs/SDL2/include/;../libs/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;LOAD_BMP;LOAD_PNG;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../libs/SDL2/include/;../libs/libpng/;../libs/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,8 +95,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../libs/SDL2/include/;../libs/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;LOAD_BMP;LOAD_PNG;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../libs/SDL2/include/;../libs/libpng/;../libs/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -18,7 +18,7 @@ namespace uut
 		bool Create(const Vector2i& size, ETextureType usage = TEXTURE_STATIC);
         void Clear();
 
-        bool Load(SharedPtr<Image> image);
+        bool Create(SharedPtr<Image> image);
 
 		const Vector2i& GetSize() const { return _size; }
         ETextureType GetUsage() const { return _usage; }
@@ -30,6 +30,9 @@ namespace uut
 		Vector2i _size;
         ETextureType _usage;
 
+		bool CreateFromSurface(SDL_Surface* surface);
+
         friend class Video;
+		friend class TextureLoader;
     };
 }

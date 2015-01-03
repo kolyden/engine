@@ -22,6 +22,9 @@
     <Filter Include="video">
       <UniqueIdentifier>{58db96e7-6e95-4a2c-8939-6743addfce3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="video\loaders">
+      <UniqueIdentifier>{fdb0dbdf-30b5-43cd-a29a-b6491e663724}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\uut\container\uutArray.h">
@@ -111,9 +114,6 @@
     <ClInclude Include="..\uut\video\uutImage.h">
       <Filter>video</Filter>
     </ClInclude>
-    <ClInclude Include="..\uut\video\uutImageLoader.h">
-      <Filter>video</Filter>
-    </ClInclude>
     <ClInclude Include="..\uut\video\uutTexture.h">
       <Filter>video</Filter>
     </ClInclude>
@@ -146,6 +146,18 @@
     </ClInclude>
     <ClInclude Include="..\uut\io\uutKeycode.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\uutModel.h">
+      <Filter>video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\uutGeometry.h">
+      <Filter>video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\loaders\uutImageLoader.h">
+      <Filter>video\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\loaders\uutTextureLoader.h">
+      <Filter>video\loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -218,9 +230,6 @@
     <ClCompile Include="..\uut\video\uutImage.cpp">
       <Filter>video</Filter>
     </ClCompile>
-    <ClCompile Include="..\uut\video\uutImageLoader.cpp">
-      <Filter>video</Filter>
-    </ClCompile>
     <ClCompile Include="..\uut\video\uutTexture.cpp">
       <Filter>video</Filter>
     </ClCompile>
@@ -244,6 +253,18 @@
     </ClCompile>
     <ClCompile Include="..\uut\math\uutVector3.cpp">
       <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutModel.cpp">
+      <Filter>video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutGeometry.cpp">
+      <Filter>video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\loaders\uutImageLoader.cpp">
+      <Filter>video\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\loaders\uutTextureLoader.cpp">
+      <Filter>video\loaders</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

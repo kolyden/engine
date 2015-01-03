@@ -16,8 +16,8 @@ namespace uut
 	public:
 		ResourceCache(Context* context);
 
-		void AddResource(Resource* resource);
-		Resource* GetResource(const HashString& type, const String& name);
+		void AddResource(Resource* resource, const Path& path);
+		Resource* GetResource(const HashString& type, const Path& name);
 
 		void AddLoader(ResourceLoader* loader);
 		ResourceLoader* GetLoader(const HashString& type) const;
@@ -26,15 +26,15 @@ namespace uut
 		template<class T>T* Load(const Path& path) { return dynamic_cast<T*>(Load(T::GetTypeStatic(), path)); }
 
 	protected:
-		struct ResourceType : RefCounted
+		struct ResourceGroup : RefCounted
 		{
-			List<SharedPtr<Resource>> resources;
+			Dictionary<Path,SharedPtr<Resource>> resources;
 		};
 
 		Dictionary<HashString, SharedPtr<ResourceLoader>> _loaders;
-		Dictionary<HashString, SharedPtr<ResourceType>> _types;
+		Dictionary<HashString, SharedPtr<ResourceGroup>> _types;
 
-		SharedPtr<ResourceType> GetType(const HashString& type);
-		SharedPtr<Resource> FindResource(const HashString& type, const String& name) const;
+		SharedPtr<ResourceGroup> GetGroup(const HashString& type);
+		SharedPtr<Resource> FindResource(const HashString& type, const Path& name) const;
 	};
 }

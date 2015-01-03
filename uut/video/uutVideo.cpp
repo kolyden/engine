@@ -5,7 +5,9 @@
 #include "uutImage.h"
 #include "uutTexture.h"
 #include "uutVideoBuffer.h"
-#include "uutImageLoader.h"
+#include "loaders/uutImageLoader.h"
+#include "loaders/uutTextureLoader.h"
+#include "SDL_IMAGE/SDL_image.h"
 
 namespace uut
 {
@@ -445,6 +447,10 @@ namespace uut
 	{
 		auto cache = _context->GetModule<ResourceCache>();
 		cache->AddLoader(new ImageLoader(_context));
+		cache->AddLoader(new TextureLoader(_context));
+
+		if (!IMG_Init(IMG_INIT_PNG))
+			Debug::LogError("SDL Image init failed");
 	}
 
     void Video::Release(bool clearGPUObjects, bool closeWindow)

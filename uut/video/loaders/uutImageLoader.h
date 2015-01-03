@@ -11,6 +11,6 @@ namespace uut
 
 		virtual const HashString& GetResourceType() const override;
 		virtual bool CanLoad(const Path& path) const override;
-		virtual Resource* Load(Deserializer& source) override;
+		virtual SharedPtr<Resource> Load(Deserializer& source) override;
 	};
 }

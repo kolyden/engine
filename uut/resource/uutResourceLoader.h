@@ -13,15 +13,8 @@ namespace uut
 	public:
 		ResourceLoader(Context* context);
 
-		const Path& GetResourcePath() const { return _resourcePath; }
-
 		virtual const HashString& GetResourceType() const = 0;
 		virtual bool CanLoad(const Path& path) const = 0;
-		virtual Resource* Load(Deserializer& source) = 0;
-
-	private:
-		Path _resourcePath;
-
-		friend class ResourceCache;
+		virtual SharedPtr<Resource> Load(Deserializer& source) = 0;
 	};
 }
