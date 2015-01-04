@@ -3,6 +3,7 @@
 
 namespace uut
 {
+	template<class T>class Vector3;
 	template<class T>class Rect;
 
 	template<class T>
@@ -481,6 +482,13 @@ namespace uut
 
 			return M;
 		}
+
+		template<class T>
+		static Matrix4<T>& translation(Matrix4<T> & M, const Vector3<T>& vec)
+		{
+			return translation(M, vec.x, vec.y, vec.z);
+		}
+
 
 		//
 		// Look At matrix creation

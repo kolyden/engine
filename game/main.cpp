@@ -27,10 +27,12 @@ namespace uut
 	{
 		const Recti rect(Vector2i::ZERO, _size);
 		Matrix4f mat;
+		const float aspect = (1.0f * _size.x) / _size.y;
 
 		_video->SetMode(_size.x, _size.y);
 		_video->SetViewPort(rect);
 		_video->SetTransform(TRANSFORM_PROJECTION,
+// 			Matrix4f::perspective(mat, 60.0f, aspect, 0.0f, 100.0f));
 			Matrix4f::ortho2D(mat, 0.0f, (float)_size.x, (float)_size.y, 0.0f));
 
 		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, false);
@@ -42,7 +44,6 @@ namespace uut
 		_camera = new Camera(_context);
 
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
-
 		_model0 = _cache->Load<Model>("Data/stairs.obj");
 
 		_vbuf = SharedPtr<VideoBuffer>(new VideoBuffer(_context));
@@ -61,6 +62,12 @@ namespace uut
 		if (_input->IsKey(KEYCODE_ESCAPE)) 
 			Stop();
 
+		if (_input->IsKey(KEYCODE_W))
+		{
+			auto vec = _camera->GetPosition();
+			_camera->SetPosition(vec);
+		}
+
 		if (_pos != newPos)
 		{
 			_pos = newPos;
@@ -70,6 +77,8 @@ namespace uut
 		_color._g += _time->GetDelta();
 		while (_color._g > 1)
 			_color._g -= 1.0f;
+
+// 		_camera->UpdatePosition();
 	}
 
 	void MyApp::OnRender()
@@ -101,11 +110,8 @@ namespace uut
 			_video->UnbindBuffer(_vbuf, Vertex2::DECLARE, Vertex2::DECLARE_COUNT);
 		}
 
-// 		if (_model0)
-// 		{
-// 			_model0->Draw();
-// 		}
-
+		if (_model0)
+			_model0->Draw();
 	}
 
 	void MyApp::UpdateBuffer(const Vector2i& pos, const Vector2f& size)

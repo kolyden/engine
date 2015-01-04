@@ -41,7 +41,9 @@ namespace uut
 			return;
 
 		_update = false;
-// 		_matrix = Matrix4::BuildPerspective()
+		_matrix.make_identity();
+		Matrix4f::translation(_matrix, _position);
+		_video->SetTransform(TRANSFORM_VIEW, _matrix);
 	}
 
 }

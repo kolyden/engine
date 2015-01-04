@@ -26,7 +26,7 @@ namespace uut
 	SharedPtr<Resource> TextureLoader::Load(Deserializer& source)
 	{
 		auto rwops = CreatReadRWops(source);
-		auto surface = IMG_LoadTyped_RW(rwops, 0, source.GetPath().GetExtension().GetData());
+		auto surface = IMG_Load_RW(rwops, 0);
 		if (surface == 0)
 			return SharedPtr<Resource>::EMPTY;
 

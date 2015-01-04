@@ -5,6 +5,7 @@ namespace uut
     File::File(Context* context)
         : Object(context)
         , _handle(0)
+		, _size(0)
     {
     }
 
@@ -29,10 +30,7 @@ namespace uut
             return false;
 
         _path = path;
-		_position = 0;
-		const auto size = SDL_RWsize(_handle);
-		if (size > 0)
-			_size = size;
+		_size = SDL_RWsize(_handle);
         return true;
     }
 
@@ -44,7 +42,6 @@ namespace uut
 		SDL_RWclose(_handle);
 		SDL_FreeRW(_handle);
 		_handle = 0;
-		_position = 0;
 		_size = 0;
     }
 
@@ -61,19 +58,36 @@ namespace uut
         if (!_handle)
             return 0;
 
-        const auto ret = SDL_RWread(_handle, data, 1, size);
-		_position += ret;
-		return ret;
+        return SDL_RWread(_handle, data, 1, size);
     }
 
-    unsigned File::Seek(unsigned position)
+	Sint64 File::Seek(Sint64 position)
     {
         if (!_handle)
             return 0;
 
-        const Sint64 ret = SDL_RWseek(_handle, position, RW_SEEK_SET);
-        return 0;
+        return SDL_RWseek(_handle, position, RW_SEEK_SET);
     }
+
+	Sint64 File::GetPosition() const
+	{
+		return _handle != 0 ? SDL_RWtell(_handle) : 0;
+	}
+
+	Sint64 File::GetSize() const
+	{
+		return _handle != 0 ? SDL_RWtell(_handle) : 0;
+	}
+
+	bool File::IsEof() const
+	{
+		if (_handle == 0 || _size == 0)
+			return true;
+		if (_size < 0)
+			return false;
+
+		return SDL_RWtell(_handle) >= _size;
+	}
 
 	const Path& File::GetPath() const
 	{

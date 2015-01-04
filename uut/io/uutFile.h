@@ -26,12 +26,17 @@ namespace uut
 
         virtual unsigned Write(const void* data, unsigned size) override;
         virtual unsigned Read(void* data, unsigned size) override;
-        virtual unsigned Seek(unsigned position) override;
+		virtual Sint64 Seek(Sint64 position) override;
+
+		virtual Sint64 GetPosition() const override;
+		virtual Sint64 GetSize() const override;
+		virtual bool IsEof() const override;
 
 		virtual const Path& GetPath() const override;
 
     protected:
         SDL_RWops* _handle;
         Path _path;
+		Sint64 _size;
     };
 }

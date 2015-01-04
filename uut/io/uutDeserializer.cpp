@@ -3,34 +3,11 @@
 namespace uut
 {
     Deserializer::Deserializer()
-        : _position(0)
-        , _size(0)
-    {
-    }
-
-    Deserializer::Deserializer(unsigned size)
-        : _position(0)
-        , _size(0)
     {
     }
 
     Deserializer::~Deserializer()
     {
-    }
-
-    unsigned Deserializer::GetPosition() const
-    {
-        return _position;
-    }
-
-    unsigned Deserializer::GetSize() const
-    {
-        return _size;
-    }
-
-    bool Deserializer::IsEof() const
-    {
-        return _position >= _size;
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -51,11 +28,11 @@ namespace uut
             break;
 
         case RW_SEEK_CUR:
-            return file->Seek((signed)file->GetPosition() + offset);
+            return file->Seek(file->GetPosition() + offset);
             break;
 
         case RW_SEEK_END:
-            return file->Seek((signed)file->GetSize() - offset);
+            return file->Seek(file->GetSize() - offset);
             break;
         }
 

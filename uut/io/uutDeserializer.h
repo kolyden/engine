@@ -8,20 +8,15 @@ namespace uut
     {
     public:
         Deserializer();
-        Deserializer(unsigned size);
         virtual ~Deserializer();
 
         virtual unsigned Read(void* data, unsigned size) = 0;
-        virtual unsigned Seek(unsigned position) = 0;
+		virtual Sint64 Seek(Sint64 position) = 0;
         virtual const Path& GetPath() const = 0;
 
-        unsigned GetPosition() const;
-        unsigned GetSize() const;
-        bool IsEof() const;
-
-    protected:
-        unsigned _position;
-        unsigned _size;
+		virtual Sint64 GetPosition() const = 0;
+		virtual Sint64 GetSize() const = 0;
+		virtual bool IsEof() const = 0;
     };
 
     SDL_RWops* UUT_API CreatReadRWops(Deserializer& deserializer);
