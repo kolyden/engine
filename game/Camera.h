@@ -13,18 +13,18 @@ namespace uut
 	public:
 		Camera(Context* context);
 
-		void SetPosition(const Vector3& position);
-		const Vector3& GetPosition() const;
+		void SetPosition(const Vector3f& position);
+		const Vector3f& GetPosition() const;
 
-		void SetRotation(const Vector3& rotation);
-		const Vector3& GetRotation() const;
+		void SetRotation(const Vector3f& rotation);
+		const Vector3f& GetRotation() const;
 
 		void UpdatePosition();
 
 	protected:
-		Vector3 _position;
-		Vector3 _rotation;
-		Matrix4 _matrix;
+		Vector3f _position;
+		Vector3f _rotation;
+		Matrix4f _matrix;
 		bool _update;
 	};
 }

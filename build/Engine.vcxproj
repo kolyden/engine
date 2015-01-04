@@ -34,9 +34,11 @@
     <ClInclude Include="..\uut\io\uutSerializer.h" />
     <ClInclude Include="..\uut\math\uutMath.h" />
     <ClInclude Include="..\uut\math\uutMatrix.h" />
+    <ClInclude Include="..\uut\math\uutQuaternion.h" />
     <ClInclude Include="..\uut\math\uutRect.h" />
     <ClInclude Include="..\uut\math\uutVector2.h" />
     <ClInclude Include="..\uut\math\uutVector3.h" />
+    <ClInclude Include="..\uut\math\uutVector4.h" />
     <ClInclude Include="..\uut\platform\uutPlatform.h" />
     <ClInclude Include="..\uut\platform\uutTime.h" />
     <ClInclude Include="..\uut\resource\uutResource.h" />
@@ -75,10 +77,6 @@
     <ClCompile Include="..\uut\io\uutInput.cpp" />
     <ClCompile Include="..\uut\io\uutPath.cpp" />
     <ClCompile Include="..\uut\io\uutSerializer.cpp" />
-    <ClCompile Include="..\uut\math\uutMatrix.cpp" />
-    <ClCompile Include="..\uut\math\uutRect.cpp" />
-    <ClCompile Include="..\uut\math\uutVector2.cpp" />
-    <ClCompile Include="..\uut\math\uutVector3.cpp" />
     <ClCompile Include="..\uut\platform\uutPlatform.cpp" />
     <ClCompile Include="..\uut\platform\uutTime.cpp" />
     <ClCompile Include="..\uut\resource\uutResource.cpp" />

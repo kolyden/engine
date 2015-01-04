@@ -7,6 +7,7 @@
 #include "platform/uutTime.h"
 #include "io/uutInput.h"
 #include "video/uutVertex2.h"
+#include "math/uutMatrix.h"
 #include "video/uutModel.h"
 
 RUNAPP(uut::MyApp);
@@ -24,11 +25,13 @@ namespace uut
 	//////////////////////////////////////////////////////////////////////////
 	void MyApp::OnInit()
 	{
-		const Rect rect(Vector2::ZERO, _size);
-		_video->SetMode(_size._x, _size._y);
+		const Recti rect(Vector2i::ZERO, _size);
+		Matrix4f mat;
+
+		_video->SetMode(_size.x, _size.y);
 		_video->SetViewPort(rect);
 		_video->SetTransform(TRANSFORM_PROJECTION,
-			Matrix4::BuildOrtho(rect, 0, 1));
+			Matrix4f::ortho2D(mat, 0.0f, (float)_size.x, (float)_size.y, 0.0f));
 
 		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, false);
 		_video->SetRenderState(RENDERSTATE_LIGHTNING, false);
@@ -45,7 +48,7 @@ namespace uut
 		_vbuf = SharedPtr<VideoBuffer>(new VideoBuffer(_context));
 		_vbuf->Create(BUFFER_VERTEX, Vertex2::SIZE* 4, BUFFERFLAG_DYNAMIC);
 
-		UpdateBuffer(_pos, Vector2(200.0f));
+		UpdateBuffer(_pos, Vector2f(200.0f));
 	}
 
 	void MyApp::OnUpdate()
@@ -61,7 +64,7 @@ namespace uut
 		if (_pos != newPos)
 		{
 			_pos = newPos;
-			UpdateBuffer(_pos, Vector2(200.0f));//IntVector2(_pos._x, 600 - _pos._y));
+			UpdateBuffer(_pos, Vector2f(200.0f));//IntVector2(_pos._x, 600 - _pos._y));
 		}
 
 		_color._g += _time->GetDelta();
@@ -75,7 +78,7 @@ namespace uut
 		_video->Clear(true, false, false);
 
 		_graphics->SetColor(Color::RED);
-		_graphics->DrawLine(Vector2(0, 0), _pos);
+		_graphics->DrawLine(Vector2f(0, 0), Vector2f(_pos));
 		_graphics->Flush();
 
 		if (_vbuf && _video->BindBuffer(_vbuf, Vertex2::SIZE, Vertex2::DECLARE, Vertex2::DECLARE_COUNT))
@@ -105,27 +108,27 @@ namespace uut
 
 	}
 
-	void MyApp::UpdateBuffer(const Vector2& pos, const Vector2& size)
+	void MyApp::UpdateBuffer(const Vector2i& pos, const Vector2f& size)
 	{
 		if (_vbuf && (_vbuf->GetSize() > 0))
 		{
-			const float hw = size._x / 2.0f;
-			const float hh = size._y / 2.0f;
+			const float hw = size.x / 2.0f;
+			const float hh = size.y / 2.0f;
 
-			const float x1 = pos._x - hw;
-			const float y1 = pos._y - hh;
-			const float x2 = pos._x + hw;
-			const float y2 = pos._y + hh;
+			const float x1 = pos.x - hw;
+			const float y1 = pos.y - hh;
+			const float x2 = pos.x + hw;
+			const float y2 = pos.y + hh;
 
 			const float tx1 = 0.0f, ty1 = 0.0f;
 			const float tx2 = 1.0f, ty2 = 1.0f;
 
 			const Vertex2 pVert[] =
 			{
-				Vertex2(Vector2(x1, y1), Vector2(tx1, ty1), 0xFFFFFFFF),
-				Vertex2(Vector2(x2, y1), Vector2(tx2, ty1), 0xFFFFFFFF),
-				Vertex2(Vector2(x1, y2), Vector2(tx1, ty2), 0xFFFFFFFF),
-				Vertex2(Vector2(x2, y2), Vector2(tx2, ty2), 0xFFFFFFFF),
+				Vertex2(Vector2f(x1, y1), Vector2f(tx1, ty1), 0xFFFFFFFF),
+				Vertex2(Vector2f(x2, y1), Vector2f(tx2, ty1), 0xFFFFFFFF),
+				Vertex2(Vector2f(x1, y2), Vector2f(tx1, ty2), 0xFFFFFFFF),
+				Vertex2(Vector2f(x2, y2), Vector2f(tx2, ty2), 0xFFFFFFFF),
 			};
 
 			_vbuf->UpdateData(0, _vbuf->GetSize(), pVert);

@@ -28,32 +28,32 @@ namespace uut
 		return _topology;
 	}
 
-	void Geometry::SetVertices(const List<Vector3>& vertices)
+	void Geometry::SetVertices(const List<Vector3f>& vertices)
 	{
 		_vertices = vertices;
 	}
 
-	const List<Vector3>& Geometry::GetVertices() const
+	const List<Vector3f>& Geometry::GetVertices() const
 	{
 		return _vertices;
 	}
 
-	void Geometry::SetNormals(const List<Vector3>& normals)
+	void Geometry::SetNormals(const List<Vector3f>& normals)
 	{
 		_normals = normals;
 	}
 
-	const List<Vector3>& Geometry::GetNormals() const
+	const List<Vector3f>& Geometry::GetNormals() const
 	{
 		return _normals;
 	}
 
-	void Geometry::SetUV(const List<Vector2>& uv)
+	void Geometry::SetUV(const List<Vector2f>& uv)
 	{
 		_uv = uv;
 	}
 
-	const List<Vector2>& Geometry::GetUV() const
+	const List<Vector2f>& Geometry::GetUV() const
 	{
 		return _uv;
 	}

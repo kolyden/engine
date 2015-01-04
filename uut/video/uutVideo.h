@@ -41,9 +41,9 @@ namespace uut
 
         bool BindTexture(Texture* texture, uint8_t index = 0);
 		bool UnbindTexture(Texture* texture, uint8_t index = 0);
-
-        void SetTransform(ETransformType type, const Matrix4& mat);
-		void SetViewPort(const Rect& rect);
+		
+        void SetTransform(ETransformType type, const Matrix4f& mat);
+		void SetViewPort(const Recti& rect);
 
         bool BindBuffer(VideoBuffer* buffer, uint32_t stride, const SDeclareType* declare, uint8_t count);
         void UnbindBuffer(VideoBuffer* buffer, const SDeclareType* declare, uint8_t count);

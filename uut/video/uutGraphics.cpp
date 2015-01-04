@@ -24,7 +24,7 @@ namespace uut
 		_currentColorUint = _currentColor.ToUint();
 	}
 
-	void Graphics::DrawLine(const Vector2& start, const Vector2& end)
+	void Graphics::DrawLine(const Vector2f& start, const Vector2f& end)
 	{
 		ChangeBufferParam(PRIMITIVE_LINES);
 

@@ -18,8 +18,8 @@ namespace uut
     {
         if (_data)
         {
-            _size._x = _data->w;
-            _size._y = _data->h;
+            _size.x = _data->w;
+            _size.y = _data->h;
             _pitch = _data->pitch;
         }
     }
@@ -33,10 +33,10 @@ namespace uut
     {
         Clear();
 
-        if ((size._x <= 0) || (size._y <= 0))
+        if ((size.x <= 0) || (size.y <= 0))
             return false;
 
-        _data = SDL_CreateRGBSurface(0, size._x, size._y,
+        _data = SDL_CreateRGBSurface(0, size.x, size.y,
             32, 0, 0, 0, 0);
 
         if (!_data)
@@ -74,10 +74,10 @@ namespace uut
             return false;
 
         SDL_Rect dstrect;
-        dstrect.x = dstPos._x;
-        dstrect.y = dstPos._y;
-        dstrect.w = _size._x;
-        dstrect.h = _size._y;
+        dstrect.x = dstPos.x;
+        dstrect.y = dstPos.y;
+        dstrect.w = _size.x;
+        dstrect.h = _size.y;
         SDL_BlitSurface(_data, 0, dst->_data, &dstrect);
 
         return true;

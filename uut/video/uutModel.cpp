@@ -32,7 +32,7 @@ namespace uut
 
 		_count = verts.Count();
 		auto data = new Vertex3[_count];
-		for (int i = 0; i < _count; i++)
+		for (auto i = 0; i < _count; i++)
 		{
 			data[i].pos = verts[i];
 			data[i].tex = uv[i];

@@ -7,8 +7,8 @@ namespace uut
 {
 	struct Vertex2
 	{
-		Vector2 pos;
-		Vector2 tex;
+		Vector2f pos;
+		Vector2f tex;
 		uint32_t color;
 
 		static const unsigned SIZE;
@@ -16,7 +16,7 @@ namespace uut
 		static const SDeclareType DECLARE[DECLARE_COUNT];
 
 		Vertex2() {}
-		Vertex2(const Vector2& pos, const uint32_t color);
-		Vertex2(const Vector2& pos, const Vector2& tex, const uint32_t color);
+		Vertex2(const Vector2f& pos, const uint32_t color);
+		Vertex2(const Vector2f& pos, const Vector2f& tex, const uint32_t color);
 	};
 }

@@ -28,8 +28,8 @@ namespace uut
         switch (evt.type)
         {
         case SDL_MOUSEMOTION:
-            _mousePos._x = evt.motion.x;
-            _mousePos._y = evt.motion.y;
+            _mousePos.x = evt.motion.x;
+            _mousePos.y = evt.motion.y;
             break;
 
         case SDL_MOUSEBUTTONDOWN:

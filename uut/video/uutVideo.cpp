@@ -90,7 +90,7 @@ namespace uut
             fullscreen = false;
             for (int i = 0; i < resolutions.Count(); ++i)
             {
-                if ((width == resolutions[i]._x) && (height == resolutions[i]._y))
+                if ((width == resolutions[i].x) && (height == resolutions[i].y))
                 {
                     fullscreen = true;
                     break;
@@ -193,7 +193,7 @@ namespace uut
         _tripleBuffer = tripleBuffer;
         _multiSample = multiSample;
 
-        SDL_GetWindowSize(_window, &_windowSize._x, &_windowSize._y);
+        SDL_GetWindowSize(_window, &_windowSize.x, &_windowSize.y);
 
         Clear(true, true, true);
         SDL_GL_SwapWindow(_window);
@@ -308,7 +308,7 @@ namespace uut
 
 	}
 
-	void Video::SetTransform(ETransformType type, const Matrix4& mat)
+	void Video::SetTransform(ETransformType type, const Matrix4f& mat)
     {
         switch (type)
         {
@@ -320,16 +320,16 @@ namespace uut
             break;
         }
 
-        ::glLoadMatrixf(mat.data);
+        ::glLoadMatrixf(mat.get_value());
     }
-
-	void Video::SetViewPort(const Rect& rect)
+	
+	void Video::SetViewPort(const Recti& rect)
 	{
 		glViewport(
-			rect._pos._x,
-			rect._pos._y,
-			rect._size._x,
-			rect._size._y);
+			rect.pos.x,
+			rect.pos.y,
+			rect.size.x,
+			rect.size.y);
 	}
 
     bool Video::BindBuffer(VideoBuffer* buffer, uint32_t stride, const SDeclareType* _declare, uint8_t count)

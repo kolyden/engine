@@ -35,6 +35,6 @@ namespace uut
 		virtual void OnUpdate() override;
 		virtual void OnRender() override;
 
-		void UpdateBuffer(const Vector2& pos, const Vector2& size);
+		void UpdateBuffer(const Vector2i& pos, const Vector2f& size);
 	};
 }

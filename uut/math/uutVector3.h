@@ -1,233 +1,268 @@
 #pragma once
-#include "uutVector2.h"
+#include "math/uutMath.h"
 
 namespace uut
 {
-	class UUT_API Vector3
+	template<class T>class Vector2;
+	template<class T>class Vector4;
+
+	template <class T>
+	class Vector3
 	{
 	public:
-		/// Construct a zero vector.
-		Vector3() :
-			_x(0.0f),
-			_y(0.0f),
-			_z(0.0f)
-		{
+		typedef T value_type;
+		int32_t size() const { return 3; }
+
+		////////////////////////////////////////////////////////
+		//
+		//  Constructors
+		//
+		////////////////////////////////////////////////////////
+
+		// Default/scalar constructor
+		Vector3(const T & t = T()) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = t;
 		}
 
-		/// Copy-construct from another vector.
-		Vector3(const Vector3& vector) :
-			_x(vector._x),
-			_y(vector._y),
-			_z(vector._z)
-		{
+		// Construct from array
+		Vector3(const T * tp) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = tp[i];
 		}
 
-		/// Construct from a two-dimensional vector and the Z coordinate.
-		Vector3(const Vector2& vector, float z) :
-			_x(vector._x),
-			_y(vector._y),
-			_z(z)
-		{
+		// Construct from explicit values
+		Vector3(const T v0, const T v1, const T v2) {
+			x = v0;
+			y = v1;
+			z = v2;
 		}
 
-		/// Construct from a two-dimensional vector (for Urho2D).
-		Vector3(const Vector2& vector) :
-			_x(vector._x),
-			_y(vector._y),
-			_z(0.0f)
-		{
+		explicit Vector3(const Vector4<T> &u) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = u._array[i];
 		}
 
-		/// Construct from coordinates.
-		Vector3(float x, float y, float z) :
-			_x(x),
-			_y(y),
-			_z(z)
-		{
+		explicit Vector3(const Vector2<T> &u, T v0) {
+			x = u.x;
+			y = u.y;
+			z = v0;
 		}
 
-		/// Construct from two-dimensional coordinates (for Urho2D).
-		Vector3(float x, float y) :
-			_x(x),
-			_y(y),
-			_z(0.0f)
-		{
+		const T * get_value() const {
+			return _array;
 		}
 
-		/// Construct from a float array.
-		Vector3(const float* data) :
-			_x(data[0]),
-			_y(data[1]),
-			_z(data[2])
-		{
-		}
-
-		/// Assign from another vector.
-		Vector3& operator = (const Vector3& rhs)
-		{
-			_x = rhs._x;
-			_y = rhs._y;
-			_z = rhs._z;
+		Vector3<T> & set_value(const T * rhs) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = rhs[i];
 			return *this;
 		}
 
-		/// Test for equality with another vector without epsilon.
-		bool operator == (const Vector3& rhs) const { return _x == rhs._x && _y == rhs._y && _z == rhs._z; }
-		/// Test for inequality with another vector without epsilon.
-		bool operator != (const Vector3& rhs) const { return _x != rhs._x || _y != rhs._y || _z != rhs._z; }
-		/// Add a vector.
-		Vector3 operator + (const Vector3& rhs) const { return Vector3(_x + rhs._x, _y + rhs._y, _z + rhs._z); }
-		/// Return negation.
-		Vector3 operator - () const { return Vector3(-_x, -_y, -_z); }
-		/// Subtract a vector.
-		Vector3 operator - (const Vector3& rhs) const { return Vector3(_x - rhs._x, _y - rhs._y, _z - rhs._z); }
-		/// Multiply with a scalar.
-		Vector3 operator * (float rhs) const { return Vector3(_x * rhs, _y * rhs, _z * rhs); }
-		/// Multiply with a vector.
-		Vector3 operator * (const Vector3& rhs) const { return Vector3(_x * rhs._x, _y * rhs._y, _z * rhs._z); }
-		/// Divide by a scalar.
-		Vector3 operator / (float rhs) const { return Vector3(_x / rhs, _y / rhs, _z / rhs); }
-		/// Divide by a vector.
-		Vector3 operator / (const Vector3& rhs) const { return Vector3(_x / rhs._x, _y / rhs._y, _z / rhs._z); }
-
-		/// Add-assign a vector.
-		Vector3& operator += (const Vector3& rhs)
-		{
-			_x += rhs._x;
-			_y += rhs._y;
-			_z += rhs._z;
-			return *this;
+		// indexing operators
+		T & operator [] (int32_t i) {
+			return _array[i];
 		}
 
-		/// Subtract-assign a vector.
-		Vector3& operator -= (const Vector3& rhs)
-		{
-			_x -= rhs._x;
-			_y -= rhs._y;
-			_z -= rhs._z;
-			return *this;
+		const T & operator [] (int32_t i) const {
+			return _array[i];
 		}
 
-		/// Multiply-assign a scalar.
-		Vector3& operator *= (float rhs)
-		{
-			_x *= rhs;
-			_y *= rhs;
-			_z *= rhs;
-			return *this;
+		// type-cast operators
+		operator T * () {
+			return _array;
 		}
 
-		/// Multiply-assign a vector.
-		Vector3& operator *= (const Vector3& rhs)
-		{
-			_x *= rhs._x;
-			_y *= rhs._y;
-			_z *= rhs._z;
-			return *this;
+		operator const T * () const {
+			return _array;
 		}
 
-		/// Divide-assign a scalar.
-		Vector3& operator /= (float rhs)
-		{
-			float invRhs = 1.0f / rhs;
-			_x *= invRhs;
-			_y *= invRhs;
-			_z *= invRhs;
-			return *this;
+		////////////////////////////////////////////////////////
+		//
+		//  Math operators
+		//
+		////////////////////////////////////////////////////////
+
+		// scalar multiply assign
+		friend Vector3<T> & operator *= (Vector3<T> &lhs, T d) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] *= d;
+			return lhs;
 		}
 
-		/// Divide-assign a vector.
-		Vector3& operator /= (const Vector3& rhs)
-		{
-			_x /= rhs._x;
-			_y /= rhs._y;
-			_z /= rhs._z;
-			return *this;
+		// component-wise vector multiply assign
+		friend Vector3<T> & operator *= (Vector3<T> &lhs, const Vector3<T> &rhs) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] *= rhs[i];
+			return lhs;
 		}
 
-		/// Normalize to unit length.
-		void Normalize()
-		{
-			float lenSquared = LengthSquared();
-			if (!Math::Equals(lenSquared, 1.0f) && lenSquared > 0.0f)
-			{
-				float invLen = 1.0f / sqrtf(lenSquared);
-				_x *= invLen;
-				_y *= invLen;
-				_z *= invLen;
-			}
+		// scalar divide assign
+		friend Vector3<T> & operator /= (Vector3<T> &lhs, T d) {
+			if (d == 0) return lhs;
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] /= d;
+			return lhs;
 		}
 
-		/// Return length.
-		float Length() const { return sqrtf(_x * _x + _y * _y + _z * _z); }
-		/// Return squared length.
-		float LengthSquared() const { return _x * _x + _y * _y + _z * _z; }
-		/// Calculate dot product.
-		float DotProduct(const Vector3& rhs) const { return _x * rhs._x + _y * rhs._y + _z * rhs._z; }
-		/// Calculate absolute dot product.
-		float AbsDotProduct(const Vector3& rhs) const { return Math::Abs(_x * rhs._x) + Math::Abs(_y * rhs._y) + Math::Abs(_z * rhs._z); }
-
-		/// Calculate cross product.
-		Vector3 CrossProduct(const Vector3& rhs) const
-		{
-			return Vector3(
-				_y * rhs._z - _z * rhs._y,
-				_z * rhs._x - _x * rhs._z,
-				_x * rhs._y - _y * rhs._x
-				);
+		// component-wise vector divide assign
+		friend Vector3<T> & operator /= (Vector3<T> &lhs, const Vector3<T> & rhs) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] /= rhs._array[i];
+			return lhs;
 		}
 
-		/// Return absolute vector.
-		Vector3 Abs() const { return Vector3(Math::Abs(_x), Math::Abs(_y), Math::Abs(_z)); }
-		/// Linear interpolation with another vector.
-		Vector3 Lerp(const Vector3& rhs, float t) const { return *this * (1.0f - t) + rhs * t; }
-		/// Test for equality with another vector with epsilon.
-		bool Equals(const Vector3& rhs) const { return Math::Equals(_x, rhs._x) && Math::Equals(_y, rhs._y) && Math::Equals(_z, rhs._z); }
-		/// Returns the angle between this vector and another vector in degrees.
-		float Angle(const Vector3& rhs) const { return Math::Acos(DotProduct(rhs) / (Length() * rhs.Length())); }
-		/// Return whether is NaN.
-// 		bool IsNaN() const { return Urho3D::IsNaN(x_) || Math::IsNaN(y_) || Math::IsNaN(z_); }
-
-		/// Return normalized to unit length.
-		Vector3 Normalized() const
-		{
-			float lenSquared = LengthSquared();
-			if (!Math::Equals(lenSquared, 1.0f) && lenSquared > 0.0f)
-			{
-				float invLen = 1.0f / sqrtf(lenSquared);
-				return *this * invLen;
-			}
-			else
-				return *this;
+		// component-wise vector add assign
+		friend Vector3<T> & operator += (Vector3<T> &lhs, const Vector3<T> & rhs) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] += rhs._array[i];
+			return lhs;
 		}
 
-		/// Return float data.
-		const float* Data() const { return &_x; }
-		/// Return as string.
-// 		String ToString() const;
+		// component-wise vector subtract assign
+		friend Vector3<T> & operator -= (Vector3<T> &lhs, const Vector3<T> & rhs) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] -= rhs._array[i];
+			return lhs;
+		}
 
-		/// coordinates
-		float _x, _y, _z;
+		// unary negate
+		friend Vector3<T> operator - (const Vector3<T> &rhs) {
+			Vector3<T> rv;
+			for (int32_t i = 0; i < rhs.size(); i++) rv._array[i] = -rhs._array[i];
+			return rv;
+		}
 
-		/// Zero vector.
-		static const Vector3 ZERO;
-		/// (-1,0,0) vector.
-		static const Vector3 LEFT;
-		/// (1,0,0) vector.
-		static const Vector3 RIGHT;
-		/// (0,1,0) vector.
-		static const Vector3 UP;
-		/// (0,-1,0) vector.
-		static const Vector3 DOWN;
-		/// (0,0,1) vector.
-		static const Vector3 FORWARD;
-		/// (0,0,-1) vector.
-		static const Vector3 BACK;
-		/// (1,1,1) vector.
-		static const Vector3 ONE;
+		// vector add
+		friend Vector3<T> operator + (const Vector3<T> & lhs, const Vector3<T> & rhs) {
+			Vector3<T> rt(lhs);
+			return rt += rhs;
+		}
+
+		// vector subtract
+		friend Vector3<T> operator - (const Vector3<T> & lhs, const Vector3<T> & rhs) {
+			Vector3<T> rt(lhs);
+			return rt -= rhs;
+		}
+
+		// scalar multiply
+		friend Vector3<T> operator * (const Vector3<T> & lhs, T rhs) {
+			Vector3<T> rt(lhs);
+			return rt *= rhs;
+		}
+
+		// scalar multiply
+		friend Vector3<T> operator * (T lhs, const Vector3<T> & rhs) {
+			Vector3<T> rt(lhs);
+			return rt *= rhs;
+		}
+
+		// vector component-wise multiply
+		friend Vector3<T> operator * (const Vector3<T> & lhs, const Vector3<T> & rhs){
+			Vector3<T> rt(lhs);
+			return rt *= rhs;
+		}
+
+		// scalar multiply
+		friend Vector3<T> operator / (const Vector3<T> & lhs, T rhs) {
+			Vector3<T> rt(lhs);
+			return rt /= rhs;
+		}
+
+		// vector component-wise multiply
+		friend Vector3<T> operator / (const Vector3<T> & lhs, const Vector3<T> & rhs){
+			Vector3<T> rt(lhs);
+			return rt /= rhs;
+		}
+
+		// vector - axis rotation //harish
+		void rotate(float angle, T vx, T vy, T vz) //harish
+		{
+			Vector3<T> NewPosition;
+
+			// Calculate the sine and cosine of the angle once
+			float cosTheta = (float)cos(angle);
+			float sinTheta = (float)sin(angle);
+
+
+			NewPosition._array[0] = (cosTheta + (1 - cosTheta) * vx * vx)            * _array[0];
+			NewPosition._array[0] += ((1 - cosTheta) * vx * vy - vz * sinTheta)    * _array[1];
+			NewPosition._array[0] += ((1 - cosTheta) * vx * vz + vy * sinTheta)    * _array[2];
+
+
+			NewPosition._array[1] = ((1 - cosTheta) * vx * vy + vz * sinTheta)    * _array[0];
+			NewPosition._array[1] += (cosTheta + (1 - cosTheta) * vy * vy)        * _array[1];
+			NewPosition._array[1] += ((1 - cosTheta) * vy * vz - vx * sinTheta)    * _array[2];
+
+			NewPosition._array[2] = ((1 - cosTheta) * vx * vz - vy * sinTheta)    *  _array[0];
+			NewPosition._array[2] += ((1 - cosTheta) * vy * vz + vx * sinTheta)    *  _array[1];
+			NewPosition._array[2] += (cosTheta + (1 - cosTheta) * vz * vz)        *  _array[2];
+
+			_array[0] = NewPosition._array[0];
+			_array[1] = NewPosition._array[1];
+			_array[2] = NewPosition._array[2];
+		}
+
+		//Calculate the cross product
+		Vector3<T> cross(Vector3<T> vec) //harish
+		{
+			Vector3<T> vNormal;                                    // The vector to hold the cross product
+
+			vNormal._array[0] = ((_array[1] * vec._array[2]) - (_array[2] * vec._array[1]));
+			vNormal._array[1] = ((_array[2] * vec._array[0]) - (_array[0] * vec._array[2]));
+			vNormal._array[2] = ((_array[0] * vec._array[1]) - (_array[1] * vec._array[0]));
+
+			return vNormal;
+		}
+
+		////////////////////////////////////////////////////////
+		//
+		//  Comparison operators
+		//
+		////////////////////////////////////////////////////////
+
+		// equality
+		friend bool operator == (const Vector3<T> &lhs, const Vector3<T> &rhs) {
+			bool r = true;
+			for (int32_t i = 0; i < lhs.size(); i++)
+				r &= lhs._array[i] == rhs._array[i];
+			return r;
+		}
+
+		// inequality
+		friend bool operator != (const Vector3<T> &lhs, const Vector3<T> &rhs) {
+			bool r = true;
+			for (int32_t i = 0; i < lhs.size(); i++)
+				r &= lhs._array[i] != rhs._array[i];
+			return r;
+		}
+
+		////////////////////////////////////////////////////////////////////////////////
+		//
+		// dimension specific operations
+		//
+		////////////////////////////////////////////////////////////////////////////////
+
+		// cross product
+		friend Vector3<T> cross(const Vector3<T> & lhs, const Vector3<T> & rhs) {
+			Vector3<T> r;
+
+			r.x = lhs.y * rhs.z - lhs.z * rhs.y;
+			r.y = lhs.z * rhs.x - lhs.x * rhs.z;
+			r.z = lhs.x * rhs.y - lhs.y * rhs.x;
+
+			return r;
+		}
+
+		//data intentionally left public to allow vec2.x
+		union {
+			struct {
+				T x, y, z;          // standard names for components
+			};
+			struct {
+				T s, t, r;          // standard names for components
+			};
+			T _array[3];     // array access
+		};
+
+		static const Vector3<T> ZERO;
+		static const Vector3<T> ONE;
 	};
 
-	/// Multiply Vector3 with a scalar.
-	inline Vector3 operator * (float lhs, const Vector3& rhs) { return rhs * lhs; }
+	template<class T>const Vector3<T> Vector3<T>::ZERO(0, 0, 0);
+	template<class T>const Vector3<T> Vector3<T>::ONE(1, 1, 1);
 
+	typedef Vector3<float> Vector3f; ///< float 3-vectors
+	typedef Vector3<int32_t> Vector3i; ///< signed integer 3-vectors
+	typedef Vector3<uint32_t> Vector3ui; ///< unsigned integer 4-vectors
 }

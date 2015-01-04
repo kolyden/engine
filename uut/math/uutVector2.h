@@ -1,298 +1,210 @@
 #pragma once
 #include "math/uutMath.h"
-#include "container/uutString.h"
 
 namespace uut
 {
-	class Vector2i;
+	template<class T>class Vector3;
+	template<class T>class Vector4;
 
-    /// Two-dimensional vector.
-    class UUT_API Vector2
-    {
-    public:
-        /// Construct undefined.
-        Vector2()
-        {
-        }
+	/// Template class for 2-tuple vector.
+	template <class T>
+	class Vector2
+	{
+	public:
+		typedef T value_type;
+		int32_t size() const { return 2; }
 
-        /// Copy-construct from another vector.
-        Vector2(const Vector2& vector) :
-            _x(vector._x),
-            _y(vector._y)
-        {
-        }
+		/// Default/scalar constructor
+		Vector2(const T & t = T()) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = t;
+		}
 
-        /// Construct from coordinates.
-        Vector2(float x, float y)
-            : _x(x), _y(y)
-        {
-        }
+		/// Construct from array
+		Vector2(const T * tp) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = tp[i];
+		}
 
-        explicit Vector2(float val)
-            : _x(val), _y(val)
-        {
-        }
+		/// Construct from explicit values
+		Vector2(const T v0, const T v1) {
+			x = v0;
+			y = v1;
+		}
 
-        /// Construct from a float array.
-        Vector2(const float* data)
-            : _x(data[0]), _y(data[1])
-        {
-        }
+		template<class C>
+		explicit Vector2(const Vector2<C>& u)
+			: x((T)u.x), y((T)u.y)
+		{}
 
-		Vector2(const Vector2i& vector);
+		/// "Cropping" explicit constructor from vec3 to vec2
+		explicit Vector2(const Vector3<T> &u) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = u._array[i];
+		}
 
-        /// Assign from another vector.
-        Vector2& operator = (const Vector2& rhs)
-        {
-            _x = rhs._x;
-            _y = rhs._y;
-            return *this;
-        }
+		/// "Cropping" explicit constructor from vec4 to vec2
+		explicit Vector2(const Vector4<T> &u) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = u._array[i];
+		}
 
-        /// Test for equality with another vector without epsilon.
-        bool operator == (const Vector2& rhs) const { return _x == rhs._x && _y == rhs._y; }
-        /// Test for inequality with another vector without epsilon.
-        bool operator != (const Vector2& rhs) const { return _x != rhs._x || _y != rhs._y; }
-        /// Add a vector.
-        Vector2 operator + (const Vector2& rhs) const { return Vector2(_x + rhs._x, _y + rhs._y); }
-        /// Return negation.
-        Vector2 operator - () const { return Vector2(-_x, -_y); }
-        /// Subtract a vector.
-        Vector2 operator - (const Vector2& rhs) const { return Vector2(_x - rhs._x, _y - rhs._y); }
-        /// Multiply with a scalar.
-        Vector2 operator * (float rhs) const { return Vector2(_x * rhs, _y * rhs); }
-        /// Multiply with a vector.
-        Vector2 operator * (const Vector2& rhs) const { return Vector2(_x * rhs._x, _y * rhs._y); }
-        /// Divide by a scalar.
-        Vector2 operator / (float rhs) const { return Vector2(_x / rhs, _y / rhs); }
-        /// Divide by a vector.
-        Vector2 operator / (const Vector2& rhs) const { return Vector2(_x / rhs._x, _y / rhs._y); }
+		const T * get_value() const {
+			return _array;
+		}
 
-        /// Add-assign a vector.
-        Vector2& operator += (const Vector2& rhs)
-        {
-            _x += rhs._x;
-            _y += rhs._y;
-            return *this;
-        }
+		Vector2<T> & set_value(const T * rhs) {
+			for (int32_t i = 0; i < size(); i++) _array[i] = rhs[i];
+			return *this;
+		}
 
-        /// Subtract-assign a vector.
-        Vector2& operator -= (const Vector2& rhs)
-        {
-            _x -= rhs._x;
-            _y -= rhs._y;
-            return *this;
-        }
+		// indexing operators
+		T & operator [] (int32_t i) {
+			return _array[i];
+		}
 
-        /// Multiply-assign a scalar.
-        Vector2& operator *= (float rhs)
-        {
-            _x *= rhs;
-            _y *= rhs;
-            return *this;
-        }
+		const T & operator [] (int32_t i) const {
+			return _array[i];
+		}
 
-        /// Multiply-assign a vector.
-        Vector2& operator *= (const Vector2& rhs)
-        {
-            _x *= rhs._x;
-            _y *= rhs._y;
-            return *this;
-        }
+		// type-cast operators
+		operator T * () {
+			return _array;
+		}
 
-        /// Divide-assign a scalar.
-        Vector2& operator /= (float rhs)
-        {
-            float invRhs = 1.0f / rhs;
-            _x *= invRhs;
-            _y *= invRhs;
-            return *this;
-        }
+		operator const T * () const {
+			return _array;
+		}
 
-        /// Divide-assign a vector.
-        Vector2& operator /= (const Vector2& rhs)
-        {
-            _x /= rhs._x;
-            _y /= rhs._y;
-            return *this;
-        }
+		////////////////////////////////////////////////////////
+		//
+		//  Math operators
+		//
+		////////////////////////////////////////////////////////
 
-        /// Normalize to unit length.
-        void Normalize()
-        {
-            float lenSquared = LengthSquared();
-            if (!Math::Equals(lenSquared, 1.0f) && lenSquared > 0.0f)
-            {
-                float invLen = 1.0f / sqrtf(lenSquared);
-                _x *= invLen;
-                _y *= invLen;
-            }
-        }
+		// scalar multiply assign
+		friend Vector2<T> & operator *= (Vector2<T> &lhs, T d) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] *= d;
+			return lhs;
+		}
 
-        /// Return length.
-        float Length() const { return sqrtf(_x * _x + _y * _y); }
-        /// Return squared length.
-        float LengthSquared() const { return _x * _x + _y * _y; }
-        /// Calculate dot product.
-        float DotProduct(const Vector2& rhs) const { return _x * rhs._x + _y * rhs._y; }
-        /// Calculate absolute dot product.
-		float AbsDotProduct(const Vector2& rhs) const { return Math::Abs(_x * rhs._x) + Math::Abs(_y * rhs._y); }
-        /// Return absolute vector.
-		Vector2 Abs() const { return Vector2(Math::Abs(_x), Math::Abs(_y)); }
-        /// Linear interpolation with another vector.
-        Vector2 Lerp(const Vector2& rhs, float t) const { return *this * (1.0f - t) + rhs * t; }
-        /// Test for equality with another vector with epsilon.
-		bool Equals(const Vector2& rhs) const { return Math::Equals(_x, rhs._x) && Math::Equals(_y, rhs._y); }
+		// component-wise vector multiply assign
+		friend Vector2<T> & operator *= (Vector2<T> &lhs, const Vector2<T> &rhs) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] *= rhs[i];
+			return lhs;
+		}
 
-        /// Return normalized to unit length.
-        Vector2 Normalized() const
-        {
-            float lenSquared = LengthSquared();
-            if (!Math::Equals(lenSquared, 1.0f) && lenSquared > 0.0f)
-            {
-                float invLen = 1.0f / sqrtf(lenSquared);
-                return *this * invLen;
-            }
-            else
-                return *this;
-        }
+		// scalar divide assign
+		friend Vector2<T> & operator /= (Vector2<T> &lhs, T d) {
+			if (d == 0) return lhs;
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] /= d;
+			return lhs;
+		}
 
-        /// Return float data.
-        const float* Data() const { return &_x; }
-        /// Return as string.
-        String ToString() const;
+		// component-wise vector divide assign
+		//    friend vec2<T> & operator /= ( vec2<T> &lhs, const vec2<T> & rhs ) {
+		//        for(int32_t i = 0; i < lhs.size(); i++) lhs._array[i] /= rhs._array[i];
+		//        return *this;
+		//    }
 
-        /// X coordinate.
-        float _x;
-        /// Y coordinate.
-        float _y;
+		// component-wise vector add assign
+		friend Vector2<T> & operator += (Vector2<T> &lhs, const Vector2<T> & rhs) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] += rhs._array[i];
+			return lhs;
+		}
 
-        /// Zero vector.
-        static const Vector2 ZERO;
-        /// (-1,0) vector.
-        static const Vector2 LEFT;
-        /// (1,0) vector.
-        static const Vector2 RIGHT;
-        /// (0,1) vector.
-        static const Vector2 UP;
-        /// (0,-1) vector.
-        static const Vector2 DOWN;
-        /// (1,1) vector.
-        static const Vector2 ONE;
-    };
+		// component-wise vector subtract assign
+		friend Vector2<T> & operator -= (Vector2<T> &lhs, const Vector2<T> & rhs) {
+			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] -= rhs._array[i];
+			return lhs;
+		}
 
-    /// Multiply Vector2 with a scalar
-    inline Vector2 operator * (float lhs, const Vector2& rhs) { return rhs * lhs; }
+		// unary negate
+		friend Vector2<T> operator - (const Vector2<T> &rhs) {
+			Vector2<T> rv;
+			for (int32_t i = 0; i < rhs.size(); i++) rv._array[i] = -rhs._array[i];
+			return rv;
+		}
 
-    /// Two-dimensional vector with integer values.
-    class UUT_API Vector2i
-    {
-    public:
-        /// Construct undefined.
-        Vector2i()
-        {
-        }
+		// vector add
+		friend Vector2<T> operator + (const Vector2<T> & lhs, const Vector2<T> & rhs) {
+			Vector2<T> rt(lhs);
+			return rt += rhs;
+		}
 
-        /// Construct from coordinates.
-        Vector2i(int x, int y)
-            : _x(x), _y(y)
-        {
-        }
+		// vector subtract
+		friend Vector2<T> operator - (const Vector2<T> & lhs, const Vector2<T> & rhs) {
+			Vector2<T> rt(lhs);
+			return rt -= rhs;
+		}
 
-        explicit Vector2i(int val)
-            : _x(val), _y(val)
-        {
-        }
+		// scalar multiply
+		friend Vector2<T> operator * (const Vector2<T> & lhs, T rhs) {
+			Vector2<T> rt(lhs);
+			return rt *= rhs;
+		}
 
-        /// Construct from an int array.
-        Vector2i(const int* data)
-            : _x(data[0]), _y(data[1])
-        {
-        }
+		// scalar multiply
+		friend Vector2<T> operator * (T lhs, const Vector2<T> & rhs) {
+			Vector2<T> rt(lhs);
+			return rt *= rhs;
+		}
 
-        /// Copy-construct from another vector.
-        Vector2i(const Vector2i& rhs)
-            : _x(rhs._x), _y(rhs._y)
-        {
-        }
+		// vector component-wise multiply
+		friend Vector2<T> operator * (const Vector2<T> & lhs, const Vector2<T> & rhs){
+			Vector2<T> rt(lhs);
+			return rt *= rhs;
+		}
 
-		/// Copy-construct from another vector.
-		Vector2i(const Vector2& rhs);
+		// scalar multiply
+		friend Vector2<T> operator / (const Vector2<T> & lhs, T rhs) {
+			Vector2<T> rt(lhs);
+			return rt /= rhs;
+		}
 
-        int Area() const { return _x * _y; }
+		// vector component-wise multiply
+		friend Vector2<T> operator / (const Vector2<T> & lhs, const Vector2<T> & rhs){
+			Vector2<T> rt(lhs);
+			return rt /= rhs;
+		}
 
-        /// Test for equality with another vector.
-        bool operator == (const Vector2i& rhs) const { return _x == rhs._x && _y == rhs._y; }
-        /// Test for inequality with another vector.
-        bool operator != (const Vector2i& rhs) const { return _x != rhs._x || _y != rhs._y; }
-        /// Add a vector.
-        Vector2i operator + (const Vector2i& rhs) const { return Vector2i(_x + rhs._x, _y + rhs._y); }
-        /// Return negation.
-        Vector2i operator - () const { return Vector2i(-_x, -_y); }
-        /// Subtract a vector.
-        Vector2i operator - (const Vector2i& rhs) const { return Vector2i(_x - rhs._x, _y - rhs._y); }
-        /// Multiply with a scalar.
-        Vector2i operator * (int rhs) const { return Vector2i(_x * rhs, _y * rhs); }
-        /// Divide by a scalar.
-        Vector2i operator / (int rhs) const { return Vector2i(_x / rhs, _y / rhs); }
+		////////////////////////////////////////////////////////
+		//
+		//  Comparison operators
+		//
+		////////////////////////////////////////////////////////
 
-        /// Add-assign a vector.
-        Vector2i& operator += (const Vector2i& rhs)
-        {
-            _x += rhs._x;
-            _y += rhs._y;
-            return *this;
-        }
+		// equality
+		friend bool operator == (const Vector2<T> &lhs, const Vector2<T> &rhs) {
+			bool r = true;
+			for (int32_t i = 0; i < lhs.size(); i++)
+				r &= lhs._array[i] == rhs._array[i];
+			return r;
+		}
 
-        /// Subtract-assign a vector.
-        Vector2i& operator -= (const Vector2i& rhs)
-        {
-            _x -= rhs._x;
-            _y -= rhs._y;
-            return *this;
-        }
+		// inequality
+		friend bool operator != (const Vector2<T> &lhs, const Vector2<T> &rhs) {
+			bool r = true;
+			for (int32_t i = 0; i < lhs.size(); i++)
+				r &= lhs._array[i] != rhs._array[i];
+			return r;
+		}
 
-        /// Multiply-assign a scalar.
-        Vector2i& operator *= (int rhs)
-        {
-            _x *= rhs;
-            _y *= rhs;
-            return *this;
-        }
+		//data intentionally left public to allow vec2.x
+		union {
+			struct {
+				T x, y;          // standard names for components
+			};
+			struct {
+				T s, t;          // standard names for components
+			};
+			T _array[2];     // array access
+		};
 
-        /// Divide-assign a scalar.
-        Vector2i& operator /= (int rhs)
-        {
-            _x /= rhs;
-            _y /= rhs;
-            return *this;
-        }
-
-        /// Return integer data.
-        const int* Data() const { return &_x; }
-        /// Return as string.
-        String ToString() const;
-
-        /// X coordinate.
-        int _x;
-        /// Y coordinate.
-        int _y;
-
-		/// Zero vector.
-		static const Vector2i ZERO;
-		/// (-1,0) vector.
-		static const Vector2i LEFT;
-		/// (1,0) vector.
-		static const Vector2i RIGHT;
-		/// (0,1) vector.
-		static const Vector2i UP;
-		/// (0,-1) vector.
-		static const Vector2i DOWN;
-		/// (1,1) vector.
-		static const Vector2i ONE;
+		static const Vector2<T> ZERO;
+		static const Vector2<T> ONE;
 	};
 
-    /// Multiply IntVector2 with a scalar.
-    inline Vector2i operator * (int lhs, const Vector2i& rhs) { return rhs * lhs; }
+	template<class T>const Vector2<T> Vector2<T>::ZERO(0, 0);
+	template<class T>const Vector2<T> Vector2<T>::ONE(1, 1);
 
+	typedef Vector2<float> Vector2f; ///< float 2-vectors
+	typedef Vector2<int32_t> Vector2i; ///< signed integer 2-vectors
+	typedef Vector2<uint32_t> Vector2ui; ///< unsigned integer 2-vectors
 }

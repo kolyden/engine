@@ -19,7 +19,7 @@ namespace uut
 
 		void SetColor(const Color& color);
 
-		void DrawLine(const Vector2& start, const Vector2& end);
+		void DrawLine(const Vector2f& start, const Vector2f& end);
 
 		void Flush();
 

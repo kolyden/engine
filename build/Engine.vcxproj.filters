@@ -171,6 +171,12 @@
     <ClInclude Include="..\uut\math\uutMatrix.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="..\uut\math\uutQuaternion.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\math\uutVector4.h">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\uut\container\uutHashString.cpp">
@@ -199,12 +205,6 @@
     </ClCompile>
     <ClCompile Include="..\uut\io\uutInput.cpp">
       <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\uut\math\uutRect.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\uut\math\uutVector2.cpp">
-      <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="..\uut\platform\uutPlatform.cpp">
       <Filter>platform</Filter>
@@ -260,9 +260,6 @@
     <ClCompile Include="..\uut\video\uutTriangle.cpp">
       <Filter>video</Filter>
     </ClCompile>
-    <ClCompile Include="..\uut\math\uutVector3.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
     <ClCompile Include="..\uut\video\uutModel.cpp">
       <Filter>video</Filter>
     </ClCompile>
@@ -286,9 +283,6 @@
     </ClCompile>
     <ClCompile Include="..\uut\video\loaders\tiny_obj_loader.cc">
       <Filter>video\loaders</Filter>
-    </ClCompile>
-    <ClCompile Include="..\uut\math\uutMatrix.cpp">
-      <Filter>math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

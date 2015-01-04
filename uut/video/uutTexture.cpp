@@ -24,7 +24,7 @@ namespace uut
     {
         Clear();
 
-        if ((size._x <= 0) || (size._y <= 0))
+        if ((size.x <= 0) || (size.y <= 0))
             return false;
 
         int access = 0;
@@ -45,7 +45,7 @@ namespace uut
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
         // Loads image data into OpenGL.
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size._x, size._y, 0,
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0,
             GL_RGB, GL_UNSIGNED_BYTE, 0);
 
         glBindTexture(GL_TEXTURE_2D, 0);
