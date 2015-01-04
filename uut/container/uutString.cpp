@@ -30,6 +30,17 @@ namespace uut
 		return _data.compare(str._data);
 	}
 
+
+	float String::ToFloat() const
+	{
+		return std::stof(GetData());
+	}
+
+	int String::ToInt() const
+	{
+		return std::stoi(GetData());
+	}
+
 	String String::Copy(int start, int count /*= -1*/) const
 	{
 		return String(_data.substr(start, count ? count : (int)_data.size() - start));
@@ -41,17 +52,18 @@ namespace uut
 		int cur = 0, prev = 0;
 		while ((cur = Find(c, prev)) >= 0)
 		{
-			const int count = prev - cur - 1;
+			const int count = cur - prev;
 			if (count == 0)
 			{
 				if (keepEmpty)
 					arr.Add(String::EMPTY);
 			}
-			else arr.Add(Copy(cur + 1, prev - cur));
-			prev = cur;
+			else arr.Add(Copy(prev, count));
+			prev = cur + 1;
 		}
+
+		arr.Add(Copy(prev));
 
 		return arr;
 	}
-
 }

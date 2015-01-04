@@ -15,6 +15,15 @@ namespace uut
     {
     }
 
+	Color::Color(uint32_t color)
+	{
+		const float inv = 1.0f / 255.0f;
+		_r = inv * ((color >> 24) & 0xFF);
+		_g = inv * ((color >> 16) & 0xFF);
+		_b = inv * ((color >>  8) & 0xFF);
+		_a = inv * ((color      ) & 0xFF);
+	}
+
     void Color::Convert(uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a) const
     {
         if (r) *r = static_cast<uint8_t>(_r * 255.0f);

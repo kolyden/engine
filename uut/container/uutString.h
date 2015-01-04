@@ -27,6 +27,9 @@ namespace uut
 		
 		String Copy(int start, int count = -1) const;
 
+		float ToFloat() const;
+		int ToInt() const;
+
 		const char* GetData() const { return _data.c_str(); }
 
 		int Find(char c, int start = 0) const				{ return (int)_data.find(c, start); }

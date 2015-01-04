@@ -29,17 +29,23 @@ namespace uut
             return false;
 
         _path = path;
+		_position = 0;
+		const auto size = SDL_RWsize(_handle);
+		if (size > 0)
+			_size = size;
         return true;
     }
 
     void File::Close()
     {
-        if (_handle)
-        {
-            SDL_RWclose(_handle);
-            SDL_FreeRW(_handle);
-            _handle = 0;
-        }
+		if (_handle == 0)
+			return;
+
+		SDL_RWclose(_handle);
+		SDL_FreeRW(_handle);
+		_handle = 0;
+		_position = 0;
+		_size = 0;
     }
 
     unsigned File::Write(const void* data, unsigned size)
@@ -55,7 +61,9 @@ namespace uut
         if (!_handle)
             return 0;
 
-        return SDL_RWread(_handle, data, 1, size);
+        const auto ret = SDL_RWread(_handle, data, 1, size);
+		_position += ret;
+		return ret;
     }
 
     unsigned File::Seek(unsigned position)

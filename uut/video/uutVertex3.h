@@ -1,5 +1,6 @@
 #pragma once
 #include "uutVideoDefs.h"
+#include "math/uutVector2.h"
 #include "math/uutVector3.h"
 
 namespace uut
@@ -7,7 +8,7 @@ namespace uut
 	struct Vertex3
 	{
 		Vector3 pos;
-		Vector3 tex;
+		Vector2 tex;
 		uint32_t color;
 
 		static const unsigned SIZE;
@@ -16,6 +17,6 @@ namespace uut
 
 		Vertex3() {}
 		Vertex3(const Vector3& pos, const uint32_t color);
-		Vertex3(const Vector3& pos, const Vector3& tex, const uint32_t color);
+		Vertex3(const Vector3& pos, const Vector2& tex, const uint32_t color);
 	};
 }

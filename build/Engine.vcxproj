@@ -41,6 +41,7 @@
     <ClInclude Include="..\uut\resource\uutResource.h" />
     <ClInclude Include="..\uut\resource\uutResourceCache.h" />
     <ClInclude Include="..\uut\resource\uutResourceLoader.h" />
+    <ClInclude Include="..\uut\video\loaders\tiny_obj_loader.h" />
     <ClInclude Include="..\uut\video\loaders\uutImageLoader.h" />
     <ClInclude Include="..\uut\video\loaders\uutModelLoaderOBJ.h" />
     <ClInclude Include="..\uut\video\loaders\uutTextureLoader.h" />
@@ -81,6 +82,7 @@
     <ClCompile Include="..\uut\resource\uutResource.cpp" />
     <ClCompile Include="..\uut\resource\uutResourceCache.cpp" />
     <ClCompile Include="..\uut\resource\uutResourceLoader.cpp" />
+    <ClCompile Include="..\uut\video\loaders\tiny_obj_loader.cc" />
     <ClCompile Include="..\uut\video\loaders\uutImageLoader.cpp" />
     <ClCompile Include="..\uut\video\loaders\uutModelLoaderOBJ.cpp" />
     <ClCompile Include="..\uut\video\loaders\uutTextureLoader.cpp" />

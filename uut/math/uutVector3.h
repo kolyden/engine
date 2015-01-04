@@ -11,33 +11,18 @@ namespace uut
 	{
 	public:
 		/// Construct undefined.
-		Vector3()
-		{
-		}
+		Vector3();
 
 		/// Copy-construct from another vector.
-		Vector3(const Vector3& vector) :
-			_x(vector._x),
-			_y(vector._y)
-		{
-		}
+		Vector3(const Vector3& vector);
 
 		/// Construct from coordinates.
-		Vector3(float x, float y, float z)
-			: _x(x), _y(y), _z(z)
-		{
-		}
+		Vector3(float x, float y, float z);
 
-		explicit Vector3(float val)
-			: _x(val), _y(val), _z(val)
-		{
-		}
+		explicit Vector3(float val);
 
 		/// Construct from a float array.
-		Vector3(const float* data)
-			: _x(data[0]), _y(data[1])
-		{
-		}
+		Vector3(const float* data);
 
 		Vector3(const Vector3i& vector);
 

@@ -5,27 +5,93 @@ namespace uut
 {
 	Geometry::Geometry(Context* context)
 		: Object(context)
+		, _topology(PRIMITIVE_TRIANGLES)
 	{
 	}
 
-	void Geometry::SetVideoBuffer(VideoBuffer* buffer)
+	void Geometry::Clear()
 	{
-		_vbuffer = buffer;
+		_vertices.Clear();
+		_normals.Clear();
+		_uv.Clear();
+		_colors.Clear();
+		_indexes.Clear();
 	}
 
-	VideoBuffer* Geometry::GetVideoBuffer() const
+	void Geometry::SetTopology(EPrimitiveType type)
 	{
-		return _vbuffer;
+		_topology = type;
 	}
 
-	void Geometry::SetIndexBuffer(VideoBuffer* buffer)
+	uut::EPrimitiveType Geometry::GetTopology() const
 	{
-		_ibuffer = buffer;
+		return _topology;
 	}
 
-	VideoBuffer* Geometry::GetIndexBuffer() const
+	void Geometry::SetVertices(const List<Vector3>& vertices)
 	{
-		return _ibuffer;
+		_vertices = vertices;
+	}
+
+	const List<Vector3>& Geometry::GetVertices() const
+	{
+		return _vertices;
+	}
+
+	void Geometry::SetNormals(const List<Vector3>& normals)
+	{
+		_normals = normals;
+	}
+
+	const List<Vector3>& Geometry::GetNormals() const
+	{
+		return _normals;
+	}
+
+	void Geometry::SetUV(const List<Vector2>& uv)
+	{
+		_uv = uv;
+	}
+
+	const List<Vector2>& Geometry::GetUV() const
+	{
+		return _uv;
+	}
+
+	void Geometry::SetColors(const List<Color>& colors)
+	{
+		_colors.Clear();
+		for (int i = 0; i < colors.Count(); i++)
+			_colors.Add(colors[i].ToUint());
+	}
+
+	List<Color> Geometry::GetColors() const
+	{
+		List<Color> ret;
+		for (int i = 0; i < _colors.Count(); i++)
+			ret.Add(Color(_colors[i]));
+
+		return ret;
+	}
+
+	void Geometry::SetColors32(const List<uint32_t>& colors)
+	{
+		_colors = colors;
+	}
+
+	const List<uint32_t>& Geometry::GetColors32() const
+	{
+		return _colors;
+	}
+
+	void Geometry::SetIndexes(const List<uint16_t>& indexes)
+	{
+		_indexes = indexes;
+	}
+
+	const List<uint16_t>& Geometry::GetIndexes() const
+	{
+		return _indexes;
 	}
 
 }

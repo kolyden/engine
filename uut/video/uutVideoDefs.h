@@ -27,6 +27,7 @@ namespace uut
 
     enum EBufferFlag
     {
+		BUFFERFLAG_STATIC = 0,
         BUFFERFLAG_DYNAMIC = 1,
     };
 

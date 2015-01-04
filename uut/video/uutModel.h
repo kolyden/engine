@@ -1,9 +1,11 @@
 #pragma once
 #include "resource/uutResource.h"
+#include "uutVideoDefs.h"
 
 namespace uut
 {
 	class Geometry;
+	class VideoBuffer;
 
 	class UUT_API Model : public Resource
 	{
@@ -11,10 +13,15 @@ namespace uut
 	public:
 		Model(Context* context);
 
-		void SetGeometry(Geometry* geometry);
-		Geometry* GetGeometry() const;
+		bool Create(Geometry* geometry);
+		void Clear();
+
+		void Draw() const;
 
 	protected:
-		SharedPtr<Geometry> _geometry;
+		EPrimitiveType _topology;
+		uint32_t _count;
+		SharedPtr<VideoBuffer> _vbuffer;
+		SharedPtr<VideoBuffer> _ibuffer;
 	};
 }

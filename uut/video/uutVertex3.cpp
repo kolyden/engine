@@ -11,11 +11,11 @@ namespace uut
 	};
 
 	Vertex3::Vertex3(const Vector3& _pos, const uint32_t _color)
-		: pos(_pos), tex(Vector3::ZERO), color(_color)
+		: pos(_pos), tex(Vector2::ZERO), color(_color)
 	{
 	}
 
-	Vertex3::Vertex3(const Vector3& _pos, const Vector3& _tex, const uint32_t _color)
+	Vertex3::Vertex3(const Vector3& _pos, const Vector2& _tex, const uint32_t _color)
 		: pos(_pos), tex(_tex), color(_color)
 	{
 	}

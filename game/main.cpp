@@ -7,6 +7,7 @@
 #include "platform/uutTime.h"
 #include "io/uutInput.h"
 #include "video/uutVertex2.h"
+#include "video/uutModel.h"
 
 RUNAPP(uut::MyApp);
 
@@ -31,6 +32,8 @@ namespace uut
 	void MyApp::OnStart()
 	{
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
+
+		_model0 = _cache->Load<Model>("Data/stairs.obj");
 
 		_vbuf = SharedPtr<VideoBuffer>(new VideoBuffer(_context));
 		_vbuf->Create(BUFFER_VERTEX, Vertex2::SIZE* 4, BUFFERFLAG_DYNAMIC);
@@ -61,7 +64,7 @@ namespace uut
 
 	void MyApp::OnRender()
 	{
-		_video->SetColor(COLOR_CLEAR, _color);
+		_video->SetColor(COLOR_CLEAR, Color::WHITE);
 		_video->Clear(true, false, false);
 
 		_graphics->SetColor(Color::RED);
@@ -87,6 +90,12 @@ namespace uut
 			_video->SetRenderState(RENDERSATE_BLEND, false);
 			_video->UnbindBuffer(_vbuf, Vertex2::DECLARE, Vertex2::DECLARE_COUNT);
 		}
+
+		if (_model0)
+		{
+			_model0->Draw();
+		}
+
 	}
 
 	void MyApp::UpdateBuffer(const Vector2& pos, const Vector2& size)

@@ -8,6 +8,7 @@ namespace uut
 {
 	class Texture;
 	class VideoBuffer;
+	class Model;
 
 	class MyApp : public Application
 	{
@@ -18,6 +19,7 @@ namespace uut
 		SharedPtr<Texture> _tex0;
 		SharedPtr<VideoBuffer> _vbuf;
 		SharedPtr<VideoBuffer> _ibuf;
+		SharedPtr<Model> _model0;
 
 		Color _color;
 		Vector2i _pos;
