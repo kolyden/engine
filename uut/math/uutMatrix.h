@@ -673,7 +673,21 @@ namespace uut
 			};
 			T _array[16];     // array access
 		};
+
+		static const Matrix4<T> ZERO;
+		static const Matrix4<T> IDENTITY;
 	};
+
+	template<class T>const Matrix4<T> Matrix4<T>::ZERO(
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0);
+	template<class T>const Matrix4<T> Matrix4<T>::IDENTITY(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1);
 
 	typedef Matrix4<float> Matrix4f; ///< float 4x4 matrices
 }

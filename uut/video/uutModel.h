@@ -20,8 +20,9 @@ namespace uut
 
 	protected:
 		EPrimitiveType _topology;
-		uint32_t _count;
 		SharedPtr<VideoBuffer> _vbuffer;
 		SharedPtr<VideoBuffer> _ibuffer;
+		uint32_t _vcount;
+		uint32_t _icount;
 	};
 }

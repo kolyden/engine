@@ -37,12 +37,13 @@ namespace uut
 
 	void Camera::UpdatePosition()
 	{
-		if (!_update)
-			return;
+		if (_update)
+		{
+			_update = false;
+			_matrix.make_identity();
+			Matrix4f::translation(_matrix, _position);
+		}
 
-		_update = false;
-		_matrix.make_identity();
-		Matrix4f::translation(_matrix, _position);
 		_video->SetTransform(TRANSFORM_VIEW, _matrix);
 	}
 

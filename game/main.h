@@ -4,6 +4,8 @@
 #include "video/uutColor.h"
 #include "math/uutVector2.h"
 #include "math/uutVector3.h"
+#include "math/uutMatrix.h"
+#include "math/uutRect.h"
 #include "Camera.h"
 
 namespace uut
@@ -24,6 +26,9 @@ namespace uut
 		SharedPtr<VideoBuffer> _ibuf;
 		SharedPtr<Model> _model0;
 		SharedPtr<Camera> _camera;
+
+		Matrix4f _matOrtho;
+		Matrix4f _matPersp;
 
 		Color _color;
 		Vector2i _pos;
