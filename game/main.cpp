@@ -29,7 +29,7 @@ namespace uut
 		const float aspect = (1.0f * _size.x) / _size.y;
 
 		Matrix4f::ortho2D(_matOrtho, 0.0f, (float)_size.x, (float)_size.y, 0.0f);
-		Matrix4f::perspective(_matPersp, 60.0f, aspect, 0.0f, 100.0f);
+		Matrix4f::perspective2(_matPersp, Math::ToRad(60.0f), aspect, 0.0f, 100.0f);
 
 		_video->SetMode(_size.x, _size.y);
 		_video->SetViewPort(rect);
@@ -90,6 +90,20 @@ namespace uut
 			_camera->SetPosition(vec);
 		}
 
+		if (_input->IsKey(KEYCODE_Q))
+		{
+			auto vec = _camera->GetPosition();
+			vec.z -= speed * _time->GetDelta();
+			_camera->SetPosition(vec);
+		}
+
+		if (_input->IsKey(KEYCODE_Z))
+		{
+			auto vec = _camera->GetPosition();
+			vec.z += speed * _time->GetDelta();
+			_camera->SetPosition(vec);
+		}
+
 		if (_pos != newPos)
 		{
 			_pos = newPos;
@@ -105,18 +119,21 @@ namespace uut
 
 	void MyApp::OnRender()
 	{
-		_video->SetColor(COLOR_CLEAR, _color);
+		_video->SetColor(COLOR_CLEAR, Color::BLACK);
 		_video->Clear(true, false, false);
 
 		_video->SetTransform(TRANSFORM_PROJECTION, _matPersp);
 		_camera->UpdatePosition();
 		if (_model0)
+		{
+			_video->SetColor(COLOR_DRAW, Color::WHITE);
 			_model0->Draw();
+		}
 
 		_video->SetTransform(TRANSFORM_PROJECTION, _matOrtho);
 // 		_video->SetTransform(TRANSFORM_VIEW, Matrix4f::IDENTITY);
 
-		_graphics->SetColor(Color::RED);
+		_graphics->SetColor(_color);
 		_graphics->DrawLine(Vector2f(0, 0), Vector2f(_pos));
 		_graphics->Flush();
 

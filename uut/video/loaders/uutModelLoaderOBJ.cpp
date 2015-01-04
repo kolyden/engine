@@ -64,7 +64,7 @@ namespace uut
 
 		List<Vector3f> verts;
 		List<uint32_t> colors;
-		for (auto i = 0; i < count; i++)
+		for (unsigned int i = 0; i < count; i++)
 		{
 			const int index = i * 3;
 			verts.Add(Vector3f(
@@ -75,7 +75,7 @@ namespace uut
 		}
 
 		List<Vector3f> normals;
-		for (auto i = 0; i < count; i++)
+		for (unsigned int i = 0; i < count; i++)
 		{
 			const int index = i * 3;
 			normals.Add(Vector3f(
@@ -85,7 +85,7 @@ namespace uut
 		}
 
 		List<Vector2f> tex;
-		for (auto i = 0; i < count; i++)
+		for (unsigned int i = 0; i < count; i++)
 		{
 			const int index = i * 2;
 			tex.Add(Vector2f(
@@ -94,7 +94,7 @@ namespace uut
 		}
 
 		List<uint16_t> indexes;
-		for (auto i = 0; i < mesh.indices.size(); i++)
+		for (unsigned int i = 0; i < mesh.indices.size(); i++)
 			indexes.Add(mesh.indices[i]);
 
 		auto geometry = SharedPtr<Geometry>(new Geometry(_context));

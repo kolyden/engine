@@ -14,6 +14,9 @@ namespace uut
 		static const float DEGTORAD_2 = (float)PI / 360.0f; // M_DEGTORAD / 2.f
 		static const float RADTODEG = 1.0f / DEGTORAD;
 
+		inline float ToRad(float angle) { return DEGTORAD * angle; }
+		inline float ToDeg(float angle) { return RADTODEG * angle; }
+
 		/// Check whether two floating point values are equal within accuracy.
 		inline bool Equals(float lhs, float rhs) { return lhs + EPSILON >= rhs && lhs - EPSILON <= rhs; }
 		/// Linear interpolation between two float values.

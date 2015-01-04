@@ -584,6 +584,48 @@ namespace uut
 		}
 
 		template<class T>
+		static Matrix4<T>& perspective2(Matrix4<T> & m, float fov, float aspect, float znear, float zfar)
+		{
+			const float PI_OVER_360 = 0.0087266f;
+			float xymax = znear * tan(fov * PI_OVER_360);
+			float ymin = -xymax;
+			float xmin = -xymax;
+
+			float width = xymax - xmin;
+			float height = xymax - ymin;
+
+			float depth = zfar - znear;
+			float q = -(zfar + znear) / depth;
+			float qn = -2 * (zfar * znear) / depth;
+
+			float w = 2 * znear / width;
+			w = w / aspect;
+			float h = 2 * znear / height;
+
+			m._array[0] = w;
+			m._array[1] = 0;
+			m._array[2] = 0;
+			m._array[3] = 0;
+
+			m._array[4] = 0;
+			m._array[5] = h;
+			m._array[6] = 0;
+			m._array[7] = 0;
+
+			m._array[8] = 0;
+			m._array[9] = 0;
+			m._array[10] = q;
+			m._array[11] = -1;
+
+			m._array[12] = 0;
+			m._array[13] = 0;
+			m._array[14] = qn;
+			m._array[15] = 0;
+
+			return m;
+		}
+
+		template<class T>
 		static Matrix4<T>& perspectivex(Matrix4<T> & M, const T fovx, const T aspect, const T near, const T far)
 		{
 			float e = 1.0f / tanf(fovx / 2.0f);
