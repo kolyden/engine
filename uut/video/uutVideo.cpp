@@ -308,7 +308,7 @@ namespace uut
 
 	}
 
-    void Video::SetTransform(ETransformType type, float* mat)
+	void Video::SetTransform(ETransformType type, const Matrix4& mat)
     {
         switch (type)
         {
@@ -320,8 +320,17 @@ namespace uut
             break;
         }
 
-        ::glLoadMatrixf(mat);
+        ::glLoadMatrixf(mat.data);
     }
+
+	void Video::SetViewPort(const Rect& rect)
+	{
+		glViewport(
+			rect._pos._x,
+			rect._pos._y,
+			rect._size._x,
+			rect._size._y);
+	}
 
     bool Video::BindBuffer(VideoBuffer* buffer, uint32_t stride, const SDeclareType* _declare, uint8_t count)
     {
@@ -525,19 +534,21 @@ namespace uut
 
 	bool Video::UpdateViewport()
 	{
-		glViewport(0, 0,
-			_windowSize._x,
-			_windowSize._y);
+// 		glViewport(0, 0,
+// 			_windowSize._x,
+// 			_windowSize._y);
+// 
+// 		glMatrixMode(GL_PROJECTION);
+// 		glLoadIdentity();
+// 		glOrtho((GLdouble)0,
+// 				(GLdouble)_windowSize._x,
+// 				(GLdouble)_windowSize._y,
+// 				(GLdouble)0,
+// 				0.0, 1.0);
+// 
+// 		return CheckGLError("Update Viewport");
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho((GLdouble)0,
-				(GLdouble)_windowSize._x,
-				(GLdouble)_windowSize._y,
-				(GLdouble)0,
-				0.0, 1.0);
-
-		return CheckGLError("Update Viewport");
+		return true;
 	}
 
 	void Video::ResetStates()

@@ -168,6 +168,9 @@
     <ClInclude Include="..\uut\video\loaders\tiny_obj_loader.h">
       <Filter>video\loaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\uut\math\uutMatrix.h">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\uut\container\uutHashString.cpp">
@@ -283,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="..\uut\video\loaders\tiny_obj_loader.cc">
       <Filter>video\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutMatrix.cpp">
+      <Filter>math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

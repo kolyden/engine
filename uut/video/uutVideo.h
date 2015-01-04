@@ -3,6 +3,8 @@
 #include "uutVideoDefs.h"
 #include "uutColor.h"
 #include "math/uutVector2.h"
+#include "math/uutRect.h"
+#include "math/uutMatrix.h"
 #include "container/uutList.h"
 
 struct SDL_Window;
@@ -40,7 +42,8 @@ namespace uut
         bool BindTexture(Texture* texture, uint8_t index = 0);
 		bool UnbindTexture(Texture* texture, uint8_t index = 0);
 
-        void SetTransform(ETransformType type, float* mat);
+        void SetTransform(ETransformType type, const Matrix4& mat);
+		void SetViewPort(const Rect& rect);
 
         bool BindBuffer(VideoBuffer* buffer, uint32_t stride, const SDeclareType* declare, uint8_t count);
         void UnbindBuffer(VideoBuffer* buffer, const SDeclareType* declare, uint8_t count);

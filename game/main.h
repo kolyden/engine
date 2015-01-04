@@ -3,9 +3,12 @@
 #include <windows.h>
 #include "video/uutColor.h"
 #include "math/uutVector2.h"
+#include "math/uutVector3.h"
+#include "Camera.h"
 
 namespace uut
 {
+
 	class Texture;
 	class VideoBuffer;
 	class Model;
@@ -20,6 +23,7 @@ namespace uut
 		SharedPtr<VideoBuffer> _vbuf;
 		SharedPtr<VideoBuffer> _ibuf;
 		SharedPtr<Model> _model0;
+		SharedPtr<Camera> _camera;
 
 		Color _color;
 		Vector2i _pos;

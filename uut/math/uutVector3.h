@@ -1,30 +1,66 @@
 #pragma once
-#include "math/uutMath.h"
-#include "container/uutString.h"
+#include "uutVector2.h"
 
 namespace uut
 {
-	class Vector3i;
-
-	/// Two-dimensional vector.
 	class UUT_API Vector3
 	{
 	public:
-		/// Construct undefined.
-		Vector3();
+		/// Construct a zero vector.
+		Vector3() :
+			_x(0.0f),
+			_y(0.0f),
+			_z(0.0f)
+		{
+		}
 
 		/// Copy-construct from another vector.
-		Vector3(const Vector3& vector);
+		Vector3(const Vector3& vector) :
+			_x(vector._x),
+			_y(vector._y),
+			_z(vector._z)
+		{
+		}
+
+		/// Construct from a two-dimensional vector and the Z coordinate.
+		Vector3(const Vector2& vector, float z) :
+			_x(vector._x),
+			_y(vector._y),
+			_z(z)
+		{
+		}
+
+		/// Construct from a two-dimensional vector (for Urho2D).
+		Vector3(const Vector2& vector) :
+			_x(vector._x),
+			_y(vector._y),
+			_z(0.0f)
+		{
+		}
 
 		/// Construct from coordinates.
-		Vector3(float x, float y, float z);
+		Vector3(float x, float y, float z) :
+			_x(x),
+			_y(y),
+			_z(z)
+		{
+		}
 
-		explicit Vector3(float val);
+		/// Construct from two-dimensional coordinates (for Urho2D).
+		Vector3(float x, float y) :
+			_x(x),
+			_y(y),
+			_z(0.0f)
+		{
+		}
 
 		/// Construct from a float array.
-		Vector3(const float* data);
-
-		Vector3(const Vector3i& vector);
+		Vector3(const float* data) :
+			_x(data[0]),
+			_y(data[1]),
+			_z(data[2])
+		{
+		}
 
 		/// Assign from another vector.
 		Vector3& operator = (const Vector3& rhs)
@@ -123,19 +159,34 @@ namespace uut
 		}
 
 		/// Return length.
-		float Length() const { return sqrtf(LengthSquared()); }
+		float Length() const { return sqrtf(_x * _x + _y * _y + _z * _z); }
 		/// Return squared length.
 		float LengthSquared() const { return _x * _x + _y * _y + _z * _z; }
 		/// Calculate dot product.
 		float DotProduct(const Vector3& rhs) const { return _x * rhs._x + _y * rhs._y + _z * rhs._z; }
 		/// Calculate absolute dot product.
 		float AbsDotProduct(const Vector3& rhs) const { return Math::Abs(_x * rhs._x) + Math::Abs(_y * rhs._y) + Math::Abs(_z * rhs._z); }
+
+		/// Calculate cross product.
+		Vector3 CrossProduct(const Vector3& rhs) const
+		{
+			return Vector3(
+				_y * rhs._z - _z * rhs._y,
+				_z * rhs._x - _x * rhs._z,
+				_x * rhs._y - _y * rhs._x
+				);
+		}
+
 		/// Return absolute vector.
 		Vector3 Abs() const { return Vector3(Math::Abs(_x), Math::Abs(_y), Math::Abs(_z)); }
 		/// Linear interpolation with another vector.
 		Vector3 Lerp(const Vector3& rhs, float t) const { return *this * (1.0f - t) + rhs * t; }
 		/// Test for equality with another vector with epsilon.
 		bool Equals(const Vector3& rhs) const { return Math::Equals(_x, rhs._x) && Math::Equals(_y, rhs._y) && Math::Equals(_z, rhs._z); }
+		/// Returns the angle between this vector and another vector in degrees.
+		float Angle(const Vector3& rhs) const { return Math::Acos(DotProduct(rhs) / (Length() * rhs.Length())); }
+		/// Return whether is NaN.
+// 		bool IsNaN() const { return Urho3D::IsNaN(x_) || Math::IsNaN(y_) || Math::IsNaN(z_); }
 
 		/// Return normalized to unit length.
 		Vector3 Normalized() const
@@ -153,137 +204,30 @@ namespace uut
 		/// Return float data.
 		const float* Data() const { return &_x; }
 		/// Return as string.
-		String ToString() const;
+// 		String ToString() const;
 
-		float _x,  _y, _z;
+		/// coordinates
+		float _x, _y, _z;
 
 		/// Zero vector.
 		static const Vector3 ZERO;
-		/// (-1,0) vector.
+		/// (-1,0,0) vector.
 		static const Vector3 LEFT;
-		/// (1,0) vector.
+		/// (1,0,0) vector.
 		static const Vector3 RIGHT;
-		/// (0,1) vector.
+		/// (0,1,0) vector.
 		static const Vector3 UP;
-		/// (0,-1) vector.
+		/// (0,-1,0) vector.
 		static const Vector3 DOWN;
-		/// (1,1) vector.
+		/// (0,0,1) vector.
+		static const Vector3 FORWARD;
+		/// (0,0,-1) vector.
+		static const Vector3 BACK;
+		/// (1,1,1) vector.
 		static const Vector3 ONE;
 	};
 
-	/// Multiply Vector2 with a scalar
+	/// Multiply Vector3 with a scalar.
 	inline Vector3 operator * (float lhs, const Vector3& rhs) { return rhs * lhs; }
-
-	/// Two-dimensional vector with integer values.
-	class UUT_API Vector3i
-	{
-	public:
-		/// Construct undefined.
-		Vector3i()
-		{
-		}
-
-		/// Construct from coordinates.
-		Vector3i(int x, int y, int z)
-			: _x(x), _y(y), _z(z)
-		{
-		}
-
-		explicit Vector3i(int val)
-			: _x(val), _y(val), _z(val)
-		{
-		}
-
-		/// Construct from an int array.
-		Vector3i(const int* data)
-			: _x(data[0]), _y(data[1]), _z(data[2])
-		{
-		}
-
-		/// Copy-construct from another vector.
-		Vector3i(const Vector3i& rhs)
-			: _x(rhs._x), _y(rhs._y), _z(rhs._z)
-		{
-		}
-
-		/// Copy-construct from another vector.
-		Vector3i(const Vector3& rhs);
-
-		int Area() const { return _x * _y * _z; }
-
-		/// Test for equality with another vector.
-		bool operator == (const Vector3i& rhs) const { return _x == rhs._x && _y == rhs._y && _z == rhs._z; }
-		/// Test for inequality with another vector.
-		bool operator != (const Vector3i& rhs) const { return _x != rhs._x || _y != rhs._y || _z != rhs._z; }
-		/// Add a vector.
-		Vector3i operator + (const Vector3i& rhs) const { return Vector3i(_x + rhs._x, _y + rhs._y, _z + rhs._z); }
-		/// Return negation.
-		Vector3i operator - () const { return Vector3i(-_x, -_y, -_z); }
-		/// Subtract a vector.
-		Vector3i operator - (const Vector3i& rhs) const { return Vector3i(_x - rhs._x, _y - rhs._y, _z - rhs._z); }
-		/// Multiply with a scalar.
-		Vector3i operator * (int rhs) const { return Vector3i(_x * rhs, _y * rhs, _z * rhs); }
-		/// Divide by a scalar.
-		Vector3i operator / (int rhs) const { return Vector3i(_x / rhs, _y / rhs, _z / rhs); }
-
-		/// Add-assign a vector.
-		Vector3i& operator += (const Vector3i& rhs)
-		{
-			_x += rhs._x;
-			_y += rhs._y;
-			_z += rhs._z;
-			return *this;
-		}
-
-		/// Subtract-assign a vector.
-		Vector3i& operator -= (const Vector3i& rhs)
-		{
-			_x -= rhs._x;
-			_y -= rhs._y;
-			_z -= rhs._z;
-			return *this;
-		}
-
-		/// Multiply-assign a scalar.
-		Vector3i& operator *= (int rhs)
-		{
-			_x *= rhs;
-			_y *= rhs;
-			_z *= rhs;
-			return *this;
-		}
-
-		/// Divide-assign a scalar.
-		Vector3i& operator /= (int rhs)
-		{
-			_x /= rhs;
-			_y /= rhs;
-			_z /= rhs;
-			return *this;
-		}
-
-		/// Return integer data.
-		const int* Data() const { return &_x; }
-		/// Return as string.
-		String ToString() const;
-
-		int _x, _y, _z;
-
-		/// Zero vector.
-		static const Vector3i ZERO;
-		/// (-1,0) vector.
-		static const Vector3i LEFT;
-		/// (1,0) vector.
-		static const Vector3i RIGHT;
-		/// (0,1) vector.
-		static const Vector3i UP;
-		/// (0,-1) vector.
-		static const Vector3i DOWN;
-		/// (1,1) vector.
-		static const Vector3i ONE;
-	};
-
-	/// Multiply IntVector2 with a scalar.
-	inline Vector3i operator * (int lhs, const Vector3i& rhs) { return rhs * lhs; }
 
 }

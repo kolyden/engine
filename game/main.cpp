@@ -24,13 +24,20 @@ namespace uut
 	//////////////////////////////////////////////////////////////////////////
 	void MyApp::OnInit()
 	{
+		const Rect rect(Vector2::ZERO, _size);
 		_video->SetMode(_size._x, _size._y);
+		_video->SetViewPort(rect);
+		_video->SetTransform(TRANSFORM_PROJECTION,
+			Matrix4::BuildOrtho(rect, 0, 1));
+
 		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, false);
 		_video->SetRenderState(RENDERSTATE_LIGHTNING, false);
 	}
 
 	void MyApp::OnStart()
 	{
+		_camera = new Camera(_context);
+
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
 
 		_model0 = _cache->Load<Model>("Data/stairs.obj");
@@ -64,7 +71,7 @@ namespace uut
 
 	void MyApp::OnRender()
 	{
-		_video->SetColor(COLOR_CLEAR, Color::WHITE);
+		_video->SetColor(COLOR_CLEAR, _color);
 		_video->Clear(true, false, false);
 
 		_graphics->SetColor(Color::RED);
@@ -91,10 +98,10 @@ namespace uut
 			_video->UnbindBuffer(_vbuf, Vertex2::DECLARE, Vertex2::DECLARE_COUNT);
 		}
 
-		if (_model0)
-		{
-			_model0->Draw();
-		}
+// 		if (_model0)
+// 		{
+// 			_model0->Draw();
+// 		}
 
 	}
 
