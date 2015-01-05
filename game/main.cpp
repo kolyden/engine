@@ -22,7 +22,6 @@ namespace uut
 	{
 	}
 
-	//////////////////////////////////////////////////////////////////////////
 	void MyApp::OnInit()
 	{
 		const Recti rect(Vector2i::ZERO, _size);
@@ -104,8 +103,6 @@ namespace uut
 		_color._g += _time->GetDelta();
 		while (_color._g > 1)
 			_color._g -= 1.0f;
-
-// 		_camera->UpdatePosition();
 	}
 
 	void MyApp::OnRender()
@@ -132,28 +129,13 @@ namespace uut
 		if (_tex0)
 		{
 			_graphics->SetColor(Color::WHITE);
-			_graphics->DrawTexture(_tex0, Rectf(_pos.x, _pos.y, 200, 200));
+			_graphics->DrawTexture(_tex0, Rectf( 50, 50, 100, 100));
+			_graphics->DrawTexture(_tex0, Rectf(_pos.x - 100, _pos.y - 100, 200, 200));
 		}
+		_graphics->SetColor(_color);
+		_graphics->DrawLine(Vector2f(800, 0), Vector2f(_pos));
+		_graphics->DrawLine(Vector2f(800, 600), Vector2f(_pos));
+		_graphics->DrawLine(Vector2f(0, 600), Vector2f(_pos));
 		_graphics->Flush();
-
-// 		if (_vbuf && _video->BindBuffer(_vbuf, Vertex2::SIZE, Vertex2::DECLARE, Vertex2::DECLARE_COUNT))
-// 		{
-// 			_video->SetColor(COLOR_DRAW, Color::WHITE);
-// 			_video->SetRenderState(RENDERSATE_BLEND, true);
-// 			_video->SetBlendFunc(BLEND_SRC_ALPHA, BLEND_ONE_MINUS_SRC_ALPHA);
-// 			_video->BindTexture(_tex0);
-// 
-// 			if (_ibuf)
-// 			{
-// 				_video->BindBuffer(_ibuf, 0, 0, 0);
-// 				_video->DrawIndexedPrimitives(PRIMITIVE_TRIANGLES, 6, VALUE_UBYTE);
-// 				_video->UnbindBuffer(_ibuf, 0, 0);
-// 			}
-// 			else _video->DrawPrimitives(PRIMITIVE_TRIANGLE_STRIP, 4, 0);
-// 
-// 			_video->UnbindTexture(_tex0);
-// 			_video->SetRenderState(RENDERSATE_BLEND, false);
-// 			_video->UnbindBuffer(_vbuf, Vertex2::DECLARE, Vertex2::DECLARE_COUNT);
-// 		}
 	}
 }

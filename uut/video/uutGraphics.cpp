@@ -38,16 +38,13 @@ namespace uut
 
 	void Graphics::DrawTexture(Texture* texture, const Rectf& rect)
 	{
-		ChangeBufferParam(PRIMITIVE_TRIANGLE_STRIP, VertexType::V2D);
+		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V2D);
 		SetTexture(texture);
 
-		const float hw = rect.size.x / 2.0f;
-		const float hh = rect.size.y / 2.0f;
-
-		const float x1 = rect.pos.x - hw;
-		const float y1 = rect.pos.y - hh;
-		const float x2 = rect.pos.x + hw;
-		const float y2 = rect.pos.y + hh;
+		const float x1 = rect.pos.x;
+		const float y1 = rect.pos.y;
+		const float x2 = x1 + rect.size.x;
+		const float y2 = y1 + rect.size.y;
 
 		const float tx1 = 0.0f, ty1 = 0.0f;
 		const float tx2 = 1.0f, ty2 = 1.0f;
@@ -56,7 +53,10 @@ namespace uut
 		verts[_currentCount++] = Vertex2(Vector2f(x1, y1), Vector2f(tx1, ty1), _currentColorUint);
 		verts[_currentCount++] = Vertex2(Vector2f(x2, y1), Vector2f(tx2, ty1), _currentColorUint);
 		verts[_currentCount++] = Vertex2(Vector2f(x1, y2), Vector2f(tx1, ty2), _currentColorUint);
+
+		verts[_currentCount++] = Vertex2(Vector2f(x2, y1), Vector2f(tx2, ty1), _currentColorUint);
 		verts[_currentCount++] = Vertex2(Vector2f(x2, y2), Vector2f(tx2, ty2), _currentColorUint);
+		verts[_currentCount++] = Vertex2(Vector2f(x1, y2), Vector2f(tx1, ty2), _currentColorUint);
 	}
 
 	void Graphics::Flush()
