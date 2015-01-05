@@ -320,6 +320,7 @@ namespace uut
             break;
         }
 
+		::glLoadIdentity();
         ::glLoadMatrixf(mat.get_value());
     }
 	

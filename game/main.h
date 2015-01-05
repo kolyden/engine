@@ -22,8 +22,6 @@ namespace uut
 
 	protected:
 		SharedPtr<Texture> _tex0;
-		SharedPtr<VideoBuffer> _vbuf;
-		SharedPtr<VideoBuffer> _ibuf;
 		SharedPtr<Model> _model0;
 		SharedPtr<Camera> _camera;
 
@@ -39,7 +37,5 @@ namespace uut
 		virtual void OnStart() override;
 		virtual void OnUpdate() override;
 		virtual void OnRender() override;
-
-		void UpdateBuffer(const Vector2i& pos, const Vector2f& size);
 	};
 }

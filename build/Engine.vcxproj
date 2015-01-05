@@ -57,6 +57,7 @@
     <ClInclude Include="..\uut\video\uutTriangle.h" />
     <ClInclude Include="..\uut\video\uutVertex2.h" />
     <ClInclude Include="..\uut\video\uutVertex3.h" />
+    <ClInclude Include="..\uut\video\uutVertexDeclare.h" />
     <ClInclude Include="..\uut\video\uutVideo.h" />
     <ClInclude Include="..\uut\video\uutVideoBuffer.h" />
     <ClInclude Include="..\uut\video\uutVideoDefs.h" />
@@ -95,6 +96,7 @@
     <ClCompile Include="..\uut\video\uutTriangle.cpp" />
     <ClCompile Include="..\uut\video\uutVertex2.cpp" />
     <ClCompile Include="..\uut\video\uutVertex3.cpp" />
+    <ClCompile Include="..\uut\video\uutVertexDeclare.cpp" />
     <ClCompile Include="..\uut\video\uutVideo.cpp" />
     <ClCompile Include="..\uut\video\uutVideoBuffer.cpp" />
     <ClCompile Include="..\uut\video\uutVideoObject.cpp" />

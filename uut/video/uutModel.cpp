@@ -40,7 +40,7 @@ namespace uut
 			data[i].color = colors[i];
 		}
 		_vbuffer = new VideoBuffer(_context);
-		_vbuffer->Create(BUFFER_VERTEX, Vertex3::SIZE * _vcount, BUFFERFLAG_STATIC, data);
+		_vbuffer->Create(BUFFER_VERTEX, Vertex3::DECLARE.size * _vcount, BUFFERFLAG_STATIC, data);
 		delete[] data;
 
 		if (!indexes.Empty())
@@ -72,7 +72,7 @@ namespace uut
 
 		auto video = _context->GetModule<Video>();
 
-		if (!video->BindBuffer(_vbuffer, Vertex3::SIZE, Vertex3::DECLARE, Vertex3::DECLARE_COUNT))
+		if (!video->BindBuffer(_vbuffer, Vertex3::DECLARE.size, Vertex3::DECLARE.types, Vertex3::DECLARE.count))
 			return;
 
 		if (_ibuffer && video->BindBuffer(_ibuffer, 0, 0, 0))
@@ -82,7 +82,7 @@ namespace uut
 		}
 		else video->DrawPrimitives(_topology, _vcount, 0);
 
-		video->UnbindBuffer(_vbuffer, Vertex3::DECLARE, Vertex3::DECLARE_COUNT);
+		video->UnbindBuffer(_vbuffer, Vertex3::DECLARE.types, Vertex3::DECLARE.count);
 	}
 
 }

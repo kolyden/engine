@@ -506,7 +506,7 @@ namespace uut
 			z.x = eye.x - center.x;
 			z.y = eye.y - center.y;
 			z.z = eye.z - center.z;
-			z = normalize(z);
+			z = Vector3<T>::normalize(z);
 
 			// Y vector
 			y.x = up.x;
@@ -514,15 +514,15 @@ namespace uut
 			y.z = up.z;
 
 			// X vector = Y cross Z
-			x = cross(y, z);
+			x = Vector3<T>::cross(y, z);
 
 			// Recompute Y = Z cross X
-			y = cross(z, x);
+			y = Vector3<T>::cross(z, x);
 
 			// cross product gives area of parallelogram, which is < 1.0 for
 			// non-perpendicular unit-length vectors; so normalize x, y here
-			x = normalize(x);
-			y = normalize(y);
+			x = Vector3<T>::normalize(x);
+			y = Vector3<T>::normalize(y);
 
 			M._11 = x.x; M._21 = x.y; M._31 = x.z; M._41 = -x.x * eye.x - x.y * eye.y - x.z*eye.z;
 			M._12 = y.x; M._22 = y.y; M._32 = y.z; M._42 = -y.x * eye.x - y.y * eye.y - y.z*eye.z;

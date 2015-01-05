@@ -24,6 +24,8 @@ namespace uut
 	protected:
 		Vector3f _position;
 		Vector3f _rotation;
+		Vector3f _forward;
+		Vector3f _up;
 		Matrix4f _matrix;
 		bool _update;
 	};

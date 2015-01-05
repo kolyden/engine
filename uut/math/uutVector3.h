@@ -234,13 +234,43 @@ namespace uut
 		////////////////////////////////////////////////////////////////////////////////
 
 		// cross product
-		friend Vector3<T> cross(const Vector3<T> & lhs, const Vector3<T> & rhs) {
+		static Vector3<T> cross(const Vector3<T> & lhs, const Vector3<T> & rhs) {
 			Vector3<T> r;
 
 			r.x = lhs.y * rhs.z - lhs.z * rhs.y;
 			r.y = lhs.z * rhs.x - lhs.x * rhs.z;
 			r.z = lhs.x * rhs.y - lhs.y * rhs.x;
 
+			return r;
+		}
+
+		static T dot(const Vector3<T> & lhs, const Vector3<T> & rhs) {
+			T r = 0;
+			for (int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
+			return r;
+		}
+
+		static T length(const Vector3<T> & vec) {
+			T r = 0;
+			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
+			return T(sqrt(r));
+		}
+
+		static T square_norm(const Vector3<T> & vec) {
+			T r = 0;
+			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
+			return r;
+		}
+
+		static Vector3<T> normalize(const Vector3<T> & vec) {
+			T sum(0);
+			Vector3<T> r;
+			for (int32_t i = 0; i < vec.size(); i++)
+				sum += vec._array[i] * vec._array[i];
+			sum = T(sqrt(sum));
+			if (sum > 0)
+			for (int32_t i = 0; i < vec.size(); i++)
+				r._array[i] = vec._array[i] / sum;
 			return r;
 		}
 

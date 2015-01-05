@@ -189,6 +189,36 @@ namespace uut
 			return r;
 		}
 
+		static T dot(const Vector4<T> & lhs, const Vector4<T> & rhs) {
+			T r = 0;
+			for (int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
+			return r;
+		}
+
+		static T length(const Vector4<T> & vec) {
+			T r = 0;
+			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
+			return T(sqrt(r));
+		}
+
+		static T square_norm(const Vector4<T> & vec) {
+			T r = 0;
+			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
+			return r;
+		}
+
+		static Vector4<T> normalize(const Vector4<T> & vec) {
+			T sum(0);
+			Vector4<T> r;
+			for (int32_t i = 0; i < vec.size(); i++)
+				sum += vec._array[i] * vec._array[i];
+			sum = T(sqrt(sum));
+			if (sum > 0)
+			for (int32_t i = 0; i < vec.size(); i++)
+				r._array[i] = vec._array[i] / sum;
+			return r;
+		}
+
 		//data intentionally left public to allow vec2.x
 		union {
 			struct {
@@ -201,177 +231,28 @@ namespace uut
 		};
 	};
 
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	// Generic vector operations
-	//
-	////////////////////////////////////////////////////////////////////////////////
-
-	// compute the dot product of two vectors
-	//template<class T>
-	//inline typename T::value_type dot( const T & lhs, const T & rhs ) {
-	//    T::value_type r = 0;
-	//    for(int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
-	//    return r;
-	//}
-
-	template<class T>
-	inline T dot(const Vector2<T> & lhs, const Vector2<T> & rhs) {
-		T r = 0;
-		for (int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
-		return r;
-	}
-
-	template<class T>
-	inline T dot(const Vector3<T> & lhs, const Vector3<T> & rhs) {
-		T r = 0;
-		for (int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
-		return r;
-	}
-
-	template<class T>
-	inline T dot(const Vector4<T> & lhs, const Vector4<T> & rhs) {
-		T r = 0;
-		for (int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
-		return r;
-	}
-
-	// return the length of the provided vector
-	//template< class T>
-	//inline typename T::value_type length( const T & vec) {
-	//    T::value_type r = 0;
-	//    for(int32_t i = 0; i < vec.size(); i++) r += vec._array[i]*vec._array[i];
-	//    return T::value_type(sqrt(r));
-	//}
-
-
-	template<class T>
-	inline T length(const Vector2<T> & vec) {
-		T r = 0;
-		for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-		return T(sqrt(r));
-	}
-
-	template<class T>
-	inline T length(const Vector3<T> & vec) {
-		T r = 0;
-		for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-		return T(sqrt(r));
-	}
-
-	template<class T>
-	inline T length(const Vector4<T> & vec) {
-		T r = 0;
-		for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-		return T(sqrt(r));
-	}
-
-	// return the squared norm
-	//template< class T>
-	//inline typename T::value_type square_norm( const T & vec) {
-	//    T::value_type r = 0;
-	//    for(int32_t i = 0; i < vec.size(); i++) r += vec._array[i]*vec._array[i];
-	//    return r;
-	//}
-
-	template< class T>
-	inline T square_norm(const Vector2<T> & vec) {
-		T r = 0;
-		for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-		return r;
-	}
-
-	template< class T>
-	inline T square_norm(const Vector3<T> & vec) {
-		T r = 0;
-		for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-		return r;
-	}
-
-	template< class T>
-	inline T square_norm(const Vector4<T> & vec) {
-		T r = 0;
-		for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-		return r;
-	}
-
-	// return the normalized version of the vector
-	//template< class T>
-	//inline T normalize( const T & vec) {
-	//    T::value_type sum(0);
-	//    T r;
-	//    for(int32_t i = 0; i < vec.size(); i++)
-	//        sum += vec._array[i] * vec._array[i];
-	//    sum = T::value_type(sqrt(sum));
-	//    if (sum > 0)
-	//        for(int32_t i = 0; i < vec.size(); i++)
-	//            r._array[i] = vec._array[i] / sum;
-	//    return r;
-	//}
-
-	template< class T>
-	inline Vector2<T> normalize(const Vector2<T> & vec) {
-		T sum(0);
-		Vector2<T> r;
-		for (int32_t i = 0; i < vec.size(); i++)
-			sum += vec._array[i] * vec._array[i];
-		sum = T(sqrt(sum));
-		if (sum > 0)
-		for (int32_t i = 0; i < vec.size(); i++)
-			r._array[i] = vec._array[i] / sum;
-		return r;
-	}
-
-	template< class T>
-	inline Vector3<T> normalize(const Vector3<T> & vec) {
-		T sum(0);
-		Vector3<T> r;
-		for (int32_t i = 0; i < vec.size(); i++)
-			sum += vec._array[i] * vec._array[i];
-		sum = T(sqrt(sum));
-		if (sum > 0)
-		for (int32_t i = 0; i < vec.size(); i++)
-			r._array[i] = vec._array[i] / sum;
-		return r;
-	}
-
-	template< class T>
-	inline Vector4<T> normalize(const Vector4<T> & vec) {
-		T sum(0);
-		Vector4<T> r;
-		for (int32_t i = 0; i < vec.size(); i++)
-			sum += vec._array[i] * vec._array[i];
-		sum = T(sqrt(sum));
-		if (sum > 0)
-		for (int32_t i = 0; i < vec.size(); i++)
-			r._array[i] = vec._array[i] / sum;
-		return r;
-	}
-
 	// In VC8 : min and max are already defined by a #define...
-#ifdef min
-#undef min
-#endif
-#ifdef max
-#undef max
-#endif
-	//componentwise min
-	template< class T>
-	inline T min(const T & lhs, const T & rhs) {
-		T rt;
-		for (int32_t i = 0; i < lhs.size(); i++) rt._array[i] = std::min(lhs._array[i], rhs._array[i]);
-		return rt;
-	}
-
-	// componentwise max
-	template< class T>
-	inline T max(const T & lhs, const T & rhs) {
-		T rt;
-		for (int32_t i = 0; i < lhs.size(); i++) rt._array[i] = std::max(lhs._array[i], rhs._array[i]);
-		return rt;
-	}
+// #ifdef min
+// #undef min
+// #endif
+// #ifdef max
+// #undef max
+// #endif
+// 	//componentwise min
+// 	template< class T>
+// 	inline T min(const T & lhs, const T & rhs) {
+// 		T rt;
+// 		for (int32_t i = 0; i < lhs.size(); i++) rt._array[i] = std::min(lhs._array[i], rhs._array[i]);
+// 		return rt;
+// 	}
+// 
+// 	// componentwise max
+// 	template< class T>
+// 	inline T max(const T & lhs, const T & rhs) {
+// 		T rt;
+// 		for (int32_t i = 0; i < lhs.size(); i++) rt._array[i] = std::max(lhs._array[i], rhs._array[i]);
+// 		return rt;
+// 	}
 
 	typedef Vector4<float> Vector4f; ///< float 4-vectors
 	typedef Vector4<int32_t> Vector4i; ///< signed integer 4-vectors

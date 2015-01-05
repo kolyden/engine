@@ -9,6 +9,8 @@ namespace uut
 		, VideoObject(_context->GetModule<Video>())
 		, _position(Vector3f::ZERO)
 		, _rotation(Vector3f::ZERO)
+		, _forward(0, 0, 1)
+		, _up(0, 1, 0)
 		, _update(true)
 	{
 	}
@@ -41,7 +43,8 @@ namespace uut
 		{
 			_update = false;
 			_matrix.make_identity();
-			Matrix4f::translation(_matrix, _position);
+// 			Matrix4f::translation(_matrix, _position);
+			Matrix4f::lookAt(_matrix, _forward, _position, _up);
 		}
 
 		_video->SetTransform(TRANSFORM_VIEW, _matrix);

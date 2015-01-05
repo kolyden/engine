@@ -186,6 +186,36 @@ namespace uut
 			return r;
 		}
 
+		static T dot(const Vector2<T> & lhs, const Vector2<T> & rhs) {
+			T r = 0;
+			for (int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
+			return r;
+		}
+
+		static T length(const Vector2<T> & vec) {
+			T r = 0;
+			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
+			return T(sqrt(r));
+		}
+
+		static T square_norm(const Vector2<T> & vec) {
+			T r = 0;
+			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
+			return r;
+		}
+
+		static Vector2<T> normalize(const Vector2<T> & vec) {
+			T sum(0);
+			Vector2<T> r;
+			for (int32_t i = 0; i < vec.size(); i++)
+				sum += vec._array[i] * vec._array[i];
+			sum = T(sqrt(sum));
+			if (sum > 0)
+			for (int32_t i = 0; i < vec.size(); i++)
+				r._array[i] = vec._array[i] / sum;
+			return r;
+		}
+
 		//data intentionally left public to allow vec2.x
 		union {
 			struct {
