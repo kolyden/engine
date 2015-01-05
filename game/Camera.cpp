@@ -44,7 +44,7 @@ namespace uut
 			_update = false;
 			_matrix.make_identity();
 // 			Matrix4f::translation(_matrix, _position);
-			Matrix4f::lookAt(_matrix, _forward, _position, _up);
+			Matrix4f::lookAt(_matrix, _position, _position + _forward, Vector3f(0, 1, 0));
 		}
 
 		_video->SetTransform(TRANSFORM_VIEW, _matrix);

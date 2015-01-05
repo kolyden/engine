@@ -47,7 +47,7 @@ namespace uut
 		EPrimitiveType _currentType;
 
 		VertexType _vertexType;
-		int _vertexMax;
+		unsigned _vertexMax;
 		uint8_t* _data;
 
 		SharedPtr<Texture> _texture;

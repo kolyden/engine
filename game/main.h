@@ -25,8 +25,7 @@ namespace uut
 		SharedPtr<Model> _model0;
 		SharedPtr<Camera> _camera;
 
-		Matrix4f _matOrtho;
-		Matrix4f _matPersp;
+		Matrix4f _matProj;
 
 		Color _color;
 		Vector2i _pos;
