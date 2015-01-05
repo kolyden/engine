@@ -6,11 +6,10 @@
 #include "math/uutVector3.h"
 #include "math/uutMatrix.h"
 #include "math/uutRect.h"
-#include "Camera.h"
 
 namespace uut
 {
-
+	class Camera;
 	class Texture;
 	class VideoBuffer;
 	class Model;

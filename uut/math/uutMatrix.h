@@ -437,15 +437,15 @@ namespace uut
 
 			if (roll)
 			{
-				nv::rotationZ(M, roll);
+				rotationZ(M, roll);
 			}
 			if (pitch)
 			{
-				M *= nv::rotationX(rot, pitch);
+				M *= rotationX(rot, pitch);
 			}
 			if (yaw)
 			{
-				M *= nv::rotationY(rot, yaw);
+				M *= rotationY(rot, yaw);
 			}
 
 			return M;

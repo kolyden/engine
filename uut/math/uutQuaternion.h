@@ -4,9 +4,10 @@
 namespace uut
 {
 
-	template <class T> class vec2;
-	template <class T> class vec3;
-	template <class T> class vec4;
+	template <class T> class Vector2;
+	template <class T> class Vector3;
+	template <class T> class Vector4;
+	template <class T> class Matrix4;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -34,25 +35,25 @@ namespace uut
 		}
 
 
-		Quaternion( const matrix4<T> & m )
+		Quaternion( const Matrix4<T> & m )
 		{
 			set_value( m );
 		}
 
 
-		Quaternion( const vec3<T> &axis, T radians )
+		Quaternion( const Vector3<T> &axis, T radians )
 		{
 			set_value( axis, radians );
 		}
 
 
-		Quaternion( const vec3<T> &rotateFrom, const vec3<T> &rotateTo )
+		Quaternion( const Vector3<T> &rotateFrom, const Vector3<T> &rotateTo )
 		{
 			set_value( rotateFrom, rotateTo );
 		}
 
-		Quaternion( const vec3<T> & from_look, const vec3<T> & from_up,
-			const vec3<T>& to_look, const vec3<T>& to_up)
+		Quaternion( const Vector3<T> & from_look, const Vector3<T> & from_up,
+			const Vector3<T>& to_look, const Vector3<T>& to_up)
 		{
 			set_value(from_look, from_up, to_look, to_up);
 		}
@@ -85,11 +86,11 @@ namespace uut
 			return *this;
 		}
 
-		void get_value( vec3<T> &axis, T &radians ) const
+		void get_value( Vector3<T> &axis, T &radians ) const
 		{
 			radians = T(acos( _array[3] ) * T(2.0));
 			if ( radians == T(0.0) )
-				axis = vec3<T>( 0.0, 0.0, 1.0 );
+				axis = Vector3<T>( 0.0, 0.0, 1.0 );
 			else
 			{
 				axis[0] = _array[0];
@@ -99,7 +100,7 @@ namespace uut
 			}
 		}
 
-		void get_value( matrix4<T> & m ) const
+		void get_value( Matrix4<T> & m ) const
 		{
 			T s, xs, ys, zs, wx, wy, wz, xx, xy, xz, yy, yz, zz;
 
@@ -146,7 +147,7 @@ namespace uut
 			return *this;
 		}
 
-		Quaternion & set_value( const matrix4<T> & m )
+		Quaternion & set_value( const Matrix4<T> & m )
 		{
 			T tr, s;
 			int32_t i, j, k;
@@ -189,9 +190,9 @@ namespace uut
 			return *this;
 		}
 
-		Quaternion & set_value( const vec3<T> &axis, T theta )
+		Quaternion & set_value( const Vector3<T> &axis, T theta )
 		{
-			T sqnorm = square_norm(axis);
+			T sqnorm = Vector3<T>::square_norm(axis);
 
 			if (sqnorm == T(0.0))
 			{
@@ -214,9 +215,9 @@ namespace uut
 			return *this;
 		}
 
-		Quaternion & set_value( const vec3<T> & rotateFrom, const vec3<T> & rotateTo )
+		Quaternion & set_value( const Vector3<T> & rotateFrom, const Vector3<T> & rotateTo )
 		{
-			vec3<T> p1, p2;
+			Vector3<T> p1, p2;
 			T alpha;
 
 			p1 = normalize(rotateFrom);
@@ -232,12 +233,12 @@ namespace uut
 			// ensures that the anti-parallel case leads to a positive dot
 			if( alpha == T(-1.0))
 			{
-				vec3<T> v;
+				Vector3<T> v;
 
 				if(p1[0] != p1[1] || p1[0] != p1[2])
-					v = vec3<T>(p1[1], p1[2], p1[0]);
+					v = Vector3<T>(p1[1], p1[2], p1[0]);
 				else
-					v = vec3<T>(-p1[0], p1[1], p1[2]);
+					v = Vector3<T>(-p1[0], p1[1], p1[2]);
 
 				v -= p1 * dot( p1, v);
 				v = normalize(v);
@@ -253,12 +254,12 @@ namespace uut
 			return *this;
 		}
 
-		Quaternion & set_value( const vec3<T> & from_look, const vec3<T> & from_up,
-			const vec3<T> & to_look, const vec3<T> & to_up)
+		Quaternion & set_value( const Vector3<T> & from_look, const Vector3<T> & from_up,
+			const Vector3<T> & to_look, const Vector3<T> & to_up)
 		{
 			Quaternion r_look = Quaternion(from_look, to_look);
 
-			vec3<T> rotated_from_up(from_up);
+			Vector3<T> rotated_from_up(from_up);
 			r_look.mult_vec(rotated_from_up);
 
 			Quaternion r_twist = Quaternion(rotated_from_up, to_up);
@@ -289,7 +290,7 @@ namespace uut
 		// Quaternion multiplication with cartesian vector
 		// v' = q*v*q(star)
 		//
-		void mult_vec( const vec3<T> &src, vec3<T> &dst ) const
+		void mult_vec( const Vector3<T> &src, Vector3<T> &dst ) const
 		{
 			T v_coef = w * w - x * x - y * y - z * z;
 			T u_coef = T(2.0) * (src[0] * x + src[1] * y + src[2] * z);
@@ -300,13 +301,13 @@ namespace uut
 			dst._array[2] = v_coef * src._array[2] + u_coef * z + c_coef * (x * src._array[1] - y * src._array[0]);
 		}
 
-		void mult_vec( vec3<T> & src_and_dst) const
+		void mult_vec( Vector3<T> & src_and_dst) const
 		{
-			mult_vec(vec3<T>(src_and_dst), src_and_dst);
+			mult_vec(Vector3<T>(src_and_dst), src_and_dst);
 		}
 
 		void scale_angle( T scaleFactor ) {
-			vec3<T> axis;
+			Vector3<T> axis;
 			T radians;
 
 			get_value(axis, radians);
@@ -358,7 +359,13 @@ namespace uut
 			T _array[4];
 		};
 
+		static const Quaternion<T> ZERO;
+		static const Quaternion<T> IDENTITY;
 	};
+
+	template<class T> const Quaternion<T> Quaternion<T>::ZERO(0, 0, 0, 0);
+	template<class T> const Quaternion<T> Quaternion<T>::IDENTITY(0, 0, 0, 1);
+
 
 	template<class T>
 	inline Quaternion<T> normalize( const Quaternion<T> &q) {

@@ -9,39 +9,68 @@
 #include "video/uutVertex2.h"
 #include "math/uutMatrix.h"
 #include "video/uutModel.h"
+#include "Camera.h"
 
 RUNAPP(uut::MyApp);
 
 namespace uut
 {
-	static Matrix4f& perspective2(Matrix4f & M, const float fov, const float aspect, const float znear, const float zfar)
+	const Vector3f CAMERA_ACCELERATION(0.1f, 0.1f, 0.1f);
+	const float    CAMERA_FOVX = 90.0f;
+	const Vector3f CAMERA_POS(0.0f, 0.0f, 0.0f);
+	const float    CAMERA_SPEED_ROTATION = 0.2f;
+	const float    CAMERA_SPEED_FLIGHT_YAW = 100.0f;
+	const Vector3f CAMERA_VELOCITY(2.0f, 2.0f, 2.0f);
+	const float    CAMERA_ZFAR = 100.0f;
+	const float    CAMERA_ZNEAR = 0.1f;
+
+	const float    FLOOR_WIDTH = 16.0f;
+	const float    FLOOR_HEIGHT = 16.0f;
+	const float    FLOOR_TILE_S = 8.0f;
+	const float    FLOOR_TILE_T = 8.0f;
+
+	float g_cameraRotationSpeed = 0.00001f * CAMERA_SPEED_ROTATION;
+
+	static void GetMovementDirection(Camera* camera, Input* input, Vector3f &direction)
 	{
-		const float h = (1.0f / tanf(fov * 0.5f));// * zoom_;
-		const float w = h / aspect;
-		const float q = (zfar + znear) / (zfar - znear);
-		const float r = -2.0f * zfar * znear / (zfar - znear);
+		Vector3f velocity = camera->getCurrentVelocity();
+		direction = Vector3f(0.0f, 0.0f, 0.0f);
 
-		M._array[0] = w;
-		M._array[1] = 0.0f;
-		M._array[2] = 0.0f; //projectionOffset_.x_ * 2.0f;
-		M._array[3] = 0.0f;
+		if (input->IsKey(KEYCODE_W))
+		{
+			camera->setCurrentVelocity(velocity.x, velocity.y, 0.0f);
+			direction.z += 1.0f;
+		}
 
-		M._array[4] = 0.0f;
-		M._array[5] = h;
-		M._array[6] = 0.0f; //projectionOffset_.y_ * 2.0f;
-		M._array[7] = 0.0f;
+		if (input->IsKey(KEYCODE_S))
+		{
+			camera->setCurrentVelocity(velocity.x, velocity.y, 0.0f);
+			direction.z -= 1.0f;
+		}
 
-		M._array[8] = 0.0f;
-		M._array[9] = 0.0f;
-		M._array[10] = q;
-		M._array[11] = r;
+		if (input->IsKey(KEYCODE_D))
+		{
+			camera->setCurrentVelocity(0.0f, velocity.y, velocity.z);
+			direction.x += 1.0f;
+		}
 
-		M._array[12] = 0.0f;
-		M._array[13] = 0.0f;
-		M._array[14] = 1.0f;
-		M._array[15] = 0.0f;
+		if (input->IsKey(KEYCODE_A))
+		{
+			camera->setCurrentVelocity(0.0f, velocity.y, velocity.z);
+			direction.x -= 1.0f;
+		}
 
-		return M;
+		if (input->IsKey(KEYCODE_E))
+		{
+			camera->setCurrentVelocity(velocity.x, 0.0f, velocity.z);
+			direction.y += 1.0f;
+		}
+
+		if (input->IsKey(KEYCODE_Q))
+		{
+			camera->setCurrentVelocity(velocity.x, 0.0f, velocity.z);
+			direction.y -= 1.0f;
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -69,6 +98,17 @@ namespace uut
 	void MyApp::OnStart()
 	{
 		_camera = new Camera(_context);
+		if (_camera)
+		{
+			_camera->perspective(CAMERA_FOVX,
+				static_cast<float>(_size.x) / static_cast<float>(_size.y),
+				CAMERA_ZNEAR, CAMERA_ZFAR);
+
+			_camera->setBehavior(Camera::CAMERA_BEHAVIOR_FIRST_PERSON);
+			_camera->setPosition(CAMERA_POS);
+			_camera->setAcceleration(CAMERA_ACCELERATION);
+			_camera->setVelocity(CAMERA_VELOCITY);
+		}
 
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
 		_model0 = _cache->Load<Model>("Data/stairs.obj");
@@ -86,47 +126,47 @@ namespace uut
 
 		const float speed = 100;
 
-		if (_input->IsKey(KEYCODE_W))
-		{
-			auto vec = _camera->GetPosition();
-			vec.y += speed * _time->GetDelta();
-			_camera->SetPosition(vec);
-		}
-
-		if (_input->IsKey(KEYCODE_S))
-		{
-			auto vec = _camera->GetPosition();
-			vec.y -= speed * _time->GetDelta();
-			_camera->SetPosition(vec);
-		}
-
-		if (_input->IsKey(KEYCODE_A))
-		{
-			auto vec = _camera->GetPosition();
-			vec.x += speed * _time->GetDelta();
-			_camera->SetPosition(vec);
-		}
-
-		if (_input->IsKey(KEYCODE_D))
-		{
-			auto vec = _camera->GetPosition();
-			vec.x -= speed * _time->GetDelta();
-			_camera->SetPosition(vec);
-		}
-
-		if (_input->IsKey(KEYCODE_Q))
-		{
-			auto vec = _camera->GetPosition();
-			vec.z += speed * _time->GetDelta();
-			_camera->SetPosition(vec);
-		}
-
-		if (_input->IsKey(KEYCODE_Z))
-		{
-			auto vec = _camera->GetPosition();
-			vec.z -= speed * _time->GetDelta();
-			_camera->SetPosition(vec);
-		}
+// 		if (_input->IsKey(KEYCODE_W))
+// 		{
+// 			auto vec = _camera->getPosition();
+// 			vec.y += speed * _time->GetDelta();
+// 			_camera->setPosition(vec);
+// 		}
+// 
+// 		if (_input->IsKey(KEYCODE_S))
+// 		{
+// 			auto vec = _camera->getPosition();
+// 			vec.y -= speed * _time->GetDelta();
+// 			_camera->setPosition(vec);
+// 		}
+// 
+// 		if (_input->IsKey(KEYCODE_A))
+// 		{
+// 			auto vec = _camera->getPosition();
+// 			vec.x += speed * _time->GetDelta();
+// 			_camera->setPosition(vec);
+// 		}
+// 
+// 		if (_input->IsKey(KEYCODE_D))
+// 		{
+// 			auto vec = _camera->getPosition();
+// 			vec.x -= speed * _time->GetDelta();
+// 			_camera->setPosition(vec);
+// 		}
+// 
+// 		if (_input->IsKey(KEYCODE_Q))
+// 		{
+// 			auto vec = _camera->getPosition();
+// 			vec.z += speed * _time->GetDelta();
+// 			_camera->setPosition(vec);
+// 		}
+// 
+// 		if (_input->IsKey(KEYCODE_Z))
+// 		{
+// 			auto vec = _camera->getPosition();
+// 			vec.z -= speed * _time->GetDelta();
+// 			_camera->setPosition(vec);
+// 		}
 
 		if (_pos != newPos)
 			_pos = newPos;
@@ -142,16 +182,49 @@ namespace uut
 		_video->Clear(true, true, false);
 
 		//////////////////////////////////////////////////////////////////////////
-		_video->SetTransform(TRANSFORM_PROJECTION, _matProj);
-		_camera->UpdatePosition();
+		if (_camera)
+		{
+			float heading = 0.0f;
+			float pitch = 0.0f;
+			float roll = 0.0f;
+			Vector3f direction;
 
-		const int count = 200;
+			const Vector3f center(0.5f * _size.x, 0.5f * _size.y);
+
+			GetMovementDirection(_camera, _input, direction);
+
+			switch (_camera->getBehavior())
+			{
+			case Camera::CAMERA_BEHAVIOR_FIRST_PERSON:
+				pitch = (center.y - _input->GetMousePos().y) * g_cameraRotationSpeed;
+				heading = -(_input->GetMousePos().x - center.x) * g_cameraRotationSpeed;
+
+				_camera->rotate(heading, pitch, 0.0f);
+				break;
+
+			case Camera::CAMERA_BEHAVIOR_FLIGHT:
+				heading = -direction.x * CAMERA_SPEED_FLIGHT_YAW * _time->GetElapsed();
+				pitch = -(center.y - _input->GetMousePos().y) * g_cameraRotationSpeed;
+				roll = -(_input->GetMousePos().x - center.x) * g_cameraRotationSpeed;
+
+				_camera->rotate(heading, pitch, roll);
+				direction.x = 0.0f; // ignore yaw motion when updating camera velocity
+				break;
+			}
+
+			_camera->updatePosition(direction, _time->GetElapsed());
+
+			_video->SetTransform(TRANSFORM_PROJECTION, _camera->getProjectionMatrix());
+			_video->SetTransform(TRANSFORM_VIEW, _camera->getViewMatrix());
+		}
+
+		const int count = 100;
 		const float side = 1;
 
 		_graphics->ResetStates();
 		_graphics->SetColor(Color::WHITE);
 		const Vector3f offset(0, 0, 10);
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i <= count; i++)
 		{
 			// XY PLANE
 			_graphics->DrawLine(
