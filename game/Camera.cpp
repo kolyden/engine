@@ -7,7 +7,7 @@ namespace uut
 	Camera::Camera(Context* context)
 		: Object(context)
 		, VideoObject(_context->GetModule<Video>())
-		, _position(Vector3f::ZERO)
+		, _position(0, 0, 0)
 		, _rotation(Vector3f::ZERO)
 		, _forward(0, 0, 1)
 		, _up(0, 1, 0)

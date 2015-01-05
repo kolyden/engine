@@ -3,6 +3,7 @@
 #include "math/uutRect.h"
 #include "uutVideoDefs.h"
 #include "uutColor.h"
+#include "uutVertex3.h"
 
 namespace uut
 {
@@ -20,7 +21,11 @@ namespace uut
 		void SetColor(const Color& color);
 
 		void DrawLine(const Vector2f& start, const Vector2f& end);
-		void DrawTexture(Texture* texture, const Rectf& rect);
+		void DrawLine(const Vector3f& start, const Vector3f& end);
+		void DrawTexture(Texture* tex, const Rectf& rect);
+
+		void DrawTriangle(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2);
+		void DrawQuad(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2, const Vertex3& v3);
 
 		void Flush();
 		void ResetStates();

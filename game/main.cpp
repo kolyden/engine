@@ -33,6 +33,7 @@ namespace uut
 		_video->SetMode(_size.x, _size.y);
 		_video->SetViewPort(rect);
 		_video->SetRenderState(RENDERSTATE_LIGHTNING, false);
+		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, false);
 	}
 
 	void MyApp::OnStart()
@@ -110,32 +111,37 @@ namespace uut
 		_video->SetColor(COLOR_CLEAR, Color::BLACK);
 		_video->Clear(true, true, false);
 
-		_video->SetTransform(TRANSFORM_PROJECTION, _matPersp);
-		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, true);
-		_camera->UpdatePosition();
-		if (_model0)
-		{
-			_video->SetColor(COLOR_DRAW, Color::WHITE);
-			_model0->Draw();
-		}
-
+		//////////////////////////////////////////////////////////////////////////
 		_video->SetTransform(TRANSFORM_PROJECTION, _matOrtho);
-		_video->SetTransform(TRANSFORM_VIEW, Matrix4f::IDENTITY);
-		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, false);
+// 		_camera->UpdatePosition();
+
+		const int count = 200;
+		const float side = 10;
 
 		_graphics->ResetStates();
-		_graphics->SetColor(_color);
-		_graphics->DrawLine(Vector2f(0, 0), Vector2f(_pos));
-		if (_tex0)
+		_graphics->SetColor(Color::WHITE);
+		for (int i = 0; i < count; i++)
 		{
-			_graphics->SetColor(Color::WHITE);
-			_graphics->DrawTexture(_tex0, Rectf( 50, 50, 100, 100));
-			_graphics->DrawTexture(_tex0, Rectf(_pos.x - 100, _pos.y - 100, 200, 200));
+			_graphics->DrawLine(
+				Vector3f(side * i, 0, 0),
+				Vector3f(side * i, side * count, 0));
+			_graphics->DrawLine(
+				Vector3f(0, side * i, 0),
+				Vector3f(side * count, side * i, 0));
 		}
-		_graphics->SetColor(_color);
-		_graphics->DrawLine(Vector2f(800, 0), Vector2f(_pos));
-		_graphics->DrawLine(Vector2f(800, 600), Vector2f(_pos));
-		_graphics->DrawLine(Vector2f(0, 600), Vector2f(_pos));
 		_graphics->Flush();
+
+// 		if (_model0)
+// 		{
+// 			_video->SetColor(COLOR_DRAW, Color::WHITE);
+// 			_model0->Draw();
+// 		}
+// 
+// 		_graphics->ResetStates();
+// 		_graphics->SetColor(Color::WHITE);
+// 		_graphics->DrawTriangle(0,
+// 			Vertex3(Vector3f(0, 0, 0), 0xFFFFFFFF),
+// 			Vertex3(Vector3f(100, 0, 0), 0xFFFFFFFF),
+// 			Vertex3(Vector3f(100, 100, 0), 0xFFFFFFFF));
 	}
 }

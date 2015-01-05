@@ -16,8 +16,9 @@ namespace uut
 		, _vertexType(VertexType::None)
 		, _vertexMax(0)
 		, _data(0)
+		, _currentColor(Color::WHITE)
+		, _currentColorUint(_currentColor.ToUint())
     {
-		SetColor(Color::WHITE);
     }
 
 	void Graphics::SetColor(const Color& color)
@@ -30,16 +31,29 @@ namespace uut
 	{
 		ChangeBufferParam(PRIMITIVE_LINES, VertexType::V2D);
 		SetTexture(0);
+		TestBufferCount(2);
 
 		auto verts = (Vertex2*)_data;
 		verts[_currentCount++] = Vertex2(start, _currentColorUint);
 		verts[_currentCount++] = Vertex2(end, _currentColorUint);
 	}
 
+	void Graphics::DrawLine(const Vector3f& start, const Vector3f& end)
+	{
+		ChangeBufferParam(PRIMITIVE_LINES, VertexType::V3D);
+		SetTexture(0);
+		TestBufferCount(2);
+
+		auto verts = (Vertex3*)_data;
+		verts[_currentCount++] = Vertex3(start, _currentColorUint);
+		verts[_currentCount++] = Vertex3(end, _currentColorUint);
+	}
+
 	void Graphics::DrawTexture(Texture* texture, const Rectf& rect)
 	{
 		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V2D);
 		SetTexture(texture);
+		TestBufferCount(6);
 
 		const float x1 = rect.pos.x;
 		const float y1 = rect.pos.y;
@@ -59,18 +73,63 @@ namespace uut
 		verts[_currentCount++] = Vertex2(Vector2f(x1, y2), Vector2f(tx1, ty2), _currentColorUint);
 	}
 
+	void Graphics::DrawTriangle(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2)
+	{
+		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V3D);
+		SetTexture(tex);
+		TestBufferCount(3);
+
+		auto verts = (Vertex3*)_data;
+		verts[_currentCount++] = v0;
+		verts[_currentCount++] = v1;
+		verts[_currentCount++] = v2;
+	}
+
+	void Graphics::DrawQuad(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2, const Vertex3& v3)
+	{
+		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V3D);
+		SetTexture(tex);
+		TestBufferCount(6);
+
+		auto verts = (Vertex3*)_data;
+		verts[_currentCount++] = v0;
+		verts[_currentCount++] = v1;
+		verts[_currentCount++] = v2;
+
+		verts[_currentCount++] = v1;
+		verts[_currentCount++] = v3;
+		verts[_currentCount++] = v2;
+	}
+
 	void Graphics::Flush()
 	{
 		if (_currentCount == 0)
 			return;
 
-		_buffer->UpdateData(0, _currentCount * Vertex2::DECLARE.size, _data);
-		if (_video->BindBuffer(_buffer, Vertex2::DECLARE.size,
-			Vertex2::DECLARE.types, Vertex2::DECLARE.count))
+		_video->BindTexture(_texture);
+		switch (_vertexType)
 		{
-			_video->SetColor(COLOR_DRAW, _currentColor);
-			_video->DrawPrimitives(_currentType, _currentCount, 0);
-			_video->UnbindBuffer(_buffer, Vertex2::DECLARE.types, Vertex2::DECLARE.count);
+		case uut::Graphics::VertexType::V2D:
+			_buffer->UpdateData(0, _currentCount * Vertex2::DECLARE.size, _data);
+			if (_video->BindBuffer(_buffer, Vertex2::DECLARE.size,
+				Vertex2::DECLARE.types, Vertex2::DECLARE.count))
+			{
+				_video->SetColor(COLOR_DRAW, _currentColor);
+				_video->DrawPrimitives(_currentType, _currentCount, 0);
+				_video->UnbindBuffer(_buffer, Vertex2::DECLARE.types, Vertex2::DECLARE.count);
+			}
+			break;
+
+		case uut::Graphics::VertexType::V3D:
+			_buffer->UpdateData(0, _currentCount * Vertex3::DECLARE.size, _data);
+			if (_video->BindBuffer(_buffer, Vertex3::DECLARE.size,
+				Vertex3::DECLARE.types, Vertex3::DECLARE.count))
+			{
+				_video->SetColor(COLOR_DRAW, _currentColor);
+				_video->DrawPrimitives(_currentType, _currentCount, 0);
+				_video->UnbindBuffer(_buffer, Vertex3::DECLARE.types, Vertex3::DECLARE.count);
+			}
+			break;
 		}
 
 		_currentCount = 0;
@@ -104,12 +163,13 @@ namespace uut
 			_data = new uint8_t[BUFFER_SIZE];
 		}
 
-		if (_currentType == type)
+		if (_currentType == type && _vertexType == vert)
 			return;
 
 		Flush();
 		_currentType = type;
 		_vertexType = vert;
+
 		switch (_vertexType)
 		{
 		case VertexType::V2D:
@@ -129,7 +189,6 @@ namespace uut
 
 		Flush();
 		_texture = texture;
-		_video->BindTexture(_texture);
 	}
 
 	void Graphics::TestBufferCount(int count)
