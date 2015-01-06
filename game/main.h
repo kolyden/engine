@@ -5,6 +5,7 @@
 #include "math/uutVector2.h"
 #include "math/uutVector3.h"
 #include "math/uutMatrix.h"
+#include "math/uutQuaternion.h"
 #include "math/uutRect.h"
 
 namespace uut
@@ -22,9 +23,12 @@ namespace uut
 	protected:
 		SharedPtr<Texture> _tex0;
 		SharedPtr<Model> _model0;
-		SharedPtr<Camera> _camera;
 
 		Matrix4f _matProj;
+		Matrix4f _matView;
+		Vector3f _cameraPos;
+		Vector3f _cameraEye;
+		Quaternionf _cameraRot;
 
 		Color _color;
 		Vector2i _pos;

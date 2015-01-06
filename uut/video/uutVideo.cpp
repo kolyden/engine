@@ -352,14 +352,21 @@ namespace uut
                 glVertexPointer(declare.count, type, stride, (void*)declare.offset);
                 CheckGLError("glVertexPointer");
                 glEnableClientState(GL_VERTEX_ARRAY);
-                CheckGLError("glEnableClientState GL_TEXTURE_COORD_ARRAY");
+                CheckGLError("glEnableClientState GL_VERTEX_ARRAY");
                 break;
+
+			case USAGE_NORMAL:
+				glVertexPointer(declare.count, type, stride, (void*)declare.offset);
+				CheckGLError("glNormalPointer");
+				glEnableClientState(GL_NORMAL_ARRAY);
+				CheckGLError("glEnableClientState GL_NORMAL_ARRAY");
+				break;
 
             case USAGE_COLOR:
                 glColorPointer(declare.count, type, stride, (void*)declare.offset);
                 CheckGLError("glColorPointer");
                 glEnableClientState(GL_COLOR_ARRAY);
-                CheckGLError("glEnableClientState GL_TEXTURE_COORD_ARRAY");
+                CheckGLError("glEnableClientState GL_COLOR_ARRAY");
                 break;
 
             case USAGE_TEXCOORDS:
@@ -389,6 +396,7 @@ namespace uut
             switch (declare[i].usage)
             {
             case USAGE_POSITION: ::glDisableClientState(GL_VERTEX_ARRAY); break;
+			case USAGE_NORMAL: ::glDisableClientState(GL_NORMAL_ARRAY); break;
             case USAGE_COLOR: ::glDisableClientState(GL_COLOR_ARRAY); break;
             case USAGE_TEXCOORDS: ::glDisableClientState(GL_TEXTURE_COORD_ARRAY); break;
             }
@@ -585,7 +593,9 @@ namespace uut
     unsigned Video::valueToGL(EValueType type)
     {
         static const GLenum convert[] = {
-            GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT, GL_UNSIGNED_SHORT,
+            GL_BYTE, GL_UNSIGNED_BYTE,
+			GL_SHORT, GL_UNSIGNED_SHORT,
+			GL_INT, GL_UNSIGNED_INT,
             GL_FLOAT, GL_FIXED
         };
 
@@ -605,9 +615,6 @@ namespace uut
 		case GL_INVALID_VALUE: Debug::LogError("%s - Invalid Value", message); break;
 		case GL_INVALID_OPERATION: Debug::LogError("%s - Invalid Operation", message); break;
 		case GL_OUT_OF_MEMORY: Debug::LogError("%s - Out Of Memory", message); break;
-
-        default:
-            break;
         }
 
         return false;

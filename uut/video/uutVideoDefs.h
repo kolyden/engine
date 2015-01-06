@@ -37,6 +37,8 @@ namespace uut
         VALUE_UBYTE,
         VALUE_SHORT,
         VALUE_USHORT,
+		VALUE_INT,
+		VALUE_UINT,
         VALUE_FLOAT,
         VALUE_FIXED,
     };
@@ -44,6 +46,7 @@ namespace uut
     enum EUsageType
     {
         USAGE_POSITION,
+		USAGE_NORMAL,
         USAGE_TEXCOORDS,
         USAGE_COLOR,
     };
