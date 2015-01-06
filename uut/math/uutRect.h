@@ -3,19 +3,27 @@
 
 namespace uut
 {
-	template<class T>
-	class Rect
+	class Rectf
 	{
 	public:
-		Rect() {}
-		Rect(T x, T y, T w, T h) : pos(x, y), size(w, h) {}
-		Rect(const Vector2<T>& _pos, const Vector2<T>& _size)
+		Rectf() {}
+		Rectf(float x, float y, float w, float h) : pos(x, y), size(w, h) {}
+		Rectf(const Vector2f& _pos, const Vector2f& _size)
 			: pos(_pos), size(_size) {}
 
-		Vector2<T> pos;
-		Vector2<T> size;
+		Vector2f pos;
+		Vector2f size;
 	};
 
-	typedef Rect<float> Rectf;
-	typedef Rect<int> Recti;
+	class Recti
+	{
+	public:
+		Recti() {}
+		Recti(int x, int y, int w, int h) : pos(x, y), size(w, h) {}
+		Recti(const Vector2i& _pos, const Vector2i& _size)
+			: pos(_pos), size(_size) {}
+
+		Vector2i pos;
+		Vector2i size;
+	};
 }

@@ -115,7 +115,7 @@ namespace uut
             SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
             SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
             SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-            SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
+            SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
             SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 #endif
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -198,7 +198,6 @@ namespace uut
         Clear(true, true, true);
         SDL_GL_SwapWindow(_window);
 
-		UpdateViewport();
 		ResetStates();
 
         return true;
@@ -320,8 +319,7 @@ namespace uut
             break;
         }
 
-		::glLoadIdentity();
-        ::glLoadMatrixf(mat.get_value());
+        ::glLoadMatrixf(mat.GetData());
     }
 	
 	void Video::SetViewPort(const Recti& rect)
@@ -356,7 +354,7 @@ namespace uut
                 break;
 
 			case USAGE_NORMAL:
-				glVertexPointer(declare.count, type, stride, (void*)declare.offset);
+				glNormalPointer(type, stride, (void*)declare.offset);
 				CheckGLError("glNormalPointer");
 				glEnableClientState(GL_NORMAL_ARRAY);
 				CheckGLError("glEnableClientState GL_NORMAL_ARRAY");
@@ -437,7 +435,8 @@ namespace uut
         if (depth) flags |= GL_DEPTH_BUFFER_BIT;
         if (stencil) flags |= GL_STENCIL_BUFFER_BIT;
 
-        glClear(flags);
+		if (flags > 0)
+			glClear(flags);
     }
 
 	unsigned Video::GetResolutions(List<Vector2i>& arr) const
@@ -521,44 +520,6 @@ namespace uut
 #endif
         }
     }
-
-    bool Video::OpenWindow(int width, int height,
-        bool resizable, bool borderless)
-    {
-        Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
-        if (resizable)
-            flags |= SDL_WINDOW_RESIZABLE;
-        if (borderless)
-            flags |= SDL_WINDOW_BORDERLESS;
-
-        _window = SDL_CreateWindow(_windowTitle.GetData(),
-            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            width, height, flags);
-
-        if (!_window)
-            return false;
-
-        return true;
-    }
-
-	bool Video::UpdateViewport()
-	{
-// 		glViewport(0, 0,
-// 			_windowSize._x,
-// 			_windowSize._y);
-// 
-// 		glMatrixMode(GL_PROJECTION);
-// 		glLoadIdentity();
-// 		glOrtho((GLdouble)0,
-// 				(GLdouble)_windowSize._x,
-// 				(GLdouble)_windowSize._y,
-// 				(GLdouble)0,
-// 				0.0, 1.0);
-// 
-// 		return CheckGLError("Update Viewport");
-
-		return true;
-	}
 
 	void Video::ResetStates()
 	{

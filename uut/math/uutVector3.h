@@ -3,296 +3,56 @@
 
 namespace uut
 {
-	template<class T>class Vector2;
-	template<class T>class Vector4;
-
-	template <class T>
-	class Vector3
+	class Vector3f
 	{
 	public:
-		typedef T value_type;
-		int32_t size() const { return 3; }
+		float x, y, z;
 
-		////////////////////////////////////////////////////////
-		//
-		//  Constructors
-		//
-		////////////////////////////////////////////////////////
+		Vector3f() {}
+		Vector3f(float x_, float y_, float z_);
+		~Vector3f() {}
 
-		// Default/scalar constructor
-		Vector3(const T & t = T()) {
-			for (int32_t i = 0; i < size(); i++) _array[i] = t;
-		}
+		bool operator==(const Vector3f &rhs) const;
+		bool operator!=(const Vector3f &rhs) const;
 
-		// Construct from array
-		Vector3(const T * tp) {
-			for (int32_t i = 0; i < size(); i++) _array[i] = tp[i];
-		}
+		Vector3f &operator+=(const Vector3f &rhs);
+		Vector3f &operator-=(const Vector3f &rhs);
+		Vector3f &operator*=(float scalar);
+		Vector3f &operator/=(float scalar);
 
-		// Construct from explicit values
-		Vector3(const T v0, const T v1, const T v2) {
-			x = v0;
-			y = v1;
-			z = v2;
-		}
+		Vector3f operator+(const Vector3f &rhs) const;
+		Vector3f operator-(const Vector3f &rhs) const;
+		Vector3f operator*(float scalar) const;
+		Vector3f operator/(float scalar) const;
 
-		explicit Vector3(const Vector4<T> &u) {
-			for (int32_t i = 0; i < size(); i++) _array[i] = u._array[i];
-		}
+		float magnitude() const;
+		float magnitudeSq() const;
+		Vector3f inverse() const;
+		void normalize();
+		void set(float x_, float y_, float z_);
 
-		explicit Vector3(const Vector2<T> &u, T v0) {
-			x = u.x;
-			y = u.y;
-			z = v0;
-		}
+		static Vector3f cross(const Vector3f &p, const Vector3f &q);
+		static float distance(const Vector3f &pt1, const Vector3f &pt2);
+		static float distanceSq(const Vector3f &pt1, const Vector3f &pt2);
+		static float dot(const Vector3f &p, const Vector3f &q);
+		static Vector3f lerp(const Vector3f &p, const Vector3f &q, float t);
+		static void orthogonalize(Vector3f &v1, Vector3f &v2);
+		static void orthogonalize(Vector3f &v1, Vector3f &v2, Vector3f &v3);
+		static Vector3f proj(const Vector3f &p, const Vector3f &q);
+		static Vector3f perp(const Vector3f &p, const Vector3f &q);
+		static Vector3f reflect(const Vector3f &i, const Vector3f &n);
 
-		const T * get_value() const {
-			return _array;
-		}
-
-		Vector3<T> & set_value(const T * rhs) {
-			for (int32_t i = 0; i < size(); i++) _array[i] = rhs[i];
-			return *this;
-		}
-
-		// indexing operators
-		T & operator [] (int32_t i) {
-			return _array[i];
-		}
-
-		const T & operator [] (int32_t i) const {
-			return _array[i];
-		}
-
-		// type-cast operators
-		operator T * () {
-			return _array;
-		}
-
-		operator const T * () const {
-			return _array;
-		}
-
-		////////////////////////////////////////////////////////
-		//
-		//  Math operators
-		//
-		////////////////////////////////////////////////////////
-
-		// scalar multiply assign
-		friend Vector3<T> & operator *= (Vector3<T> &lhs, T d) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] *= d;
-			return lhs;
-		}
-
-		// component-wise vector multiply assign
-		friend Vector3<T> & operator *= (Vector3<T> &lhs, const Vector3<T> &rhs) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] *= rhs[i];
-			return lhs;
-		}
-
-		// scalar divide assign
-		friend Vector3<T> & operator /= (Vector3<T> &lhs, T d) {
-			if (d == 0) return lhs;
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] /= d;
-			return lhs;
-		}
-
-		// component-wise vector divide assign
-		friend Vector3<T> & operator /= (Vector3<T> &lhs, const Vector3<T> & rhs) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] /= rhs._array[i];
-			return lhs;
-		}
-
-		// component-wise vector add assign
-		friend Vector3<T> & operator += (Vector3<T> &lhs, const Vector3<T> & rhs) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] += rhs._array[i];
-			return lhs;
-		}
-
-		// component-wise vector subtract assign
-		friend Vector3<T> & operator -= (Vector3<T> &lhs, const Vector3<T> & rhs) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] -= rhs._array[i];
-			return lhs;
-		}
-
-		// unary negate
-		friend Vector3<T> operator - (const Vector3<T> &rhs) {
-			Vector3<T> rv;
-			for (int32_t i = 0; i < rhs.size(); i++) rv._array[i] = -rhs._array[i];
-			return rv;
-		}
-
-		// vector add
-		friend Vector3<T> operator + (const Vector3<T> & lhs, const Vector3<T> & rhs) {
-			Vector3<T> rt(lhs);
-			return rt += rhs;
-		}
-
-		// vector subtract
-		friend Vector3<T> operator - (const Vector3<T> & lhs, const Vector3<T> & rhs) {
-			Vector3<T> rt(lhs);
-			return rt -= rhs;
-		}
-
-		// scalar multiply
-		friend Vector3<T> operator * (const Vector3<T> & lhs, T rhs) {
-			Vector3<T> rt(lhs);
-			return rt *= rhs;
-		}
-
-		// scalar multiply
-		friend Vector3<T> operator * (T lhs, const Vector3<T> & rhs) {
-			Vector3<T> rt(lhs);
-			return rt *= rhs;
-		}
-
-		// vector component-wise multiply
-		friend Vector3<T> operator * (const Vector3<T> & lhs, const Vector3<T> & rhs){
-			Vector3<T> rt(lhs);
-			return rt *= rhs;
-		}
-
-		// scalar multiply
-		friend Vector3<T> operator / (const Vector3<T> & lhs, T rhs) {
-			Vector3<T> rt(lhs);
-			return rt /= rhs;
-		}
-
-		// vector component-wise multiply
-		friend Vector3<T> operator / (const Vector3<T> & lhs, const Vector3<T> & rhs){
-			Vector3<T> rt(lhs);
-			return rt /= rhs;
-		}
-
-		// vector - axis rotation //harish
-		void rotate(float angle, T vx, T vy, T vz) //harish
-		{
-			Vector3<T> NewPosition;
-
-			// Calculate the sine and cosine of the angle once
-			float cosTheta = (float)cos(angle);
-			float sinTheta = (float)sin(angle);
-
-
-			NewPosition._array[0] = (cosTheta + (1 - cosTheta) * vx * vx)            * _array[0];
-			NewPosition._array[0] += ((1 - cosTheta) * vx * vy - vz * sinTheta)    * _array[1];
-			NewPosition._array[0] += ((1 - cosTheta) * vx * vz + vy * sinTheta)    * _array[2];
-
-
-			NewPosition._array[1] = ((1 - cosTheta) * vx * vy + vz * sinTheta)    * _array[0];
-			NewPosition._array[1] += (cosTheta + (1 - cosTheta) * vy * vy)        * _array[1];
-			NewPosition._array[1] += ((1 - cosTheta) * vy * vz - vx * sinTheta)    * _array[2];
-
-			NewPosition._array[2] = ((1 - cosTheta) * vx * vz - vy * sinTheta)    *  _array[0];
-			NewPosition._array[2] += ((1 - cosTheta) * vy * vz + vx * sinTheta)    *  _array[1];
-			NewPosition._array[2] += (cosTheta + (1 - cosTheta) * vz * vz)        *  _array[2];
-
-			_array[0] = NewPosition._array[0];
-			_array[1] = NewPosition._array[1];
-			_array[2] = NewPosition._array[2];
-		}
-
-		//Calculate the cross product
-		Vector3<T> cross(Vector3<T> vec) //harish
-		{
-			Vector3<T> vNormal;                                    // The vector to hold the cross product
-
-			vNormal._array[0] = ((_array[1] * vec._array[2]) - (_array[2] * vec._array[1]));
-			vNormal._array[1] = ((_array[2] * vec._array[0]) - (_array[0] * vec._array[2]));
-			vNormal._array[2] = ((_array[0] * vec._array[1]) - (_array[1] * vec._array[0]));
-
-			return vNormal;
-		}
-
-		////////////////////////////////////////////////////////
-		//
-		//  Comparison operators
-		//
-		////////////////////////////////////////////////////////
-
-		// equality
-		friend bool operator == (const Vector3<T> &lhs, const Vector3<T> &rhs) {
-			bool r = true;
-			for (int32_t i = 0; i < lhs.size(); i++)
-				r &= lhs._array[i] == rhs._array[i];
-			return r;
-		}
-
-		// inequality
-		friend bool operator != (const Vector3<T> &lhs, const Vector3<T> &rhs) {
-			bool r = true;
-			for (int32_t i = 0; i < lhs.size(); i++)
-				r &= lhs._array[i] != rhs._array[i];
-			return r;
-		}
-
-		////////////////////////////////////////////////////////////////////////////////
-		//
-		// dimension specific operations
-		//
-		////////////////////////////////////////////////////////////////////////////////
-
-		// cross product
-		static Vector3<T> cross(const Vector3<T> & lhs, const Vector3<T> & rhs) {
-			Vector3<T> r;
-
-			r.x = lhs.y * rhs.z - lhs.z * rhs.y;
-			r.y = lhs.z * rhs.x - lhs.x * rhs.z;
-			r.z = lhs.x * rhs.y - lhs.y * rhs.x;
-
-			return r;
-		}
-
-		static T dot(const Vector3<T> & lhs, const Vector3<T> & rhs) {
-			T r = 0;
-			for (int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
-			return r;
-		}
-
-		static T length(const Vector3<T> & vec) {
-			T r = 0;
-			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-			return T(sqrt(r));
-		}
-
-		static T square_norm(const Vector3<T> & vec) {
-			T r = 0;
-			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-			return r;
-		}
-
-		static Vector3<T> normalize(const Vector3<T> & vec) {
-			T sum(0);
-			Vector3<T> r;
-			for (int32_t i = 0; i < vec.size(); i++)
-				sum += vec._array[i] * vec._array[i];
-			sum = T(sqrt(sum));
-			if (sum > 0)
-			for (int32_t i = 0; i < vec.size(); i++)
-				r._array[i] = vec._array[i] / sum;
-			return r;
-		}
-
-		//data intentionally left public to allow vec2.x
-		union {
-			struct {
-				T x, y, z;          // standard names for components
-			};
-			struct {
-				T s, t, r;          // standard names for components
-			};
-			T _array[3];     // array access
-		};
-
-		static const Vector3<T> ZERO;
-		static const Vector3<T> ONE;
+		friend Vector3f operator*(float lhs, const Vector3f &rhs);
+		friend Vector3f operator-(const Vector3f &v);
 	};
 
-	template<class T>const Vector3<T> Vector3<T>::ZERO(0, 0, 0);
-	template<class T>const Vector3<T> Vector3<T>::ONE(1, 1, 1);
+	inline Vector3f operator*(float lhs, const Vector3f &rhs)
+	{
+		return Vector3f(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
+	}
 
-	typedef Vector3<float> Vector3f; ///< float 3-vectors
-	typedef Vector3<int32_t> Vector3i; ///< signed integer 3-vectors
-	typedef Vector3<uint32_t> Vector3ui; ///< unsigned integer 4-vectors
+	inline Vector3f operator-(const Vector3f &v)
+	{
+		return Vector3f(-v.x, -v.y, -v.z);
+	}
 }

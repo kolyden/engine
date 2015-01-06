@@ -4,7 +4,7 @@
 #include "uutColor.h"
 #include "math/uutVector2.h"
 #include "math/uutRect.h"
-#include "math/uutMatrix.h"
+#include "math/uutMatrix4.h"
 #include "container/uutList.h"
 
 struct SDL_Window;
@@ -78,8 +78,6 @@ namespace uut
         void Release(bool clearGPUObjects, bool closeWindow);
         void Restore();
 
-        bool OpenWindow(int width, int height, bool resizable, bool borderless);
-		bool UpdateViewport();
 		void ResetStates();
 
         static unsigned primitiveToGL(EPrimitiveType primitive);

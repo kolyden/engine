@@ -3,258 +3,54 @@
 
 namespace uut
 {
-	template <class T>
-	class Vector4
+	class Vector3f;
+
+	class Vector4f
 	{
 	public:
-		typedef T value_type;
-		int32_t size() const { return 4; }
+		float x, y, z, w;
 
-		////////////////////////////////////////////////////////
-		//
-		//  Constructors
-		//
-		////////////////////////////////////////////////////////
+		static float distance(const Vector4f &pt1, const Vector4f &pt2);
+		static float distanceSq(const Vector4f &pt1, const Vector4f &pt2);
+		static float dot(const Vector4f &p, const Vector4f &q);
+		static Vector4f lerp(const Vector4f &p, const Vector4f &q, float t);
 
-		// Default/scalar constructor
-		Vector4(const T & t = T()) {
-			for (int32_t i = 0; i < size(); i++) _array[i] = t;
-		}
+		Vector4f() {}
+		Vector4f(float x_, float y_, float z_, float w_);
+		Vector4f(const Vector3f &v, float w_);
+		~Vector4f() {}
 
-		// Construct from array
-		Vector4(const T * tp) {
-			for (int32_t i = 0; i < size(); i++) _array[i] = tp[i];
-		}
+		bool operator==(const Vector4f &rhs) const;
+		bool operator!=(const Vector4f &rhs) const;
 
-		// Construct from explicit values
-		Vector4(const T v0, const T v1, const T v2, const T v3) {
-			x = v0;
-			y = v1;
-			z = v2;
-			w = v3;
-		}
+		Vector4f &operator+=(const Vector4f &rhs);
+		Vector4f &operator-=(const Vector4f &rhs);
+		Vector4f &operator*=(float scalar);
+		Vector4f &operator/=(float scalar);
 
-		explicit Vector4(const Vector3<T> &u, T v0) {
-			x = u.x;
-			y = u.y;
-			z = u.z;
-			w = v0;
-		}
+		Vector4f operator+(const Vector4f &rhs) const;
+		Vector4f operator-(const Vector4f &rhs) const;
+		Vector4f operator*(float scalar) const;
+		Vector4f operator/(float scalar) const;
 
-		explicit Vector4(const Vector2<T> &u, T v0, T v1) {
-			x = u.x;
-			y = u.y;
-			z = v0;
-			w = v1;
-		}
+		float magnitude() const;
+		float magnitudeSq() const;
+		Vector4f inverse() const;
+		void normalize();
+		void set(float x_, float y_, float z_, float w_);
+		Vector3f toVector3() const;
 
-		const T * get_value() const {
-			return _array;
-		}
-
-		Vector4<T> & set_value(const T * rhs) {
-			for (int32_t i = 0; i < size(); i++) _array[i] = rhs[i];
-			return *this;
-		}
-
-		// indexing operators
-		T & operator [] (int32_t i) {
-			return _array[i];
-		}
-
-		const T & operator [] (int32_t i) const {
-			return _array[i];
-		}
-
-		// type-cast operators
-		operator T * () {
-			return _array;
-		}
-
-		operator const T * () const {
-			return _array;
-		}
-
-		////////////////////////////////////////////////////////
-		//
-		//  Math operators
-		//
-		////////////////////////////////////////////////////////
-
-		// scalar multiply assign
-		friend Vector4<T> & operator *= (Vector4<T> &lhs, T d) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] *= d;
-			return lhs;
-		}
-
-		// component-wise vector multiply assign
-		friend Vector4<T> & operator *= (Vector4<T> &lhs, const Vector4<T> &rhs) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] *= rhs[i];
-			return lhs;
-		}
-
-		// scalar divide assign
-		friend Vector4<T> & operator /= (Vector4<T> &lhs, T d) {
-			if (d == 0) return lhs;
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] /= d;
-			return lhs;
-		}
-
-		// component-wise vector divide assign
-		friend Vector4<T> & operator /= (Vector4<T> &lhs, const Vector4<T> & rhs) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] /= rhs._array[i];
-			return lhs;
-		}
-
-		// component-wise vector add assign
-		friend Vector4<T> & operator += (Vector4<T> &lhs, const Vector4<T> & rhs) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] += rhs._array[i];
-			return lhs;
-		}
-
-		// component-wise vector subtract assign
-		friend Vector4<T> & operator -= (Vector4<T> &lhs, const Vector4<T> & rhs) {
-			for (int32_t i = 0; i < lhs.size(); i++) lhs._array[i] -= rhs._array[i];
-			return lhs;
-		}
-
-		// unary negate
-		friend Vector4<T> operator - (const Vector4<T> &rhs) {
-			Vector4<T> rv;
-			for (int32_t i = 0; i < rhs.size(); i++) rv._array[i] = -rhs._array[i];
-			return rv;
-		}
-
-		// vector add
-		friend Vector4<T> operator + (const Vector4<T> & lhs, const Vector4<T> & rhs) {
-			Vector4<T> rt(lhs);
-			return rt += rhs;
-		}
-
-		// vector subtract
-		friend Vector4<T> operator - (const Vector4<T> & lhs, const Vector4<T> & rhs) {
-			Vector4<T> rt(lhs);
-			return rt -= rhs;
-		}
-
-		// scalar multiply
-		friend Vector4<T> operator * (const Vector4<T> & lhs, T rhs) {
-			Vector4<T> rt(lhs);
-			return rt *= rhs;
-		}
-
-		// scalar multiply
-		friend Vector4<T> operator * (T lhs, const Vector4<T> & rhs) {
-			Vector4<T> rt(lhs);
-			return rt *= rhs;
-		}
-
-		// vector component-wise multiply
-		friend Vector4<T> operator * (const Vector4<T> & lhs, const Vector4<T> & rhs){
-			Vector4<T> rt(lhs);
-			return rt *= rhs;
-		}
-
-		// scalar multiply
-		friend Vector4<T> operator / (const Vector4<T> & lhs, T rhs) {
-			Vector4<T> rt(lhs);
-			return rt /= rhs;
-		}
-
-		// vector component-wise multiply
-		friend Vector4<T> operator / (const Vector4<T> & lhs, const Vector4<T> & rhs){
-			Vector4<T> rt(lhs);
-			return rt /= rhs;
-		}
-
-		////////////////////////////////////////////////////////
-		//
-		//  Comparison operators
-		//
-		////////////////////////////////////////////////////////
-
-		// equality
-		friend bool operator == (const Vector4<T> &lhs, const Vector4<T> &rhs) {
-			bool r = true;
-			for (int32_t i = 0; i < lhs.size(); i++)
-				r &= lhs._array[i] == rhs._array[i];
-			return r;
-		}
-
-		// inequality
-		friend bool operator != (const Vector4<T> &lhs, const Vector4<T> &rhs) {
-			bool r = true;
-			for (int32_t i = 0; i < lhs.size(); i++)
-				r &= lhs._array[i] != rhs._array[i];
-			return r;
-		}
-
-		static T dot(const Vector4<T> & lhs, const Vector4<T> & rhs) {
-			T r = 0;
-			for (int32_t i = 0; i < lhs.size(); i++) r += lhs._array[i] * rhs._array[i];
-			return r;
-		}
-
-		static T length(const Vector4<T> & vec) {
-			T r = 0;
-			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-			return T(sqrt(r));
-		}
-
-		static T square_norm(const Vector4<T> & vec) {
-			T r = 0;
-			for (int32_t i = 0; i < vec.size(); i++) r += vec._array[i] * vec._array[i];
-			return r;
-		}
-
-		static Vector4<T> normalize(const Vector4<T> & vec) {
-			T sum(0);
-			Vector4<T> r;
-			for (int32_t i = 0; i < vec.size(); i++)
-				sum += vec._array[i] * vec._array[i];
-			sum = T(sqrt(sum));
-			if (sum > 0)
-			for (int32_t i = 0; i < vec.size(); i++)
-				r._array[i] = vec._array[i] / sum;
-			return r;
-		}
-
-		//data intentionally left public to allow vec2.x
-		union {
-			struct {
-				T x, y, z, w;          // standard names for components
-			};
-			struct {
-				T s, t, r, q;          // standard names for components
-			};
-			T _array[4];     // array access
-		};
+		friend Vector4f operator*(float lhs, const Vector4f &rhs);
+		friend Vector4f operator-(const Vector4f &v);
 	};
 
-	// In VC8 : min and max are already defined by a #define...
-// #ifdef min
-// #undef min
-// #endif
-// #ifdef max
-// #undef max
-// #endif
-// 	//componentwise min
-// 	template< class T>
-// 	inline T min(const T & lhs, const T & rhs) {
-// 		T rt;
-// 		for (int32_t i = 0; i < lhs.size(); i++) rt._array[i] = std::min(lhs._array[i], rhs._array[i]);
-// 		return rt;
-// 	}
-// 
-// 	// componentwise max
-// 	template< class T>
-// 	inline T max(const T & lhs, const T & rhs) {
-// 		T rt;
-// 		for (int32_t i = 0; i < lhs.size(); i++) rt._array[i] = std::max(lhs._array[i], rhs._array[i]);
-// 		return rt;
-// 	}
+	inline Vector4f operator*(float lhs, const Vector4f &rhs)
+	{
+		return Vector4f(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z, lhs * rhs.w);
+	}
 
-	typedef Vector4<float> Vector4f; ///< float 4-vectors
-	typedef Vector4<int32_t> Vector4i; ///< signed integer 4-vectors
-	typedef Vector4<uint32_t> Vector4ui; ///< unsigned integer 4-vectors
+	inline Vector4f operator-(const Vector4f &v)
+	{
+		return Vector4f(-v.x, -v.y, -v.z, -v.w);
+	}
 }

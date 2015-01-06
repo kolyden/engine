@@ -5,7 +5,7 @@ namespace uut
     Image::Image(Context* context)
         : Resource(context)
         , _data(0)
-        , _size(0)
+        , _size(0, 0)
         , _pitch(0)
     {
     }
@@ -13,7 +13,7 @@ namespace uut
     Image::Image(Context* context, SDL_Surface* surface)
         : Resource(context)
         , _data(surface)
-        , _size(0)
+        , _size(0, 0)
         , _pitch(0)
     {
         if (_data)

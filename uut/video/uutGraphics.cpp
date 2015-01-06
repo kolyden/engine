@@ -87,18 +87,8 @@ namespace uut
 
 	void Graphics::DrawQuad(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2, const Vertex3& v3)
 	{
-		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V3D);
-		SetTexture(tex);
-		TestBufferCount(6);
-
-		auto verts = (Vertex3*)_data;
-		verts[_currentCount++] = v0;
-		verts[_currentCount++] = v1;
-		verts[_currentCount++] = v2;
-
-		verts[_currentCount++] = v1;
-		verts[_currentCount++] = v3;
-		verts[_currentCount++] = v2;
+		DrawTriangle(tex, v0, v1, v2);
+		DrawTriangle(tex, v1, v3, v2);
 	}
 
 	void Graphics::Flush()

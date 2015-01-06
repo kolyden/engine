@@ -168,9 +168,6 @@
     <ClInclude Include="..\uut\video\loaders\tiny_obj_loader.h">
       <Filter>video\loaders</Filter>
     </ClInclude>
-    <ClInclude Include="..\uut\math\uutMatrix.h">
-      <Filter>math</Filter>
-    </ClInclude>
     <ClInclude Include="..\uut\math\uutQuaternion.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -179,6 +176,15 @@
     </ClInclude>
     <ClInclude Include="..\uut\video\uutVertexDeclare.h">
       <Filter>video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\math\uutRandom.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\math\uutMatrix3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\math\uutMatrix4.h">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -289,6 +295,33 @@
     </ClCompile>
     <ClCompile Include="..\uut\video\uutVertexDeclare.cpp">
       <Filter>video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutQuaternion.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutRect.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutVector2.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutVector3.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutVector4.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutMath.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutRandom.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutMatrix3.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\math\uutMatrix4.cpp">
+      <Filter>math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

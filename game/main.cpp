@@ -6,85 +6,35 @@
 #include "video/uutGraphics.h"
 #include "platform/uutTime.h"
 #include "io/uutInput.h"
-#include "video/uutVertex2.h"
-#include "math/uutMatrix.h"
 #include "video/uutModel.h"
 #include "math/uutVector4.h"
+#include "Camera.h"
 
 RUNAPP(uut::MyApp);
 
 namespace uut
 {
-	static void LookAt(Matrix4f& mat, const Vector3f &eye, const Vector3f &target, const Vector3f &up)
-	{
-		Vector3f zAxis = eye - target;
-		Vector3f::normalize(zAxis);
+	static const Vector3f CAMERA_ACCELERATION(8.0f, 8.0f, 8.0f);
+	static const float   CAMERA_FOVX = 90.0f;
+	static const Vector3f CAMERA_POS(0.0f, 0.0f, 10.0f);
+	static const float   CAMERA_SPEED_ROTATION = 0.2f;
+	static const float   CAMERA_SPEED_FLIGHT_YAW = 100.0f;
+	static const Vector3f CAMERA_VELOCITY(2.0f, 2.0f, 2.0f);
+	static const float   CAMERA_ZFAR = 100.0f;
+	static const float   CAMERA_ZNEAR = 0.1f;
 
-// 		Vector3f viewDir = -zAxis;
+	static const float   FLOOR_WIDTH = 128;
+	static const float   FLOOR_HEIGHT = 128;
+	static const float   FLOOR_TILE_S = 1;
+	static const float   FLOOR_TILE_T = 1;
 
-		Vector3f xAxis = Vector3f::cross(up, zAxis);
-		Vector3f::normalize(xAxis);
+	static float g_cameraRotationSpeed = CAMERA_SPEED_ROTATION;
 
-		Vector3f yAxis = Vector3f::cross(zAxis, xAxis);
-		Vector3f::normalize(yAxis);
-
-		mat._11 = xAxis.x;
-		mat._21 = xAxis.y;
-		mat._31 = xAxis.z;
-		mat._41 = -Vector3f::dot(xAxis, eye);
-
-		mat._12 = yAxis.x;
-		mat._22 = yAxis.y;
-		mat._32 = yAxis.z;
-		mat._42 = -Vector3f::dot(yAxis, eye);
-
-		mat._13 = zAxis.x;
-		mat._23 = zAxis.y;
-		mat._33 = zAxis.z;
-		mat._43 = -Vector3f::dot(zAxis, eye);
-	}
-
-	static void Perspective(Matrix4f& mat, float fovx, float aspect, float znear, float zfar)
-	{
-		// Construct a projection matrix based on the horizontal field of view
-		// 'fovx' rather than the more traditional vertical field of view 'fovy'.
-
-		float e = 1.0f / tanf(Math::ToRad(fovx) / 2.0f);
-		float aspectInv = 1.0f / aspect;
-		float fovy = 2.0f * atanf(aspectInv / e);
-		float xScale = 1.0f / tanf(0.5f * fovy);
-		float yScale = xScale / aspectInv;
-
-		mat._11 = e / aspect;
-		mat._12 = 0.0f;
-		mat._13 = 0.0f;
-		mat._14 = 0.0f;
-
-		mat._21 = 0.0f;
-		mat._22 = e;
-		mat._23 = 0.0f;
-		mat._24 = 0.0f;
-
-		mat._31 = 0.0f;
-		mat._32 = 0.0f;
-		mat._33 = (zfar + znear) / (znear - zfar);
-		mat._34 = -1.0f;
-
-		mat._41 = 0.0f;
-		mat._42 = 0.0f;
-		mat._43 = (2.0f * zfar * znear) / (znear - zfar);
-		mat._44 = 0.0f;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 	MyApp::MyApp()
 		: _color(0, 0, 0)
 		, _pos(100, 100)
 		, _paused(false)
 		, _size(800, 600)
-		, _cameraPos(0, 0, 50)
-		, _cameraEye(0, 0, 1)
-		, _cameraRot(0, 0, 0, 1)
 	{
 	}
 
@@ -93,26 +43,30 @@ namespace uut
 		const Recti rect(Vector2i::ZERO, _size);
 		const float aspect = (1.0f * _size.x) / _size.y;
 
-		Matrix4f::perspectivex(_matProj, Math::ToRad(50.0f), aspect, 0.1f, 100.0f);
-// 		Perspective(_matProj, Math::ToRad(60.0f), aspect, 0.0f, 100.0f);
-		Matrix4f::lookAt(_matView, _cameraPos + _cameraEye, _cameraPos, Vector3f(0, 1, 0));
-
 		_video->SetMode(_size.x, _size.y);
-		_video->SetViewPort(rect);
 		_video->SetRenderState(RENDERSTATE_LIGHTNING, false);
 		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, false);
-
-		_video->SetTransform(TRANSFORM_PROJECTION, _matProj);
-		_video->SetTransform(TRANSFORM_VIEW, _matView);
 	}
 
 	void MyApp::OnStart()
 	{
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
-		_model0 = _cache->Load<Model>("Data/stairs.obj");
-	}
+		_tex1 = _cache->Load<Texture>("Data/floor.png");
+		_model0 = _cache->Load<Model>("Data/house2.obj");
 
-	static float g_angle = 0.0f;
+		_camera = new Camera(_context);
+		if (_camera)
+		{
+			_camera->perspective(CAMERA_FOVX,
+				static_cast<float>(_size.x) / static_cast<float>(_size.y),
+				CAMERA_ZNEAR, CAMERA_ZFAR);
+
+			_camera->setBehavior(Camera::CAMERA_BEHAVIOR_FIRST_PERSON);
+			_camera->setPosition(CAMERA_POS);
+			_camera->setAcceleration(CAMERA_ACCELERATION);
+			_camera->setVelocity(CAMERA_VELOCITY);
+		}
+	}
 
 	void MyApp::OnUpdate()
 	{
@@ -124,42 +78,121 @@ namespace uut
 		if (_input->IsKey(KEYCODE_ESCAPE)) 
 			Stop();
 
-		const float moveSpeed = 100;
-		const float rotSpeed = 1;
-
-		if (_input->IsKey(KEYCODE_W)) _cameraPos.y += moveSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_S)) _cameraPos.y -= moveSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_A)) _cameraPos.x -= moveSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_D)) _cameraPos.x += moveSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_Q)) _cameraPos.z += moveSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_Z)) _cameraPos.z -= moveSpeed * _time->GetDelta();
-
-		if (_input->IsKey(KEYCODE_R)) _cameraRot.x += rotSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_F)) _cameraRot.x -= rotSpeed * _time->GetDelta();
-
-		if (_input->IsKey(KEYCODE_T)) _cameraRot.y += rotSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_G)) _cameraRot.y -= rotSpeed * _time->GetDelta();
-
-		if (_input->IsKey(KEYCODE_Y)) _cameraRot.z += rotSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_H)) _cameraRot.z -= rotSpeed * _time->GetDelta();
-
-
-		if (_input->IsKey(KEYCODE_C)) g_angle += rotSpeed * _time->GetDelta();
-		if (_input->IsKey(KEYCODE_V)) g_angle -= rotSpeed * _time->GetDelta();
-
-
-// 		if (delta != Vector3f::ZERO)
+		if (_camera)
 		{
-			Matrix4f rot;
-			auto dir = rot * Vector4f(_cameraEye, 1);
+			static bool moveForwardsPressed = false;
+			static bool moveBackwardsPressed = false;
+			static bool moveRightPressed = false;
+			static bool moveLeftPressed = false;
+			static bool moveUpPressed = false;
+			static bool moveDownPressed = false;
 
-			Matrix4f::lookAt(_matView, _cameraPos + Vector3f(dir.x, dir.y, dir.z), _cameraPos, Vector3f(0, 1, 0));
+			const auto& velocity = _camera->getCurrentVelocity();
 
-			_video->SetTransform(TRANSFORM_VIEW, _matView);
+			Vector3f direction(0.0f, 0.0f, 0.0f);
+
+			if (_input->IsKey(KEYCODE_W))
+			{
+				if (!moveForwardsPressed)
+				{
+					moveForwardsPressed = true;
+					_camera->setCurrentVelocity(velocity.x, velocity.y, 0.0f);
+				}
+
+				direction.z += 1.0f;
+			}
+			else
+			{
+				moveForwardsPressed = false;
+			}
+
+			if (_input->IsKey(KEYCODE_S))
+			{
+				if (!moveBackwardsPressed)
+				{
+					moveBackwardsPressed = true;
+					_camera->setCurrentVelocity(velocity.x, velocity.y, 0.0f);
+				}
+
+				direction.z -= 1.0f;
+			}
+			else
+			{
+				moveBackwardsPressed = false;
+			}
+
+			if (_input->IsKey(KEYCODE_D))
+			{
+				if (!moveRightPressed)
+				{
+					moveRightPressed = true;
+					_camera->setCurrentVelocity(0.0f, velocity.y, velocity.z);
+				}
+
+				direction.x += 1.0f;
+			}
+			else
+			{
+				moveRightPressed = false;
+			}
+
+			if (_input->IsKey(KEYCODE_A))
+			{
+				if (!moveLeftPressed)
+				{
+					moveLeftPressed = true;
+					_camera->setCurrentVelocity(0.0f, velocity.y, velocity.z);
+				}
+
+				direction.x -= 1.0f;
+			}
+			else
+			{
+				moveLeftPressed = false;
+			}
+
+			if (_input->IsKey(KEYCODE_E))
+			{
+				if (!moveUpPressed)
+				{
+					moveUpPressed = true;
+					_camera->setCurrentVelocity(velocity.x, 0.0f, velocity.z);
+				}
+
+				direction.y += 1.0f;
+			}
+			else
+			{
+				moveUpPressed = false;
+			}
+
+			if (_input->IsKey(KEYCODE_Q))
+			{
+				if (!moveDownPressed)
+				{
+					moveDownPressed = true;
+					_camera->setCurrentVelocity(velocity.x, 0.0f, velocity.z);
+				}
+
+				direction.y -= 1.0f;
+			}
+			else
+			{
+				moveDownPressed = false;
+			}
+
+// 			const Vector2i center(_size.x / 2, _size.y / 2);
+			static Vector2i prevMouse = _input->GetMousePos();
+
+			Vector2i curMouse = _input->GetMousePos();
+
+			const float pitch = (prevMouse.y - curMouse.y) * g_cameraRotationSpeed;
+			const float heading = -(curMouse.x - prevMouse.x) * g_cameraRotationSpeed;
+			_camera->rotate(heading, pitch, 0.0f);
+
+			prevMouse = curMouse;
+			_camera->updatePosition(direction, _time->GetDelta());
 		}
-
-		if (_pos != newPos)
-			_pos = newPos;
 
 		_color._g += _time->GetDelta();
 		while (_color._g > 1)
@@ -168,34 +201,56 @@ namespace uut
 
 	void MyApp::OnRender()
 	{
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glDisable(GL_LIGHTING);
+
+		_video->SetViewPort(Recti(0, 0, _size.x, _size.y));
 		_video->SetColor(COLOR_CLEAR, Color::BLACK);
 		_video->Clear(true, true, false);
 
-// 		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glTranslatef(0, 0, -50);
-		glRotatef(g_angle, 1, 0, 0);
+		if (_camera)
+		{
+			_video->SetTransform(TRANSFORM_PROJECTION, _camera->getProjectionMatrix());
+			_video->SetTransform(TRANSFORM_VIEW, _camera->getViewMatrix());
+		}
 
+		//*
 		const int count = 100;
 		const float side = 1;
 
 		_graphics->ResetStates();
 		_graphics->SetColor(Color::WHITE);
 
-		_graphics->DrawLine(Vector3f::ZERO, Vector3f(100, 0, 0));
-		_graphics->DrawLine(Vector3f::ZERO, Vector3f(0, 100, 0));
-		_graphics->DrawLine(Vector3f::ZERO, Vector3f(0, 0, 100));
+		_graphics->DrawQuad(_tex1,
+			Vertex3(Vector3f(-FLOOR_WIDTH * 0.5f, -10.0f, FLOOR_HEIGHT * 0.5f), Vector2f(0, 0), 0xFFFFFFFF),
+			Vertex3(Vector3f(-FLOOR_WIDTH * 0.5f, -10.0f, -FLOOR_HEIGHT * 0.5f), Vector2f(0.00f, FLOOR_TILE_T), 0xFFFFFFFF),
+			Vertex3(Vector3f(FLOOR_WIDTH * 0.5f, -10.0f, -FLOOR_HEIGHT * 0.5f), Vector2f(FLOOR_TILE_S, FLOOR_TILE_T), 0xFFFFFFFF),
+			Vertex3(Vector3f(FLOOR_WIDTH * 0.5f, -10.0f, FLOOR_HEIGHT * 0.5f), Vector2f(FLOOR_TILE_S, 0), 0xFFFFFFFF));
 
+		{
+			const auto v0 = Vector3f(-FLOOR_WIDTH * 0.5f, -10.0f, FLOOR_HEIGHT * 0.5f);
+			const auto v1 = Vector3f(-FLOOR_WIDTH * 0.5f, -10.0f, -FLOOR_HEIGHT * 0.5f);
+			const auto v2 = Vector3f(FLOOR_WIDTH * 0.5f, -10.0f, -FLOOR_HEIGHT * 0.5f);
+			const auto v3 = Vector3f(FLOOR_WIDTH * 0.5f, -10.0f, FLOOR_HEIGHT * 0.5f);
+
+			_graphics->DrawLine(v0, v1);
+			_graphics->DrawLine(v1, v2);
+			_graphics->DrawLine(v2, v3);
+			_graphics->DrawLine(v0, v3);
+		}
+
+		_graphics->SetColor(Color::WHITE);
 		for (int i = 0; i <= count; i++)
 		{
 			// XY PLANE
-// 			_graphics->DrawLine(
-// 				Vector3f(side * i, 0, 0),
-// 				Vector3f(side * i, side * count, 0));
-// 			_graphics->DrawLine(
-// 				Vector3f(0, side * i, 0),
-// 				Vector3f(side * count, side * i, 0));
-// 
+			_graphics->DrawLine(
+				Vector3f(side * i, 0, 0),
+				Vector3f(side * i, side * count, 0));
+			_graphics->DrawLine(
+				Vector3f(0, side * i, 0),
+				Vector3f(side * count, side * i, 0));
+
 			// XZ PLANE
 // 			_graphics->DrawLine(
 // 				Vector3f(side * i, 0, 0),
@@ -206,25 +261,26 @@ namespace uut
 
 			// YZ PLANE
 // 			_graphics->DrawLine(
-// 				offset + Vector3f(0, side * i, 0),
-// 				offset + Vector3f(0, side * i, side * count));
+// 				Vector3f(0, side * i, 0),
+// 				Vector3f(0, side * i, side * count));
 // 			_graphics->DrawLine(
-// 				offset + Vector3f(0, 0, side * i),
-// 				offset + Vector3f(0, side * count, side * i));
+// 				Vector3f(0, 0, side * i),
+// 				Vector3f(0, side * count, side * i));
 		}
-		_graphics->Flush();
+		_graphics->Flush();/**/
 
-		if (_model0)
-		{
-			_video->SetColor(COLOR_DRAW, Color::WHITE);
-			_model0->Draw();
-		}
+// 		if (_model0)
+// 		{
+// 			_video->SetColor(COLOR_DRAW, Color::WHITE);
+// 			_model0->Draw();
+// 		}
  
-// 		_graphics->ResetStates();
-// 		_graphics->SetColor(Color::WHITE);
-// 		_graphics->DrawTriangle(0,
-// 			Vertex3(Vector3f(0, 0, 0), 0xFFFFFFFF),
-// 			Vertex3(Vector3f(100, 0, 0), 0xFFFFFFFF),
-// 			Vertex3(Vector3f(100, 100, 0), 0xFFFFFFFF));
+		_graphics->ResetStates();
+		_graphics->SetColor(Color::WHITE);
+		_graphics->DrawTriangle(0,
+			Vertex3(Vector3f(0, 0, 0), 0xFFFFFFFF),
+			Vertex3(Vector3f(0, 0, 20), 0xFFFFFFFF),
+			Vertex3(Vector3f(20, 0, 20), 0xFFFFFFFF));
+		_graphics->Flush();
 	}
 }
