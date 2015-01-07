@@ -3,6 +3,13 @@
 namespace uut
 {
 	const float LevelCell::SIZE = 2.0f;
+	const Matrix4f LevelCell::WALL_OFFSET[4] =
+	{
+		Matrix4f::createTranslate(+0.5f * LevelCell::SIZE, 0, 0) * Matrix4f::createRotate(Vector3f(0, 1, 0), 90),
+		Matrix4f::createTranslate(+0.5f * LevelCell::SIZE, 0, 0),
+		Matrix4f::createTranslate(-0.5f * LevelCell::SIZE, 0, 0) * Matrix4f::createRotate(Vector3f(0, 1, 0), 90),
+		Matrix4f::createTranslate(-0.5f * LevelCell::SIZE, 0, 0),
+	};
 
 	void LevelCell::SetFloor(CellPrefabIndex index)
 	{

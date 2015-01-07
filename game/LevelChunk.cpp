@@ -30,6 +30,7 @@ namespace uut
 
 	void LevelChunk::Draw() const
 	{
+		Matrix4f mat = Matrix4f::IDENTITY;
 		for (int y = 0; y < SIDE; y++)
 		{
 			for (int x = 0; x < SIDE; x++)
@@ -38,45 +39,53 @@ namespace uut
 				if (cell._floor < 0)
 					continue;
 
-				const Vector3f offset = _position + Vector3f(x * LevelCell::SIZE, 0, y * LevelCell::SIZE);
-				glPushMatrix();
-				glTranslatef(offset.x, offset.y, offset.z);
-				_level->GetPrefabs()[cell._floor]->Draw();
+				const Vector3f offset = _position + Vector3f(x, 0, y) * LevelCell::SIZE;
 
-				if (cell._wall[DIR_WEST] >= 0)
+				mat = Matrix4f::createTranslate(offset.x, offset.y, offset.z);
+				_level->GetPrefabs()[cell._floor]->Draw(mat);
+
+				for (int i = 0; i < 4; i++)
 				{
-					glPushMatrix();
-					glTranslatef(-0.5f * LevelCell::SIZE, 0, 0);
-					_level->GetPrefabs()[cell._wall[DIR_WEST]]->Draw();
-					glPopMatrix();
+					if (cell._wall[i] < 0)
+						continue;
+
+					const Matrix4f mat2 = LevelCell::WALL_OFFSET[i] * mat;
+					_level->GetPrefabs()[cell._wall[i]]->Draw(mat2);
 				}
 
-				if (cell._wall[DIR_EAST] >= 0)
-				{
-					glPushMatrix();
-					glTranslatef(+0.5f * LevelCell::SIZE, 0, 0);
-					_level->GetPrefabs()[cell._wall[DIR_EAST]]->Draw();
-					glPopMatrix();
-				}
-
-				if (cell._wall[DIR_NORTH] >= 0)
-				{
-					glPushMatrix();
-					glRotatef(90, 0, 1, 0);
-					glTranslatef(+0.5f * LevelCell::SIZE, 0, 0);
-					_level->GetPrefabs()[cell._wall[DIR_NORTH]]->Draw();
-					glPopMatrix();
-				}
-
-				if (cell._wall[DIR_SOUTH] >= 0)
-				{
-					glPushMatrix();
-					glRotatef(90, 0, 1, 0);
-					glTranslatef(-0.5f * LevelCell::SIZE, 0, 0);
-					_level->GetPrefabs()[cell._wall[DIR_SOUTH]]->Draw();
-					glPopMatrix();
-				}
-				glPopMatrix();
+// 				if (cell._wall[DIR_WEST] >= 0)
+// 				{
+// 					glPushMatrix();
+// 					glTranslatef(-0.5f * LevelCell::SIZE, 0, 0);
+// 					_level->GetPrefabs()[cell._wall[DIR_WEST]]->Draw();
+// 					glPopMatrix();
+// 				}
+// 
+// 				if (cell._wall[DIR_EAST] >= 0)
+// 				{
+// 					glPushMatrix();
+// 					glTranslatef(+0.5f * LevelCell::SIZE, 0, 0);
+// 					_level->GetPrefabs()[cell._wall[DIR_EAST]]->Draw();
+// 					glPopMatrix();
+// 				}
+// 
+// 				if (cell._wall[DIR_NORTH] >= 0)
+// 				{
+// 					glPushMatrix();
+// 					glRotatef(90, 0, 1, 0);
+// 					glTranslatef(+0.5f * LevelCell::SIZE, 0, 0);
+// 					_level->GetPrefabs()[cell._wall[DIR_NORTH]]->Draw();
+// 					glPopMatrix();
+// 				}
+// 
+// 				if (cell._wall[DIR_SOUTH] >= 0)
+// 				{
+// 					glPushMatrix();
+// 					glRotatef(90, 0, 1, 0);
+// 					glTranslatef(-0.5f * LevelCell::SIZE, 0, 0);
+// 					_level->GetPrefabs()[cell._wall[DIR_SOUTH]]->Draw();
+// 					glPopMatrix();
+// 				}
 			}
 		}
 	}

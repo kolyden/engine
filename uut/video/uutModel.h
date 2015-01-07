@@ -1,6 +1,7 @@
 #pragma once
 #include "resource/uutResource.h"
 #include "uutVideoDefs.h"
+#include "math/uutMatrix4.h"
 
 namespace uut
 {
@@ -20,7 +21,7 @@ namespace uut
 		void SetTexture(Texture* texture);
 		Texture* GetTexture() const;
 
-		void Draw() const;
+		void Draw(const Matrix4f& transform) const;
 
 	protected:
 		EPrimitiveType _topology;

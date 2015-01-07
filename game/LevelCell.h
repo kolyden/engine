@@ -1,5 +1,6 @@
 #pragma once
 #include "core/uutDefine.h"
+#include "math/uutMatrix4.h"
 
 namespace uut
 {
@@ -16,6 +17,7 @@ namespace uut
 	struct LevelCell
 	{
 		static const float SIZE;
+		static const Matrix4f WALL_OFFSET[4];
 
 		void SetFloor(CellPrefabIndex index);
 		void SetWall(Direction dir, CellPrefabIndex index);

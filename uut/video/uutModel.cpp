@@ -76,7 +76,7 @@ namespace uut
 		return _texture;
 	}
 
-	void Model::Draw() const
+	void Model::Draw(const Matrix4f& transform) const
 	{
 		if (_vbuffer == 0)
 			return;
@@ -86,6 +86,9 @@ namespace uut
 		if (!video->BindBuffer(_vbuffer, Vertex3::DECLARE.size, Vertex3::DECLARE.types, Vertex3::DECLARE.count))
 			return;
 
+		glPushMatrix();
+		glMultMatrixf(transform.GetData());
+
 		video->BindTexture(_texture);
 		if (_ibuffer && video->BindBuffer(_ibuffer, 0, 0, 0))
 		{
@@ -93,6 +96,7 @@ namespace uut
 			video->UnbindBuffer(_ibuffer, 0, 0);
 		}
 		else video->DrawPrimitives(_topology, _vcount, 0);
+		glPopMatrix();
 
 		video->UnbindBuffer(_vbuffer, Vertex3::DECLARE.types, Vertex3::DECLARE.count);
 	}
