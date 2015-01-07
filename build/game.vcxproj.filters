@@ -3,9 +3,21 @@
   <ItemGroup>
     <ClCompile Include="..\game\main.cpp" />
     <ClCompile Include="..\game\Camera.cpp" />
+    <ClCompile Include="..\game\Level.cpp" />
+    <ClCompile Include="..\game\LevelCell.cpp" />
+    <ClCompile Include="..\game\LevelChunk.cpp" />
+    <ClCompile Include="..\game\LevelData.cpp" />
+    <ClCompile Include="..\game\LevelDataLoader.cpp" />
+    <ClCompile Include="..\game\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\main.h" />
     <ClInclude Include="..\game\Camera.h" />
+    <ClInclude Include="..\game\Level.h" />
+    <ClInclude Include="..\game\LevelCell.h" />
+    <ClInclude Include="..\game\LevelChunk.h" />
+    <ClInclude Include="..\game\LevelData.h" />
+    <ClInclude Include="..\game\LevelDataLoader.h" />
+    <ClInclude Include="..\game\World.h" />
   </ItemGroup>
 </Project>

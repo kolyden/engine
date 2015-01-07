@@ -9,6 +9,8 @@
 #include "video/uutModel.h"
 #include "math/uutVector4.h"
 #include "Camera.h"
+#include "World.h"
+#include "Level.h"
 
 RUNAPP(uut::MyApp);
 
@@ -16,7 +18,7 @@ namespace uut
 {
 	static const Vector3f CAMERA_ACCELERATION(8.0f, 8.0f, 8.0f);
 	static const float   CAMERA_FOVX = 90.0f;
-	static const Vector3f CAMERA_POS(0.0f, 1.0f, 3.0f);
+	static const Vector3f CAMERA_POS(0.0f, 10.0f, 3.0f);
 	static const float   CAMERA_SPEED_ROTATION = 0.2f;
 	static const float   CAMERA_SPEED_FLIGHT_YAW = 100.0f;
 	static const Vector3f CAMERA_VELOCITY(2.0f, 2.0f, 2.0f);
@@ -28,7 +30,7 @@ namespace uut
 	static const float   FLOOR_TILE_S = 1;
 	static const float   FLOOR_TILE_T = 1;
 
-	static float g_cameraRotationSpeed = CAMERA_SPEED_ROTATION;
+	static float g_cameraRotationSpeed = 2.0f * CAMERA_SPEED_ROTATION;
 
 	MyApp::MyApp()
 		: _color(0, 0, 0)
@@ -36,6 +38,7 @@ namespace uut
 		, _paused(false)
 		, _size(800, 600)
 	{
+		_context->AddModule(new World(_context));
 	}
 
 	void MyApp::OnInit()
@@ -47,13 +50,17 @@ namespace uut
 		_video->SetViewPort(Recti(0, 0, _size.x, _size.y));
 		_video->SetRenderState(RENDERSTATE_LIGHTNING, false);
 		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, true);
+
+		_world = _context->GetModule<World>();
 	}
 
 	void MyApp::OnStart()
 	{
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
 		_tex1 = _cache->Load<Texture>("Data/floor.png");
-		_model0 = _cache->Load<Model>("Data/column.obj");
+		_model0 = _cache->Load<Model>("Data/Models/floor.obj");
+
+		_world->LoadLevel("Data/Levels/test.txt");
 
 		_camera = new Camera(_context);
 		if (_camera)
@@ -212,7 +219,7 @@ namespace uut
 			_video->SetTransform(TRANSFORM_VIEW, _camera->getViewMatrix());
 		}
 
-		if (_model0)
-			_model0->Draw();
+		if (_world && _world->GetLevel())
+			_world->GetLevel()->Draw();
 	}
 }

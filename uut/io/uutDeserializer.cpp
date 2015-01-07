@@ -10,6 +10,19 @@ namespace uut
     {
     }
 
+	uut::String Deserializer::ReadLine()
+	{
+		String ret;
+		char c;
+		while (Read(&c, 1) == 1 && c != '\n')
+		{
+			if (c != '\r')
+				ret += c;
+		}
+
+		return ret;
+	}
+
     //////////////////////////////////////////////////////////////////////////
     static Sint64 SDLCALL funcRWopsSize(struct SDL_RWops * context)
     {

@@ -25,29 +25,6 @@ namespace uut
 		return path.IsExtension("obj");
 	}
 
-	static String ReadLine(Deserializer& source)
-	{
-		String ret;
-		char c;
-		while (source.Read(&c, 1) == 1 && c != '\n')
-		{
-			if (c != '\r')
-				ret += c;
-		}
-
-		return ret;
-	}
-
-	static String ReadWord(Deserializer& source)
-	{
-		String ret;
-		char c;
-		while (source.Read(&c, 1) == 1 && c != ' ')
-			ret += c;
-
-		return ret;
-	}
-
 	SharedPtr<Resource> ModelLoaderOBJ::Load(Deserializer& source)
 	{
 		std::vector<tinyobj::shape_t> shapes;

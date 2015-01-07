@@ -66,6 +66,9 @@ namespace uut
 		Vector2i() {}
 		Vector2i(int x_, int y_) : x(x_), y(y_) {}
 
+		bool operator == (const Vector2i& vec) const { return x == vec.x && y == vec.y; }
+		bool operator != (const Vector2i& vec) const { return x != vec.x || y != vec.y; }
+
 		static const Vector2i ZERO;
 		static const Vector2i ONE;
 	};

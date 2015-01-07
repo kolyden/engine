@@ -6,6 +6,7 @@
 
 namespace uut
 {
+	class World;
 	class Camera;
 	class Texture;
 	class VideoBuffer;
@@ -17,6 +18,8 @@ namespace uut
 		MyApp();
 
 	protected:
+		WeakPtr<World> _world;
+
 		SharedPtr<Texture> _tex0;
 		SharedPtr<Texture> _tex1;
 		SharedPtr<Model> _model0;
