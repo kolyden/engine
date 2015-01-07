@@ -4,6 +4,7 @@
 #include "uutGeometry.h"
 #include "uutVideoBuffer.h"
 #include "uutVertex3.h"
+#include "uutTexture.h"
 
 namespace uut
 {
@@ -65,6 +66,16 @@ namespace uut
 		_icount = 0;
 	}
 
+	void Model::SetTexture(Texture* texture)
+	{
+		_texture = texture;
+	}
+
+	Texture* Model::GetTexture() const
+	{
+		return _texture;
+	}
+
 	void Model::Draw() const
 	{
 		if (_vbuffer == 0)
@@ -75,6 +86,7 @@ namespace uut
 		if (!video->BindBuffer(_vbuffer, Vertex3::DECLARE.size, Vertex3::DECLARE.types, Vertex3::DECLARE.count))
 			return;
 
+		video->BindTexture(_texture);
 		if (_ibuffer && video->BindBuffer(_ibuffer, 0, 0, 0))
 		{
 			video->DrawIndexedPrimitives(_topology, _icount, VALUE_USHORT);

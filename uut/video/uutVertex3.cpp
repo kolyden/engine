@@ -3,7 +3,7 @@
 namespace uut
 {
 	IMPLEMENT_VERTEX(Vertex3, (
-	{ 0, USAGE_POSITION, 2, VALUE_FLOAT, 0 },
+	{ 0, USAGE_POSITION, 3, VALUE_FLOAT, 0 },
 	{ 0, USAGE_TEXCOORDS, 2, VALUE_FLOAT, offsetof(Vertex3, tex.x) },
 	{ 0, USAGE_COLOR, 4, VALUE_UBYTE, offsetof(Vertex3, color) }));
 

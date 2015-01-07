@@ -82,51 +82,14 @@ namespace uut
 		if (surface == 0)
 			return false;
 
-		SDL_Surface* newSurface = 0;
-		bool freeSurface = false;
-
 		GLenum format;
-
-		switch (surface->format->format)
-		{
-		case SDL_PIXELFORMAT_RGBA8888:
+		if (SDL_ISPIXELFORMAT_ALPHA(surface->format->format))
 			format = GL_RGBA;
-			break;
-
-		case SDL_PIXELFORMAT_RGB888:
-		case SDL_PIXELFORMAT_RGB24:
-			format = GL_RGB;
-			break;
-
-		default:
-			switch (surface->format->BitsPerPixel)
-			{
-			case 32:
-				newSurface = SDL_ConvertSurfaceFormat(surface,
-					SDL_PIXELFORMAT_RGBA8888, 0);
-				format = GL_RGBA;
-				break;
-
-			case 24:
-				newSurface = SDL_ConvertSurfaceFormat(surface,
-					SDL_PIXELFORMAT_RGB888, 0);
-				format = GL_RGB;
-				break;
-			}
-			if (!surface && !newSurface)
-				return false;
-
-			surface = newSurface;
-			freeSurface = true;
-			break;
-		}
+		else format = GL_RGB;
 
 		if ((SDL_LockSurface(surface) != 0) || !surface->pixels)
-		{
-			if (freeSurface)
-				SDL_FreeSurface(surface);
 			return false;
-		}
+
 		void* bits = surface->pixels;
 
 		glGenTextures(1, &_data);
@@ -149,8 +112,6 @@ namespace uut
 			format, GL_UNSIGNED_BYTE, bits);
 
 		SDL_UnlockSurface(surface);
-		if (freeSurface)
-			SDL_FreeSurface(surface);
 
 		if (!CheckGLError("Error creating texture into OpenGL."))
 			return false;

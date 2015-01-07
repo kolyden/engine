@@ -39,6 +39,8 @@ namespace uut
 
 		void operator += (char c) { _data += c; }
 
+		String operator+ (const String& str) const;
+
 		List<String> Split(char c, bool keepEmpty = false);
 
 		static const String EMPTY;

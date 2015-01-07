@@ -1,7 +1,10 @@
 #include "uutModelLoaderOBJ.h"
+#include "core/uutContext.h"
+#include "resource/uutResourceCache.h"
 #include "core/uutDebug.h"
 #include "video/uutModel.h"
 #include "video/uutGeometry.h"
+#include "video/uutTexture.h"
 #include "io/uutDeserializer.h"
 #include "tiny_obj_loader.h"
 
@@ -50,7 +53,10 @@ namespace uut
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
 
-		auto err = tinyobj::LoadObj(shapes, materials, source.GetPath().ToString().GetData());
+		const auto basedir = source.GetPath().GetDirectory();
+		auto err = tinyobj::LoadObj(shapes, materials,
+			source.GetPath().ToString().GetData(),
+			basedir.GetData());
 		if (!err.empty())
 		{
 			Debug::LogError("OBJ load error - %s", err.c_str());
@@ -60,7 +66,7 @@ namespace uut
 		const tinyobj::mesh_t& mesh = shapes[0].mesh;
 		const auto count = mesh.positions.size() / 3;
 
-		const uint32_t color = Color::WHITE.ToUint();
+		const uint32_t color = 0xFFFFFFFF;
 
 		List<Vector3f> verts;
 		List<uint32_t> colors;
@@ -107,7 +113,16 @@ namespace uut
 
 		auto model = SharedPtr<Model>(new Model(_context));
 		if (model->Create(geometry))
+		{
+			if (materials.size() > 0 && !materials[0].diffuse_texname.empty())
+			{
+				const String name = materials[0].diffuse_texname.c_str();
+				auto cache = _context->GetModule<ResourceCache>();
+				SharedPtr<Texture> texture(cache->Load<Texture>(basedir + name));
+				model->SetTexture(texture);
+			}
 			return DynamicCast<Resource>(model);
+		}
 
 		return SharedPtr<Resource>::EMPTY;
 	}

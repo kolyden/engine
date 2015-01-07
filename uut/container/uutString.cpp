@@ -46,6 +46,11 @@ namespace uut
 		return String(_data.substr(start, count ? count : (int)_data.size() - start));
 	}
 
+	String String::operator+ (const String& str) const
+	{
+		return _data + str._data;
+	}
+
 	List<String> String::Split(char c, bool keepEmpty /*= false*/)
 	{
 		List<String> arr;

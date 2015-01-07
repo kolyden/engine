@@ -9,11 +9,13 @@ namespace uut
 	public:
 		Path();
 		Path(const char* str);
+		Path(const String& str);
 
 		HashString GetExtension() const;
 		bool IsExtension(const HashString& ext) const;
 
 		String ToString() const { return _data; }
+		String GetDirectory() const;
 
 		bool operator < (const Path& path) const { return _hash < path._hash; }
 		bool operator > (const Path& path) const { return _hash > path._hash; }

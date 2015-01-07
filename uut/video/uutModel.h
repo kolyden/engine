@@ -6,6 +6,7 @@ namespace uut
 {
 	class Geometry;
 	class VideoBuffer;
+	class Texture;
 
 	class UUT_API Model : public Resource
 	{
@@ -16,12 +17,16 @@ namespace uut
 		bool Create(Geometry* geometry);
 		void Clear();
 
+		void SetTexture(Texture* texture);
+		Texture* GetTexture() const;
+
 		void Draw() const;
 
 	protected:
 		EPrimitiveType _topology;
 		SharedPtr<VideoBuffer> _vbuffer;
 		SharedPtr<VideoBuffer> _ibuffer;
+		SharedPtr<Texture> _texture;
 		uint32_t _vcount;
 		uint32_t _icount;
 	};

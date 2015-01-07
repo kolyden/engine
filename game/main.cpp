@@ -16,7 +16,7 @@ namespace uut
 {
 	static const Vector3f CAMERA_ACCELERATION(8.0f, 8.0f, 8.0f);
 	static const float   CAMERA_FOVX = 90.0f;
-	static const Vector3f CAMERA_POS(0.0f, 0.0f, 10.0f);
+	static const Vector3f CAMERA_POS(0.0f, 1.0f, 3.0f);
 	static const float   CAMERA_SPEED_ROTATION = 0.2f;
 	static const float   CAMERA_SPEED_FLIGHT_YAW = 100.0f;
 	static const Vector3f CAMERA_VELOCITY(2.0f, 2.0f, 2.0f);
@@ -44,15 +44,16 @@ namespace uut
 		const float aspect = (1.0f * _size.x) / _size.y;
 
 		_video->SetMode(_size.x, _size.y);
+		_video->SetViewPort(Recti(0, 0, _size.x, _size.y));
 		_video->SetRenderState(RENDERSTATE_LIGHTNING, false);
-		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, false);
+		_video->SetRenderState(RENDERSTATE_DEPTH_TEST, true);
 	}
 
 	void MyApp::OnStart()
 	{
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
 		_tex1 = _cache->Load<Texture>("Data/floor.png");
-		_model0 = _cache->Load<Model>("Data/house2.obj");
+		_model0 = _cache->Load<Model>("Data/column.obj");
 
 		_camera = new Camera(_context);
 		if (_camera)
@@ -201,13 +202,9 @@ namespace uut
 
 	void MyApp::OnRender()
 	{
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		glDisable(GL_LIGHTING);
-
-		_video->SetViewPort(Recti(0, 0, _size.x, _size.y));
 		_video->SetColor(COLOR_CLEAR, Color::BLACK);
 		_video->Clear(true, true, false);
+		_video->SetColor(COLOR_DRAW, Color::WHITE);
 
 		if (_camera)
 		{
@@ -215,72 +212,7 @@ namespace uut
 			_video->SetTransform(TRANSFORM_VIEW, _camera->getViewMatrix());
 		}
 
-		//*
-		const int count = 100;
-		const float side = 1;
-
-		_graphics->ResetStates();
-		_graphics->SetColor(Color::WHITE);
-
-		_graphics->DrawQuad(_tex1,
-			Vertex3(Vector3f(-FLOOR_WIDTH * 0.5f, -10.0f, FLOOR_HEIGHT * 0.5f), Vector2f(0, 0), 0xFFFFFFFF),
-			Vertex3(Vector3f(-FLOOR_WIDTH * 0.5f, -10.0f, -FLOOR_HEIGHT * 0.5f), Vector2f(0.00f, FLOOR_TILE_T), 0xFFFFFFFF),
-			Vertex3(Vector3f(FLOOR_WIDTH * 0.5f, -10.0f, -FLOOR_HEIGHT * 0.5f), Vector2f(FLOOR_TILE_S, FLOOR_TILE_T), 0xFFFFFFFF),
-			Vertex3(Vector3f(FLOOR_WIDTH * 0.5f, -10.0f, FLOOR_HEIGHT * 0.5f), Vector2f(FLOOR_TILE_S, 0), 0xFFFFFFFF));
-
-		{
-			const auto v0 = Vector3f(-FLOOR_WIDTH * 0.5f, -10.0f, FLOOR_HEIGHT * 0.5f);
-			const auto v1 = Vector3f(-FLOOR_WIDTH * 0.5f, -10.0f, -FLOOR_HEIGHT * 0.5f);
-			const auto v2 = Vector3f(FLOOR_WIDTH * 0.5f, -10.0f, -FLOOR_HEIGHT * 0.5f);
-			const auto v3 = Vector3f(FLOOR_WIDTH * 0.5f, -10.0f, FLOOR_HEIGHT * 0.5f);
-
-			_graphics->DrawLine(v0, v1);
-			_graphics->DrawLine(v1, v2);
-			_graphics->DrawLine(v2, v3);
-			_graphics->DrawLine(v0, v3);
-		}
-
-		_graphics->SetColor(Color::WHITE);
-		for (int i = 0; i <= count; i++)
-		{
-			// XY PLANE
-			_graphics->DrawLine(
-				Vector3f(side * i, 0, 0),
-				Vector3f(side * i, side * count, 0));
-			_graphics->DrawLine(
-				Vector3f(0, side * i, 0),
-				Vector3f(side * count, side * i, 0));
-
-			// XZ PLANE
-// 			_graphics->DrawLine(
-// 				Vector3f(side * i, 0, 0),
-// 				Vector3f(side * i, 0, side * count));
-// 			_graphics->DrawLine(
-// 				Vector3f(0, side * i, 0),
-// 				Vector3f(side * count, 0, side * i));
-
-			// YZ PLANE
-// 			_graphics->DrawLine(
-// 				Vector3f(0, side * i, 0),
-// 				Vector3f(0, side * i, side * count));
-// 			_graphics->DrawLine(
-// 				Vector3f(0, 0, side * i),
-// 				Vector3f(0, side * count, side * i));
-		}
-		_graphics->Flush();/**/
-
-// 		if (_model0)
-// 		{
-// 			_video->SetColor(COLOR_DRAW, Color::WHITE);
-// 			_model0->Draw();
-// 		}
- 
-		_graphics->ResetStates();
-		_graphics->SetColor(Color::WHITE);
-		_graphics->DrawTriangle(0,
-			Vertex3(Vector3f(0, 0, 0), 0xFFFFFFFF),
-			Vertex3(Vector3f(0, 0, 20), 0xFFFFFFFF),
-			Vertex3(Vector3f(20, 0, 20), 0xFFFFFFFF));
-		_graphics->Flush();
+		if (_model0)
+			_model0->Draw();
 	}
 }
