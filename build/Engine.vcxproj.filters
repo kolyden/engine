@@ -186,6 +186,12 @@
     <ClInclude Include="..\uut\math\uutMatrix4.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="..\uut\io\uutTextReader.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\io\uutBinaryReader.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\uut\container\uutHashString.cpp">
@@ -322,6 +328,12 @@
     </ClCompile>
     <ClCompile Include="..\uut\math\uutMatrix4.cpp">
       <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\io\uutTextReader.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\io\uutBinaryReader.cpp">
+      <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

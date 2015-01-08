@@ -2,7 +2,7 @@
 #include "core/uutContext.h"
 #include "resource/uutResourceCache.h"
 #include "LevelData.h"
-#include "io/uutDeserializer.h"
+#include "io/uutTextReader.h"
 #include "video/uutModel.h"
 
 namespace uut
@@ -27,7 +27,9 @@ namespace uut
 		String line;
 		List<String> list;
 
-		line = source.ReadLine();
+		SharedPtr<TextReader> reader(new TextReader(&source));
+
+		line = reader->ReadLine();
 		list = line.Split(' ');
 		if (list.Count() < 2)
 			return SharedPtr<Resource>::EMPTY;
@@ -48,7 +50,7 @@ namespace uut
 
 		for (int y = 0; y < size.y; y++)
 		{
-			line = source.ReadLine();
+			line = reader->ReadLine();
 			if (line.Count() != size.x)
 			{
 				for (int x = 0; x < size.x; x++)

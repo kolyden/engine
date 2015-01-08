@@ -17,8 +17,6 @@ namespace uut
 		virtual Sint64 GetPosition() const = 0;
 		virtual Sint64 GetSize() const = 0;
 		virtual bool IsEof() const = 0;
-
-		virtual String ReadLine();
     };
 
     SDL_RWops* UUT_API CreatReadRWops(Deserializer& deserializer);
