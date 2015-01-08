@@ -3,8 +3,7 @@
 #include "resource/uutResourceCache.h"
 #include "Level.h"
 #include "LevelChunk.h"
-#include "LevelData.h"
-#include "LevelDataLoader.h"
+#include "LevelLoader.h"
 
 namespace uut
 {
@@ -16,12 +15,8 @@ namespace uut
 	bool World::LoadLevel(const String& path)
 	{
 		auto cache = _context->GetModule<ResourceCache>();
-		auto levelData = cache->Load<LevelData>(path);
-		if (levelData == 0)
-			return false;
-
-		auto level = _context->NewObject<Level>();
-		if (!level->Create(levelData))
+		auto level = cache->Load<Level>(path);
+		if (level == 0)
 			return false;
 
 		SetLevel(level);
@@ -43,13 +38,12 @@ namespace uut
 	{
 		_context->RegisterFactory<Level>();
 		_context->RegisterFactory<LevelChunk>();
-		_context->RegisterFactory<LevelData>();
 	}
 
 	void World::OnInit()
 	{
 		auto cache = _context->GetModule<ResourceCache>();
-		cache->AddLoader(new LevelDataLoader(_context));
+		cache->AddLoader(new LevelLoader(_context));
 	}
 
 }

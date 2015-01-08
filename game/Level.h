@@ -1,21 +1,19 @@
 #pragma once
-#include "core/uutObject.h"
+#include "resource/uutResource.h"
 #include "container/uutList.h"
 #include "math/uutVector2.h"
 
 namespace uut
 {
-	class LevelData;
 	class LevelChunk;
 	class Model;
 
-	class Level : public Object
+	class Level : public Resource
 	{
 		OBJECT(Level)
 	public:
 		Level(Context* context);
 
-		bool Create(LevelData* data);
 		void Clear();
 
 		void Draw() const;
@@ -23,6 +21,7 @@ namespace uut
 		LevelChunk* FindChunk(const Vector2i& index);
 		LevelChunk* GetChunk(const Vector2i& index);
 
+		void SetPrefabs(const List<SharedPtr<Model>>& prefabs);
 		const List<SharedPtr<Model>>& GetPrefabs() const;
 
 	protected:

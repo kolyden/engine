@@ -3,11 +3,11 @@
 
 namespace uut
 {
-	class LevelDataLoader : public ResourceLoader
+	class LevelLoader : public ResourceLoader
 	{
-		OBJECT(LevelDataLoader)
+		OBJECT(LevelLoader)
 	public:
-		LevelDataLoader(Context* context);
+		LevelLoader(Context* context);
 
 		virtual const HashString& GetResourceType() const override;
 		virtual bool CanLoad(const String& path) const override;

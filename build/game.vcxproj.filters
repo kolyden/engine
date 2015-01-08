@@ -6,9 +6,8 @@
     <ClCompile Include="..\game\Level.cpp" />
     <ClCompile Include="..\game\LevelCell.cpp" />
     <ClCompile Include="..\game\LevelChunk.cpp" />
-    <ClCompile Include="..\game\LevelData.cpp" />
-    <ClCompile Include="..\game\LevelDataLoader.cpp" />
     <ClCompile Include="..\game\World.cpp" />
+    <ClCompile Include="..\game\LevelLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\main.h" />
@@ -16,8 +15,7 @@
     <ClInclude Include="..\game\Level.h" />
     <ClInclude Include="..\game\LevelCell.h" />
     <ClInclude Include="..\game\LevelChunk.h" />
-    <ClInclude Include="..\game\LevelData.h" />
-    <ClInclude Include="..\game\LevelDataLoader.h" />
     <ClInclude Include="..\game\World.h" />
+    <ClInclude Include="..\game\LevelLoader.h" />
   </ItemGroup>
 </Project>

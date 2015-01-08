@@ -1,29 +1,30 @@
-#include "LevelDataLoader.h"
+#include "LevelLoader.h"
 #include "core/uutContext.h"
 #include "resource/uutResourceCache.h"
-#include "LevelData.h"
 #include "io/uutTextReader.h"
 #include "io/uutPath.h"
 #include "video/uutModel.h"
+#include "Level.h"
+#include "LevelChunk.h"
 
 namespace uut
 {
-	LevelDataLoader::LevelDataLoader(Context* context)
+	LevelLoader::LevelLoader(Context* context)
 		: ResourceLoader(context)
 	{
 	}
 
-	const HashString& LevelDataLoader::GetResourceType() const
+	const HashString& LevelLoader::GetResourceType() const
 	{
-		return LevelData::GetTypeStatic();
+		return Level::GetTypeStatic();
 	}
 
-	bool LevelDataLoader::CanLoad(const String& path) const
+	bool LevelLoader::CanLoad(const String& path) const
 	{
 		return Path::GetExtension(path).Equals("txt", true);
 	}
 
-	SharedPtr<Resource> LevelDataLoader::Load(Stream& source)
+	SharedPtr<Resource> LevelLoader::Load(Stream& source)
 	{
 		String line;
 		List<String> list;
@@ -36,11 +37,9 @@ namespace uut
 			return SharedPtr<Resource>::EMPTY;
 
 		const Vector2i size(list[0].ToInt(), list[1].ToInt());
-		auto data = _context->NewObject<LevelData>();
-		if (!data->Create(size))
-			return SharedPtr<Resource>::EMPTY;
-
+		auto data = _context->NewObject<Level>();
 		auto cache = _context->GetModule<ResourceCache>();
+
 		List<SharedPtr<Model>> prefabs;
 		prefabs.Add(SharedPtr<Model>(cache->Load<Model>("Data/Models/floor.obj")));
 		prefabs.Add(SharedPtr<Model>(cache->Load<Model>("Data/Models/wall.obj")));
@@ -67,7 +66,11 @@ namespace uut
 		for (int x = 0; x < size.x; x++)
 		for (int y = 0; y < size.y; y++)
 		{
-			auto& cell = data->GetCell(Vector2i(x, y));
+			const Vector2i index(x / LevelChunk::SIDE, y / LevelChunk::SIDE);
+			const Vector2i pos(x - index.x * LevelChunk::SIDE, y - index.y * LevelChunk::SIDE);
+			auto chunk = data->GetChunk(index);
+
+			auto& cell = chunk->GetCell(pos);
 			cell.Clear();
 
 			if (map[x][y])

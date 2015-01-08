@@ -1,5 +1,4 @@
 #include "Level.h"
-#include "LevelData.h"
 #include "LevelChunk.h"
 #include "core/uutContext.h"
 #include "video/uutModel.h"
@@ -7,10 +6,11 @@
 namespace uut
 {
 	Level::Level(Context* context)
-		: Object(context)
+		: Resource(context)
 	{
 	}
 
+	/*
 	bool Level::Create(LevelData* data)
 	{
 		if (data == 0)
@@ -34,7 +34,7 @@ namespace uut
 		_prefabs = data->GetPrefabs();
 
 		return true;
-	}
+	}*/
 
 	void Level::Clear()
 	{
@@ -69,6 +69,11 @@ namespace uut
 		_chunks.Add(chunk);
 
 		return chunk;
+	}
+
+	void Level::SetPrefabs(const List<SharedPtr<Model>>& prefabs)
+	{
+		_prefabs = prefabs;
 	}
 
 	const List<SharedPtr<Model>>& Level::GetPrefabs() const
