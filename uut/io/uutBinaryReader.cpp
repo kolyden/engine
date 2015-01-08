@@ -1,9 +1,9 @@
 #include "uutBinaryReader.h"
-#include "uutDeserializer.h"
+#include "uutStream.h"
 
 namespace uut
 {
-	BinaryReader::BinaryReader(Deserializer* source)
+	BinaryReader::BinaryReader(Stream* source)
 		: _source(source)
 	{
 	}

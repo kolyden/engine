@@ -7,23 +7,13 @@ namespace uut
 	class UUT_API Path
 	{
 	public:
-		Path();
-		Path(const char* str);
-		Path(const String& str);
-
-		HashString GetExtension() const;
-		bool IsExtension(const HashString& ext) const;
-
-		String ToString() const { return _data; }
-		String GetDirectory() const;
-
-		bool operator < (const Path& path) const { return _hash < path._hash; }
-		bool operator > (const Path& path) const { return _hash > path._hash; }
+		static String Combine(const String& path1, const String& path2);
+		static String GetDirectoryName(const String& path);
+		static String GetExtension(const String& path);
+		static String GetFileName(const String& path);
+		static String GetFileNameWithoutExtension(const String& path);
 
 	protected:
-		String _data;
-		unsigned _hash;
-
-		unsigned Calculate() const;
+		static String PreparePath(const String& path);
 	};
 }

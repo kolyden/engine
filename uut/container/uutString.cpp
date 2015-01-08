@@ -43,7 +43,7 @@ namespace uut
 
 	String String::Copy(int start, int count /*= -1*/) const
 	{
-		return String(_data.substr(start, count ? count : (int)_data.size() - start));
+		return String(_data.substr(start, count ? count : std::string::npos));
 	}
 
 	String String::operator+ (const String& str) const

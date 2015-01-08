@@ -13,7 +13,7 @@ namespace uut
 	{
 	}
 
-	bool World::LoadLevel(const Path& path)
+	bool World::LoadLevel(const String& path)
 	{
 		auto cache = _context->GetModule<ResourceCache>();
 		auto levelData = cache->Load<LevelData>(path);

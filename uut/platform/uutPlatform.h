@@ -11,10 +11,10 @@ namespace uut
 		Platform(Context* context);
 
 		String GetPlatformName() const;
-		const Path& GetBasePath() const;
+		const String& GetBasePath() const;
 
 	protected:
-		Path _basePath;
+		String _basePath;
 
 		virtual void OnRegister() override;
 		virtual void OnUnregister() override;

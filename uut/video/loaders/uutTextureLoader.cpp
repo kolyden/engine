@@ -1,7 +1,7 @@
 #include "uutTextureLoader.h"
 #include "video/uutTexture.h"
 #include "video/uutImage.h"
-#include "io/uutDeserializer.h"
+#include "io/uutStream.h"
 #include "SDL_IMAGE/SDL_image.h"
 
 namespace uut
@@ -18,14 +18,14 @@ namespace uut
 		return Texture::GetTypeStatic();
 	}
 
-	bool TextureLoader::CanLoad(const Path& path) const
+	bool TextureLoader::CanLoad(const String& path) const
 	{
 		return true;
 	}
 
-	SharedPtr<Resource> TextureLoader::Load(Deserializer& source)
+	SharedPtr<Resource> TextureLoader::Load(Stream& source)
 	{
-		auto rwops = CreatReadRWops(source);
+		auto rwops = Stream::CreatReadRWops(&source);
 		auto surface = IMG_Load_RW(rwops, 0);
 		if (surface == 0)
 			return SharedPtr<Resource>::EMPTY;

@@ -3,6 +3,7 @@
 #include "resource/uutResourceCache.h"
 #include "LevelData.h"
 #include "io/uutTextReader.h"
+#include "io/uutPath.h"
 #include "video/uutModel.h"
 
 namespace uut
@@ -17,12 +18,12 @@ namespace uut
 		return LevelData::GetTypeStatic();
 	}
 
-	bool LevelDataLoader::CanLoad(const Path& path) const
+	bool LevelDataLoader::CanLoad(const String& path) const
 	{
-		return path.IsExtension("txt");
+		return Path::GetExtension(path).Equals("txt", true);
 	}
 
-	SharedPtr<Resource> LevelDataLoader::Load(Deserializer& source)
+	SharedPtr<Resource> LevelDataLoader::Load(Stream& source)
 	{
 		String line;
 		List<String> list;

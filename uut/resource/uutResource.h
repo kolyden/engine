@@ -1,6 +1,5 @@
 #pragma once
 #include "core/uutObject.h"
-#include "io/uutPath.h"
 
 namespace uut
 {
@@ -11,11 +10,11 @@ namespace uut
 		Resource(Context* context);
 
 		const String& GetName() const { return _name; }
-		const Path& GetResourcePath() const { return _resourcePath; }
+		const String& GetResourcePath() const { return _resourcePath; }
 
 	private:
 		String _name;
-		Path _resourcePath;
+		String _resourcePath;
 
 		friend class ResourceCache;
 	};

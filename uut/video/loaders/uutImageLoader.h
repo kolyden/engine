@@ -10,7 +10,7 @@ namespace uut
 		ImageLoader(Context* context);
 
 		virtual const HashString& GetResourceType() const override;
-		virtual bool CanLoad(const Path& path) const override;
-		virtual SharedPtr<Resource> Load(Deserializer& source) override;
+		virtual bool CanLoad(const String& path) const override;
+		virtual SharedPtr<Resource> Load(Stream& source) override;
 	};
 }

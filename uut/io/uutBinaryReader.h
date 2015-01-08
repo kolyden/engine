@@ -1,16 +1,16 @@
 #pragma once
-#include "core/uutRefCounted.h"
+#include "core/uutPtr.h"
 
 namespace uut
 {
-	class Deserializer;
+	class Stream;
 
 	class BinaryReader : public RefCounted
 	{
 	public:
-		BinaryReader(Deserializer* source);
+		BinaryReader(Stream* source);
 
 	protected:
-		Deserializer* _source;
+		SharedPtr<Stream> _source;
 	};
 }

@@ -2,7 +2,7 @@
 #include "uutResource.h"
 #include "uutResourceLoader.h"
 #include "core/uutDebug.h"
-#include "io/uutFile.h"
+#include "io/uutFileStream.h"
 
 namespace uut
 {
@@ -11,7 +11,7 @@ namespace uut
 	{
 	}
 
-	void ResourceCache::AddResource(Resource* resource, const Path& path)
+	void ResourceCache::AddResource(Resource* resource, const String& path)
 	{
 		if (resource == nullptr)
 			return;
@@ -21,9 +21,17 @@ namespace uut
 		type->resources.Add(path, SharedPtr<Resource>(resource));
 	}
 
-	Resource* ResourceCache::GetResource(const HashString& type, const Path& name)
+	Resource* ResourceCache::GetResource(const HashString& type, const String& name)
 	{
-		return FindResource(type, name);
+		SharedPtr<ResourceGroup> group;
+		if (_types.TryGetValue(type, &group))
+		{
+			SharedPtr<Resource> res;
+			if (group->resources.TryGetValue(name, &res))
+				return res;
+		}
+
+		return SharedPtr<Resource>::EMPTY;
 	}
 
 	void ResourceCache::AddLoader(ResourceLoader* loader)
@@ -43,9 +51,9 @@ namespace uut
 		return SharedPtr<ResourceLoader>::EMPTY;
 	}
 
-	Resource* ResourceCache::Load(const HashString& type, const Path& path)
+	Resource* ResourceCache::Load(const HashString& type, const String& path)
 	{
-		auto existing = FindResource(type, path);
+		auto existing = GetResource(type, path);
 		if (existing)
 			return existing;
 
@@ -62,8 +70,8 @@ namespace uut
 			return 0;
 		}
 
-		auto file = SharedPtr<File>(new File(_context));
-		if (!file->Open(path))
+		auto file = SharedPtr<FileStream>(new FileStream());
+		if (!file->Open(path, FileMode::Open, FileAccess::Read, FileShare::Read))
 		{
 			Debug::LogError("Can't open file");
 			return 0;
@@ -90,18 +98,4 @@ namespace uut
 
 		return group;
 	}
-
-	SharedPtr<Resource> ResourceCache::FindResource(const HashString& type, const Path& name) const
-	{
-		SharedPtr<ResourceGroup> group;
-		if (_types.TryGetValue(type, &group))
-		{
-			SharedPtr<Resource> res;
-			if (group->resources.TryGetValue(name, &res))
-				return res;
-		}
-
-		return SharedPtr<Resource>::EMPTY;
-	}
-
 }

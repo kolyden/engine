@@ -1,6 +1,5 @@
 #pragma once
 #include "core/uutModule.h"
-#include "io/uutPath.h"
 
 namespace uut
 {
@@ -12,7 +11,7 @@ namespace uut
 	public:
 		World(Context* context);
 
-		bool LoadLevel(const Path& path);
+		bool LoadLevel(const String& path);
 
 		void SetLevel(Level* level);
 		Level* GetLevel() const;

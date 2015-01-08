@@ -5,7 +5,8 @@
 #include "video/uutModel.h"
 #include "video/uutGeometry.h"
 #include "video/uutTexture.h"
-#include "io/uutDeserializer.h"
+#include "io/uutStream.h"
+#include "io/uutPath.h"
 #include "tiny_obj_loader.h"
 
 namespace uut
@@ -20,20 +21,20 @@ namespace uut
 		return Model::GetTypeStatic();
 	}
 
-	bool ModelLoaderOBJ::CanLoad(const Path& path) const
+	bool ModelLoaderOBJ::CanLoad(const String& path) const
 	{
-		return path.IsExtension("obj");
+		return Path::GetExtension(path).Equals("obj", true);
 	}
 
-	SharedPtr<Resource> ModelLoaderOBJ::Load(Deserializer& source)
+	SharedPtr<Resource> ModelLoaderOBJ::Load(Stream& source)
 	{
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
 
-		const auto basedir = source.GetPath().GetDirectory();
+		const auto basedir = Path::GetDirectoryName(source.GetName());
+
 		auto err = tinyobj::LoadObj(shapes, materials,
-			source.GetPath().ToString().GetData(),
-			basedir.GetData());
+			source.GetName().GetData(), basedir.GetData());
 		if (!err.empty())
 		{
 			Debug::LogError("OBJ load error - %s", err.c_str());

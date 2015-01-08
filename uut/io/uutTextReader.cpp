@@ -1,9 +1,9 @@
 #include "uutTextReader.h"
-#include "io/uutDeserializer.h"
+#include "uutStream.h"
 
 namespace uut
 {
-	TextReader::TextReader(Deserializer* source)
+	TextReader::TextReader(Stream* source)
 		: _source(source)
 	{
 	}

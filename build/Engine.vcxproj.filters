@@ -96,12 +96,6 @@
     <ClInclude Include="..\uut\io\uutPath.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\uut\io\uutDeserializer.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\uut\io\uutSerializer.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\uut\io\uutFile.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -192,6 +186,21 @@
     <ClInclude Include="..\uut\io\uutBinaryReader.h">
       <Filter>io</Filter>
     </ClInclude>
+    <ClInclude Include="..\uut\video\uutFont.h">
+      <Filter>video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\uutBitmapFont.h">
+      <Filter>video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\io\uutStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\io\uutFileStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\io\uutDirectory.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\uut\container\uutHashString.cpp">
@@ -237,12 +246,6 @@
       <Filter>resource</Filter>
     </ClCompile>
     <ClCompile Include="..\uut\io\uutPath.cpp">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\uut\io\uutDeserializer.cpp">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\uut\io\uutSerializer.cpp">
       <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\uut\io\uutFile.cpp">
@@ -333,6 +336,21 @@
       <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\uut\io\uutBinaryReader.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutFont.cpp">
+      <Filter>video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutBitmapFont.cpp">
+      <Filter>video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\io\uutFileStream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\io\uutDirectory.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\io\uutStream.cpp">
       <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>

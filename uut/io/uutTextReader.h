@@ -1,19 +1,19 @@
 #pragma once
-#include "core/uutRefCounted.h"
+#include "core/uutPtr.h"
 #include "container/uutString.h"
 
 namespace uut
 {
-	class Deserializer;
+	class Stream;
 
 	class TextReader : public RefCounted
 	{
 	public:
-		TextReader(Deserializer* source);
+		TextReader(Stream* source);
 
 		String ReadLine();
 
 	protected:
-		Deserializer* _source;
+		SharedPtr<Stream> _source;
 	};
 }

@@ -1,6 +1,6 @@
 #include "uutImageLoader.h"
 #include "video/uutImage.h"
-#include "io/uutDeserializer.h"
+#include "io/uutStream.h"
 #include "SDL_IMAGE/SDL_image.h"
 
 namespace uut
@@ -15,14 +15,14 @@ namespace uut
 		return Image::GetTypeStatic();
 	}
 
-	bool ImageLoader::CanLoad(const Path& path) const
+	bool ImageLoader::CanLoad(const String& path) const
 	{
 		return true;
 	}
 
-	SharedPtr<Resource> ImageLoader::Load(Deserializer& source)
+	SharedPtr<Resource> ImageLoader::Load(Stream& source)
 	{
-		auto rwops = CreatReadRWops(source);
+		auto rwops = Stream::CreatReadRWops(&source);
 		auto surface = IMG_Load_RW(rwops, 1);
 		if (surface == 0)
 			return SharedPtr<Resource>::EMPTY;

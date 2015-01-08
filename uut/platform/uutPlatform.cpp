@@ -13,7 +13,7 @@ namespace uut
 		char *base_path = SDL_GetBasePath();
 		if (base_path)
 		{
-			_basePath = Path(base_path);
+			_basePath = base_path;
 			SDL_free(base_path);
 		}
 	}
@@ -23,7 +23,7 @@ namespace uut
 		return SDL_GetPlatform();
 	}
 
-	const Path& Platform::GetBasePath() const
+	const String& Platform::GetBasePath() const
 	{
 		return _basePath;
 	}

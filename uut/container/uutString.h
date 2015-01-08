@@ -18,6 +18,8 @@ namespace uut
 
 		bool operator == (const String& str) const { return Equals(str, false); }
 		bool operator != (const String& str) const { return !Equals(str, false); }
+		bool operator < (const String& str) const { return Compare(str) < 0; }
+		bool operator > (const String& str) const { return Compare(str) < 0; }
 
 		char& operator[] (int index) { return _data[index]; }
 		const char& operator[] (int index) const { return _data[index]; }
