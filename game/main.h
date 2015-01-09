@@ -11,6 +11,7 @@ namespace uut
 	class Texture;
 	class VideoBuffer;
 	class Model;
+	class Font;
 
 	class MyApp : public Application
 	{
@@ -24,6 +25,7 @@ namespace uut
 		SharedPtr<Texture> _tex1;
 		SharedPtr<Model> _model0;
 		SharedPtr<Camera> _camera;
+		SharedPtr<Font> _font;
 
 		Color _color;
 		Vector2i _pos;

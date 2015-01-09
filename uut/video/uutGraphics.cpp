@@ -6,6 +6,8 @@
 #include "uutVideoBuffer.h"
 #include "uutVertex2.h"
 #include "uutVertex3.h"
+#include "uutFont.h"
+#include "uutFontFace.h"
 
 namespace uut
 {
@@ -29,9 +31,9 @@ namespace uut
 
 	void Graphics::DrawLine(const Vector2f& start, const Vector2f& end)
 	{
+		TestBufferCount(2);
 		ChangeBufferParam(PRIMITIVE_LINES, VertexType::V2D);
 		SetTexture(0);
-		TestBufferCount(2);
 
 		auto verts = (Vertex2*)_data;
 		verts[_currentCount++] = Vertex2(start, _currentColorUint);
@@ -40,9 +42,9 @@ namespace uut
 
 	void Graphics::DrawLine(const Vector3f& start, const Vector3f& end)
 	{
+		TestBufferCount(2);
 		ChangeBufferParam(PRIMITIVE_LINES, VertexType::V3D);
 		SetTexture(0);
-		TestBufferCount(2);
 
 		auto verts = (Vertex3*)_data;
 		verts[_currentCount++] = Vertex3(start, _currentColorUint);
@@ -51,9 +53,9 @@ namespace uut
 
 	void Graphics::DrawTexture(Texture* texture, const Rectf& rect)
 	{
+		TestBufferCount(6);
 		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V2D);
 		SetTexture(texture);
-		TestBufferCount(6);
 
 		const float x1 = rect.pos.x;
 		const float y1 = rect.pos.y;
@@ -73,11 +75,23 @@ namespace uut
 		verts[_currentCount++] = Vertex2(Vector2f(x1, y2), Vector2f(tx1, ty2), _currentColorUint);
 	}
 
+	void Graphics::DrawTriangle(Texture* tex, const Vertex2& v0, const Vertex2& v1, const Vertex2& v2)
+	{
+		TestBufferCount(3);
+		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V2D);
+		SetTexture(tex);
+
+		auto verts = (Vertex2*)_data;
+		verts[_currentCount++] = v0;
+		verts[_currentCount++] = v1;
+		verts[_currentCount++] = v2;
+	}
+
 	void Graphics::DrawTriangle(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2)
 	{
+		TestBufferCount(3);
 		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V3D);
 		SetTexture(tex);
-		TestBufferCount(3);
 
 		auto verts = (Vertex3*)_data;
 		verts[_currentCount++] = v0;
@@ -85,10 +99,39 @@ namespace uut
 		verts[_currentCount++] = v2;
 	}
 
+	void Graphics::DrawQuad(Texture* tex, const Vertex2& v0, const Vertex2& v1, const Vertex2& v2, const Vertex2& v3)
+	{
+		DrawTriangle(tex, v0, v1, v2);
+		DrawTriangle(tex, v1, v3, v2);
+	}
+
 	void Graphics::DrawQuad(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2, const Vertex3& v3)
 	{
 		DrawTriangle(tex, v0, v1, v2);
 		DrawTriangle(tex, v1, v3, v2);
+	}
+
+	void Graphics::PrintText(Font* font, const Vector2f& pos, const String& text)
+	{
+		if (font == 0)
+			return;
+
+		auto face = font->GetFace(0);
+		auto tex = face->GetTexture(0);
+
+		List<Vertex2> list;
+		face->GenerateLine(list, text);
+
+		TestBufferCount(list.Count());
+		ChangeBufferParam(PRIMITIVE_TRIANGLES, VertexType::V2D);
+		SetTexture(tex);
+
+		auto verts = (Vertex2*)_data;
+		for (int i = 0; i < list.Count(); i++)
+		{
+			list[i].pos += pos;
+			verts[_currentCount++] = list[i];
+		}
 	}
 
 	void Graphics::Flush()

@@ -2,6 +2,7 @@
 #include "core/uutPtr.h"
 #include "container/uutList.h"
 #include "container/uutDictionary.h"
+#include "video/uutVertex2.h"
 
 namespace uut
 {
@@ -28,5 +29,7 @@ namespace uut
 		virtual const FontGlyph* GetGlyph(uint32_t id) const = 0;
 		virtual int16_t GetKerning(uint32_t a, uint32_t b) const = 0;
 		virtual Texture* GetTexture(int index) const = 0;
+
+		virtual void GenerateLine(List<Vertex2>& verts, const String& line) const = 0;
 	};
 }

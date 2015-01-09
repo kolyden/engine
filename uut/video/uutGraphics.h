@@ -3,6 +3,7 @@
 #include "math/uutRect.h"
 #include "uutVideoDefs.h"
 #include "uutColor.h"
+#include "uutVertex2.h"
 #include "uutVertex3.h"
 
 namespace uut
@@ -11,6 +12,7 @@ namespace uut
 	class Texture;
 	class Video;
 	class VideoBuffer;
+	class Font;
 
     class UUT_API Graphics : public Module
     {
@@ -24,8 +26,13 @@ namespace uut
 		void DrawLine(const Vector3f& start, const Vector3f& end);
 		void DrawTexture(Texture* tex, const Rectf& rect);
 
+		void DrawTriangle(Texture* tex, const Vertex2& v0, const Vertex2& v1, const Vertex2& v2);
 		void DrawTriangle(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2);
+
+		void DrawQuad(Texture* tex, const Vertex2& v0, const Vertex2& v1, const Vertex2& v2, const Vertex2& v3);
 		void DrawQuad(Texture* tex, const Vertex3& v0, const Vertex3& v1, const Vertex3& v2, const Vertex3& v3);
+
+		void PrintText(Font* font, const Vector2f& pos, const String& text);
 
 		void Flush();
 		void ResetStates();

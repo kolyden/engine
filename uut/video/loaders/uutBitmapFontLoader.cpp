@@ -30,20 +30,6 @@ namespace uut
 		char fontName[STRING_BUFFER];
 	};
 
-	struct BlockType2
-	{
-		uint16_t lineHeight;
-		uint16_t base;
-		uint16_t scaleW;
-		uint16_t scaleH;
-		uint16_t pages;
-		uint8_t bitField;
-		uint8_t alphaChnl;
-		uint8_t redChnl;
-		uint8_t greenChnl;
-		uint8_t blueChnl;
-	};
-
 	struct BlockType3
 	{
 		List<String> pageNames;
@@ -93,7 +79,7 @@ namespace uut
 			return SharedPtr<Resource>::EMPTY;
 
 		BlockType1 block1;
-		BlockType2 block2;
+		FontFaceBitmap::FaceInfo block2;
 		BlockType3 block3;
 		BlockType4 block4;
 		BlockType5 block5;

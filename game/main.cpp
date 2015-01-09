@@ -60,8 +60,7 @@ namespace uut
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
 		_tex1 = _cache->Load<Texture>("Data/floor.png");
 		_model0 = _cache->Load<Model>("Data/Models/floor.obj");
-
-		_cache->Load<BitmapFont>("Data/Fonts/Arial.fnt");
+		_font = _cache->Load<BitmapFont>("Data/Fonts/Arial.fnt");
 
 		_world->LoadLevel("Data/Levels/test.txt");
 
@@ -224,5 +223,12 @@ namespace uut
 
 		if (_world && _world->GetLevel())
 			_world->GetLevel()->Draw();
+
+		if (_font)
+		{
+			_graphics->ResetStates();
+			_graphics->PrintText(_font, Vector2f(0, 0), "Test String");
+			_graphics->Flush();
+		}
 	}
 }
