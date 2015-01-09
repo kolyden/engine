@@ -36,6 +36,7 @@ namespace uut
 		const T& operator[] (int index) const { return _data[index]; }
 
 		static const int NPOS;
+		static const List<T> EMPTY;
 
 	protected:
 		std::vector<T> _data;
@@ -43,6 +44,7 @@ namespace uut
 
 	//////////////////////////////////////////////////////////////////////////
 	template<class T> const int List<T>::NPOS = -1;
+	template<class T> const List<T> List<T>::EMPTY;
 
 	template<class T>
 	void List<T>::Add(const T& item)

@@ -88,8 +88,11 @@ namespace uut
 				cell.SetWall(DIR_SOUTH, 1);
 		}
 
+		for (int x = 0; x < size.x; x++)
+			delete[] map[x];
+		delete[] map;
+
 		data->SetPrefabs(prefabs);
 		return DynamicCast<Resource>(data);
 	}
-
 }

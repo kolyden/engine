@@ -12,6 +12,7 @@ namespace uut
 		static String GetExtension(const String& path);
 		static String GetFileName(const String& path);
 		static String GetFileNameWithoutExtension(const String& path);
+		static bool HasExtension(const String& path);
 
 	protected:
 		static String PreparePath(const String& path);
