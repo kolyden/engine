@@ -189,9 +189,6 @@
     <ClInclude Include="..\uut\video\uutFont.h">
       <Filter>video</Filter>
     </ClInclude>
-    <ClInclude Include="..\uut\video\uutBitmapFont.h">
-      <Filter>video</Filter>
-    </ClInclude>
     <ClInclude Include="..\uut\io\uutStream.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -200,6 +197,18 @@
     </ClInclude>
     <ClInclude Include="..\uut\io\uutDirectory.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\loaders\uutBitmapFontLoader.h">
+      <Filter>video\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\uutFontFace.h">
+      <Filter>video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\uutBitmapFont.h">
+      <Filter>video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uut\video\uutFontFaceBitmap.h">
+      <Filter>video</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,9 +350,6 @@
     <ClCompile Include="..\uut\video\uutFont.cpp">
       <Filter>video</Filter>
     </ClCompile>
-    <ClCompile Include="..\uut\video\uutBitmapFont.cpp">
-      <Filter>video</Filter>
-    </ClCompile>
     <ClCompile Include="..\uut\io\uutFileStream.cpp">
       <Filter>io</Filter>
     </ClCompile>
@@ -352,6 +358,18 @@
     </ClCompile>
     <ClCompile Include="..\uut\io\uutStream.cpp">
       <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\loaders\uutBitmapFontLoader.cpp">
+      <Filter>video\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutFontFace.cpp">
+      <Filter>video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutBitmapFont.cpp">
+      <Filter>video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uut\video\uutFontFaceBitmap.cpp">
+      <Filter>video</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

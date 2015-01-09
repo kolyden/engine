@@ -7,6 +7,7 @@
 #include "platform/uutTime.h"
 #include "io/uutInput.h"
 #include "video/uutModel.h"
+#include "video/uutBitmapFont.h"
 #include "math/uutVector4.h"
 #include "Camera.h"
 #include "World.h"
@@ -59,6 +60,8 @@ namespace uut
 		_tex0 = _cache->Load<Texture>("Data/zazaka.png");
 		_tex1 = _cache->Load<Texture>("Data/floor.png");
 		_model0 = _cache->Load<Model>("Data/Models/floor.obj");
+
+		_cache->Load<BitmapFont>("Data/Fonts/Arial.fnt");
 
 		_world->LoadLevel("Data/Levels/test.txt");
 

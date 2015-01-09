@@ -54,6 +54,7 @@ namespace uut
 		virtual bool CanWrite() const override;
 		virtual bool CanSeek() const override;
 		virtual bool IsOpened() const override;
+		virtual bool IsEOF() const override;
 
 	protected:
 		FileMode _mode;

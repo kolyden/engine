@@ -192,4 +192,10 @@ namespace uut
 	{
 		return _handle != INVALID_HANDLE_VALUE;
 	}
+
+	bool FileStream::IsEOF() const
+	{
+		return GetPosition() == GetLength();
+	}
+
 }

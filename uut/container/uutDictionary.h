@@ -21,6 +21,11 @@ namespace uut
 
 		int Count() const { return (int)_data.size(); }
 
+		void Clear()
+		{
+			_data.clear();
+		}
+
 		bool Contains(const TKey& key) const
 		{
 			DataType::const_iterator it = _data.find(key);
@@ -36,6 +41,9 @@ namespace uut
 			*data = it->second;
 			return true;
 		}
+
+		TValue& operator[](const TKey& key) { return _data[key]; }
+// 		const TValue& operator[](const TKey& key) const { return _data[key]; }
 
 		ConstIterator Begin() { return _data.begin(); }
 		ConstIterator End() { return _data.end(); }

@@ -6,5 +6,4 @@ namespace uut
 		: Resource(context)
 	{
 	}
-
 }

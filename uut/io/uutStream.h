@@ -31,6 +31,7 @@ namespace uut
 		virtual bool CanWrite() const = 0;
 		virtual bool CanSeek() const = 0;
 		virtual bool IsOpened() const = 0;
+		virtual bool IsEOF() const = 0;
 
 		static SDL_RWops* CreatReadRWops(Stream* source);
 	};

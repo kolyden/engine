@@ -5,9 +5,12 @@
 #include "uutImage.h"
 #include "uutTexture.h"
 #include "uutVideoBuffer.h"
+#include "uutFont.h"
+#include "uutBitmapFont.h"
 #include "loaders/uutImageLoader.h"
 #include "loaders/uutTextureLoader.h"
 #include "loaders/uutModelLoaderOBJ.h"
+#include "loaders/uutBitmapFontLoader.h"
 #include "SDL_IMAGE/SDL_image.h"
 
 namespace uut
@@ -459,6 +462,7 @@ namespace uut
 		_context->RegisterFactory<Image>();
 		_context->RegisterFactory<Texture>();
 		_context->RegisterFactory<VideoBuffer>();
+		_context->RegisterFactory<BitmapFont>();
 	}
 
 	void Video::OnInit()
@@ -467,6 +471,7 @@ namespace uut
 		cache->AddLoader(new ImageLoader(_context));
 		cache->AddLoader(new TextureLoader(_context));
 		cache->AddLoader(new ModelLoaderOBJ(_context));
+		cache->AddLoader(new BitmapFontLoader(_context));
 
 		if (!IMG_Init(IMG_INIT_PNG))
 			Debug::LogError("SDL Image init failed");
